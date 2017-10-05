@@ -1,8 +1,8 @@
 <template>
   <div class="header">
     <div class="shang">
-        <span class="siadebar iconfont icon-mune"></span>
-        <span>悦听</span>
+        <span class="iconfont icon-mune"></span>
+        <span>悦  听</span>
         <span class="iconfont icon-search"></span>
     </div>
     <div class="xia">
@@ -38,18 +38,17 @@
 
 .shang {
     height: 10%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .shang span {
-    display: inline-block;
     font-size: 20px;
-    margin: 5px 20px 5px 0;
+    margin: 20px 40px 0 40px;
     line-height: 20px;
 }
 
-.shang > span:nth-child(3) {
-    float: right;
-}
+
 
 .xia {
     height: 10%;
@@ -74,6 +73,10 @@
     border-bottom: 2px #fff solid;
 }
 
+.header .iconfont {
+    width: 20px;
+    height: 20px;
+}
 
 .icon-mune {
     background: url(mune.svg) no-repeat;

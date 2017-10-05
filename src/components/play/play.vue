@@ -10,7 +10,6 @@
       </div>
       <p class="geci"></p>
       <div class="contorl" :class="{'control-play':isDisplay}">
-        transition
           <span class="iconfont icon-loop" v-show="isDisplay"></span>
           <span class="iconfont icon-pre" v-show="isDisplay"></span>
           <span :class="[isPlay ? errorClass : trueClass]" class="iconfont" @click.stop="ready"></span>
@@ -199,31 +198,31 @@ clear:both;
 }
 
 .icon-loop {
-  background: url(loop.svg) no-repeat;
+  background: url(img/loop.svg) no-repeat;
   background-size: cover;
   width: 28px;
   height: 28px;
   margin: 1px 0;
 }
 .icon-pre {
-  background: url(pre.svg) no-repeat;
+  background: url(img/pre.svg) no-repeat;
   background-size: cover;
 }
 .icon-play {
-  background: url(play.svg) no-repeat;
+  background: url(img/play.svg) no-repeat;
   background-size: cover;
 }
 
 .icon-unplay {
-  background: url(unplay.svg) no-repeat;
+  background: url(img/unplay.svg) no-repeat;
   background-size: cover;
 }
 .icon-next {
-  background: url(next.svg) no-repeat;
+  background: url(img/next.svg) no-repeat;
   background-size: cover;
 }
 .icon-xin {
-  background: url(xin.svg) no-repeat;
+  background: url(img/xin.svg) no-repeat;
   background-size: cover;
   width: 24px;
   height: 24px;
@@ -232,7 +231,7 @@ clear:both;
 .icon-down {
   width: 30px;
   height: 30px;
-  background: url(down.svg) no-repeat;
+  background: url(img/down.svg) no-repeat;
   background-size: contain;
   margin: 20px 20px 10px 30px;
   position: absolute;

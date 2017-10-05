@@ -2,7 +2,7 @@
     <div class="find">
       <!-- 搜索框 -->
       <div class="search">
-        <input type="text" placeholder="在线搜索" v-model="msg" @focus="Focus" @keyup.enter="search(msg)">
+        <input type="search" placeholder="在线搜索" v-model="msg" @focus="Focus" @keyup.enter="search(msg)">
         <i v-show="isShowkey" @click="Blur">取消</i>
       </div>
       <!-- 热门搜索 -->
@@ -166,7 +166,7 @@
 .find {
   position: absolute;
   width: 100%;
-  top: 109px;
+  top: 102px;
   bottom: 4em;
   overflow: hidden;
 }

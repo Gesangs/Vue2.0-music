@@ -75,7 +75,7 @@ import BScroll from 'better-scroll';
 .music {
   position: absolute;
   width: 100%;
-  top: 112px;
+  top: 100px;
   bottom: 4em;
   overflow: hidden;
 }
