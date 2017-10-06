@@ -53,8 +53,8 @@ const store = new Vuex.Store({
         audioDom(state, dom) {
             state.audio = dom;
         },
-        addLove(state, music) {
-            state.loveMusic.push(music);
+        setLove(state, flag) {
+            state.Music.isLove = flag;
         },
         addHistory(state, musics) {
             state.searchHistory.push(musics);
@@ -65,14 +65,27 @@ const store = new Vuex.Store({
                 return item;
             }, [])
         },
+        addLove(state, musics) {
+            state.loveMusic.push(musics);
+            // let hash = {};
+            // // 数组去重
+            // state.loveMusic = state.loveMusic.reduce(function(item,next) {
+            //     hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+            //     return item;
+            // }, [])
+        },
         addOld(state, music) {
-            state.oldMusic.push(music);
-            let hash = {};
-            // 数组去重
-            state.oldMusic = state.oldMusic.reduce(function(item,next) {
-                hash[next.id] ? '' : hash[next.id] = true && item.push(next);
-                return item;
-            }, [])
+            if(music == 0) {
+                state.oldMusic.length = 0;
+            }else{
+                state.oldMusic.push(music);
+                let hash = {};
+                // 数组去重
+                state.oldMusic = state.oldMusic.reduce(function(item,next) {
+                    hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+                    return item;
+                }, [])
+            }
         }
     }
 })

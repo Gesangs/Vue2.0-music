@@ -14,10 +14,10 @@
           <span class="iconfont icon-pre" v-show="isDisplay"></span>
           <span :class="[isPlay ? errorClass : trueClass]" class="iconfont" @click.stop="ready"></span>
           <span class="iconfont icon-next"></span>
-          <span class="iconfont icon-xin" v-show="isDisplay"></span>
+          <span :class="[Music.isLove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
       </div>
       <audio :src="Music.music || audioUrl" ref="audio" :autoplay="isPlay"></audio>
-      <div class="icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
+      <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
   </div>
 </template>
 
@@ -29,6 +29,8 @@ export default {
           isDisplay: false,
           trueClass: 'icon-play',
           errorClass: 'icon-unplay',
+          loveClass: 'icon-hongxin',
+          unloveClass: 'icon-xin',
           audioUrl:'http://ws.stream.qqmusic.qq.com/9059607.m4a?fromtag=46'
         };
     },
@@ -57,15 +59,14 @@ export default {
       // 展开
         Display() {
           this.isDisplay = true,
-          this.playHeight = '100%',
-          console.log(this.$store.state.audio);
+          this.playHeight = '100%'
         },
         // 收回
         unDisplay() {
           this.playHeight = '4em',
           this.isDisplay = false
         },
-        // 点击播放音乐
+        // 切换播放状态
         ready() {
           if(! this.isPlay) {
             this.$refs.audio.play();
@@ -79,6 +80,17 @@ export default {
         getAudio() {
           let au = this.$refs.audio;
           this.$store.commit("audioDom", au);
+        },
+        Love(item) {
+          let music = {
+              img: item.img,
+              music: item.music,
+              music_name: item.music_name,
+              singer: item.singer,
+              id: item.id
+            };
+          this.$store.commit('addLove',music);
+          console.log(this.$store.state.loveMusic);
         }
     }
 };
@@ -159,6 +171,9 @@ export default {
     right: 20px;
     transition: top 1s;
     transform: translate3d(0,0,0);
+    vertical-align: middle;
+    /* 中线对齐 */
+    align-items: center;
 }
 
 .contorl span + span {
@@ -209,11 +224,15 @@ clear:both;
   background-size: cover;
 }
 .icon-play {
+  width: 35px;
+  height: 35px;
   background: url(img/play.svg) no-repeat;
   background-size: cover;
 }
 
 .icon-unplay {
+  width: 35px;
+  height: 35px;
   background: url(img/unplay.svg) no-repeat;
   background-size: cover;
 }
@@ -228,9 +247,14 @@ clear:both;
   height: 24px;
   margin: 1px 0;
 }
+.icon-hongxin {
+  background: url(img/hongxin.svg) no-repeat;
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+  margin: 1px 0;
+}
 .icon-down {
-  width: 30px;
-  height: 30px;
   background: url(img/down.svg) no-repeat;
   background-size: contain;
   margin: 20px 20px 10px 30px;
@@ -238,6 +262,4 @@ clear:both;
   top: 0;
   z-index: 20;
 }
-
-
 </style>

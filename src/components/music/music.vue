@@ -2,73 +2,103 @@
     <div class="music">
         <div class="Tab">
             <p class="myLove" :class="{active: isActive}" @click="switchLove">我喜欢的</p>
-            <p class="recent" :class="{active: !isActive}" @click="switchRecent">最近听的</p>
+            <p class="recent" :class="{active: !isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
-        <p class="suiji">
+        <!-- <p class="suiji">
             <span class="icon icon-suiji"></span>
             随机播放全部
-        </p>
-        <div class="loveList" ref="loveList" v-show="isActive"></div>
-        <div class="oldList" ref="oldList" v-show="!isActive">
-        <ul>
-        <li v-for="item in musicl" @click="Splay(item)">
-          <img :src="item.img" alt="">
-          <div>
-            <span>{{ item.music_name }}</span>
-            <span>{{ item.singer }}</span>
-            <input type="hidden" value="">
-          </div>
-        </li><li></li>
-      </ul>
-      </div>
+        </p> -->
+
+        <div class="oldList" ref="oldlist" v-show="!isActive">
+          <ul>
+            <li v-for="item in oldmusic" @click="Mplay(item)">
+              <img :src="item.img" alt="">
+              <div>
+                <span>{{ item.music_name }}</span>
+                <span>{{ item.singer }}</span>
+              </div>
+            </li><li></li>
+          </ul>
+        </div>
+        <div class="loveList" ref="lovelist" v-show="isActive">
+          <ul>
+            <li v-for="item in lovemusic" @click="Mplay(item)">
+              <img :src="item.img" alt="">
+              <div>
+                <span>{{ item.music_name }}</span>
+                <span>{{ item.singer }}</span>
+              </div>
+            </li><li></li>
+          </ul>
+        </div>
     </div>
     </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll';
-    export default {
-        data() {
+ import BScroll from 'better-scroll';
+export default {
+    data() {
         return {
-          musicl: this.$store.state.oldMusic,
-          isActive: true
-        };
+            oldmusic:[],
+            lovemusic:[],
+            isActive: true,
+        }
     },
     created() {
-        },
-    mounted() {
-      this.$nextTick(() => {
-              this._initScroll();
-            })
+        this.oldmusic = this.$store.state.oldMusic;
+        this.lovemusic = this.$store.state.loveMusic;
     },
-    methods: {
-      // 滚动插件
-      _initScroll() {
-        this.loveScorll = new BScroll(this.$refs.loveList, {
-          click: true,
-          HWCompositing: true,
-          preventDefault: false
-        });
-        this.oldScorll = new BScroll(this.$refs.oldList, {
+    watch:{
+            oldmusic:function() {
+                 this.$nextTick(() => {
+                this._initOldScroll();
+            })
+            },
+            lovemusic:function() {
+                 this.$nextTick(() => {
+                this._initLoveScroll();
+            })
+            },
+        },
+    methods:{
+        switchRecent() {
+            this.isActive = false;
+            this.$nextTick(() => {
+                this._initOldScroll();
+            })
+        },
+        switchLove() {
+            this.isActive = true;
+        },
+        _initOldScroll() {
+        this.oldScorll = new BScroll(this.$refs.oldlist, {
           click: true,
           HWCompositing: true,
           preventDefault: false
         });
       },
-      // 点击播放
-      Splay(item) {
-          this.$store.commit('playMusic', item);
+      _initLoveScroll() {
+        this.loveScorll = new BScroll(this.$refs.lovelist, {
+          click: true,
+          HWCompositing: true,
+          preventDefault: false
+        });
+      },
+      Mplay(item) {
+        let music = {
+          img: item.img,
+          music: item.music,
+          music_name: item.music_name,
+          singer: item.singer,
+          id: item.id
+        };
+          this.$store.commit('playMusic', music);
           this.$store.commit('isplay', {isPLaying:true});
           this.$store.state.audio.play();
       },
-      switchLove() {
-        this.isActive = true;
-      },
-      switchRecent() {
-        this.isActive = false;
-      }
-      }
-    };
+    }
+};
 </script>
 
 <style>

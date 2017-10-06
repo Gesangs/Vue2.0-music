@@ -13,13 +13,13 @@
         </div>
       </div>
       <!-- 搜索历史 -->
-      <div class="searchHistory" v-show="!isShowkey &&  history[0]">
-        <div class="hot">搜索历史<span class="iconfont icon-del"></span></div>
+      <div class="searchHistory" v-show="del && !isShowkey &&  history[0]">
+        <div class="hot">搜索历史<span class="iconfont icon-del" @click="delHistory"></span></div>
         <div class="historyList" ref="history">
           <ul>
-          <p v-for="item in history">
+          <p v-for="item in history" @click="search(item)">
             {{ item }}
-            <span class="iconfont icon-del_1"></span>
+            <!-- <span class="iconfont icon-del_1"></span> -->
           </p>
           </ul>
         </div>
@@ -50,15 +50,18 @@
           musics: [],
           hotkey:[],
           history:[],
+          del: true,
           isShowkey: false
         };
     },
     created() {
       this._gethotKey();
-      this.$nextTick(() => {
-        this._initHistoryScorll();
-      });
       this.history = this.$store.state.searchHistory;
+    },
+    watch: {
+      history: function() {
+        return this.$store.state.searchHistory;
+      }
     },
     methods: {
       // 去抖函数的实现
@@ -79,12 +82,10 @@
             search(msg, 1, false, 15).then((res) => {
           if(res.code === ERR_OK) {
             this.musics = res.data.song.list;
-            console.log(res.data);
             this.isShowkey = true;
             this.$store.commit("addHistory",msg);
             this.$nextTick(() => {
               this._initResultScroll();
-              this._initHistoryScorll();
               this.history = this.$store.state.searchHistory;
             })
           }
@@ -124,13 +125,6 @@
           preventDefault: false
         });
       },
-      _initHistoryScorll() {
-        this.historyScorll = new BScroll(this.$refs.history, {
-          click: true,
-          HWCompositing: true,
-          preventDefault: false
-        });
-      },
       _gethotKey() {
         getHotKey().then((res) => {
           if (res.code === ERR_OK) {
@@ -157,6 +151,11 @@
       return str.replace(/&#(x)?([^&]{1,5});?/g,function($,$1,$2) {
           return String.fromCharCode(parseInt($2 , $1 ? 16:10));
       });
+    },
+    delHistory() {
+      this.del = false;
+      this.$store.commit("addOld",0);
+      this.history.length = 0;
     }
   }
 }
@@ -170,8 +169,6 @@
   bottom: 4em;
   overflow: hidden;
 }
-
-
 .search {
     width: 100%;
     padding: 5px 0;
@@ -180,7 +177,6 @@
     border-bottom: 1px solid rgba(1,186,144,0.8);
     display: flex;
 }
-
 .search input {
     flex: 1;
     border-radius: 5px;
@@ -190,32 +186,27 @@
     margin: 7px 30px 30px;
     text-indent: 25px;
 }
-
 .search i {
     height: 46px;
     line-height: 46px;
     flex: 0 0 60px;
     width: 60px;
 }
-
 .hotSearch {
   width: 100%;
   margin-top: 20px;
 }
-
 .hot {
   display: block;
   padding: 0px 0 10px 30px;
   position: relative;
 }
-
 .hotList {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   padding-left: 10px;
 }
-
 .hotList > p {
   border-radius: 10px;
   background-color:rgb(235, 237, 239);
@@ -223,7 +214,6 @@
   margin: 5px 12px;
   font-size: 13px;
 }
-
 .searchHistory {
   margin-top: 30px;
 }
@@ -235,7 +225,6 @@
   padding: 10px 30px;
   font-size: 14px;
 }
-
 .sResult {
   height: 100%;
   position: absolute;
@@ -248,37 +237,31 @@ li {
     height: 60px;
     display: flex;
 }
-
 li > img {
     flex: 0 0 35px;
     width: 35px;
     height: 35px;
     margin: 15px;
 }
-
 li >div {
     flex: 1;
     height: 64px;
     border-bottom: 1px solid rgba(1,186,144,0.3);
 }
-
 li > div > span:nth-child(1) {
     display: block;
     margin-top: 12px;
     color: rgb(1,186,144);
 }
-
 li > div > span:nth-child(2) {
     display: block;
     margin-top: 5px;
     font-size: 12px;
 }
-
 li > span {
     display: block;
     float: right;
 }
-
 .find .iconfont {
   width: 18px;
   height: 18px;
