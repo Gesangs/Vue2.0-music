@@ -1,7 +1,7 @@
 <template>
     <div class="music">
         <div class="Tab">
-            <p class="myLove" :class="{active: isActive}" @click="switchLove">我喜欢的</p>
+            <p class="myLove" :class="{active: isActive}" @click.stop="switchLove">我喜欢的</p>
             <p class="recent" :class="{active: !isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
         <!-- <p class="suiji">
@@ -91,7 +91,8 @@ export default {
           music: item.music,
           music_name: item.music_name,
           singer: item.singer,
-          id: item.id
+          id: item.id,
+          mid: item.mid
         };
           this.$store.commit('playMusic', music);
           this.$store.commit('isplay', {isPLaying:true});

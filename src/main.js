@@ -28,11 +28,13 @@ const store = new Vuex.Store({
     state: {
         isPlaying: false,
         Music: {
-            img:'',
-            music: '',
-            music_name: '',
-            singer: '',
-            id: ''
+            img:'http://imgcache.qq.com/music/photo/album_300/82/300_albumpic_35182_0.jpg',
+            music: 'http://ws.stream.qqmusic.qq.com/9059607.m4a?fromtag=46',
+            music_name: '不要说话',
+            singer: '陈奕迅',
+            id: '9059607',
+            mid: '002B2EAA3brD5b',
+            index:''
         },
         audio: {},
         oldMusic: [],
@@ -46,6 +48,7 @@ const store = new Vuex.Store({
             state.Music.music_name = data.music_name;
             state.Music.singer = data.singer;
             state.Music.id = data.id;
+            state.Music.mid = data.mid;
         },
         isplay(state, flag) {
           state.isPlaying = flag;
@@ -67,12 +70,12 @@ const store = new Vuex.Store({
         },
         addLove(state, musics) {
             state.loveMusic.push(musics);
-            // let hash = {};
-            // // 数组去重
-            // state.loveMusic = state.loveMusic.reduce(function(item,next) {
-            //     hash[next.id] ? '' : hash[next.id] = true && item.push(next);
-            //     return item;
-            // }, [])
+            let hash = {};
+            // 数组去重
+            state.loveMusic = state.loveMusic.reduce(function(item,next) {
+                hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+                return item;
+            }, [])
         },
         addOld(state, music) {
             if(music == 0) {

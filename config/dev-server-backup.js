@@ -8,10 +8,12 @@ if (!process.env.NODE_ENV) {
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
+var axios = require('axios')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
-var webpackConfig = require('./webpack.dev.conf')
-var axios = require('axios')
+var webpackConfig = (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'production')
+  ? require('./webpack.prod.conf')
+  : require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -23,7 +25,7 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-var apiRoutes = express.Router()
+var apiRoutes = express.Router();
 
 apiRoutes.get('/getDiscList', function (req, res) {
   var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
@@ -64,17 +66,22 @@ apiRoutes.get('/lyric', function (req, res) {
   })
 })
 
-app.use('/api', apiRoutes)
+app.use('/api',apiRoutes)
+
+
+
 
 var compiler = webpack(webpackConfig)
-
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true
 })
 
+
+
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: () => {}
+  log: false,
+  heartbeat: 2000
 })
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {

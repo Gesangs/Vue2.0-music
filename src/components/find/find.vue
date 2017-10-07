@@ -82,6 +82,7 @@
             search(msg, 1, false, 15).then((res) => {
           if(res.code === ERR_OK) {
             this.musics = res.data.song.list;
+            console.log(this.musics)
             this.isShowkey = true;
             this.$store.commit("addHistory",msg);
             this.$nextTick(() => {
@@ -139,7 +140,8 @@
           music:this.handleMusic(item),
           music_name: this.strDecode(item.songname),
           singer: this.strDecode(this.handleSinger(item)),
-          id: item.songid
+          id: item.songid,
+          mid: item.songmid
         };
           this.$store.commit('playMusic', music);
           this.$store.commit('isplay', {isPLaying:true});
