@@ -2,11 +2,13 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Axios from 'axios';
 import Vuex from 'vuex';
+import {saveSearch, clearSearch, deleteSearch, savePlay, saveFavorite, deleteFavorite, loadSearch, loadFavorite,loadPlay} from './api/localStorage.js'
 
 import App from './App';
 import music from './components/music/music.vue';
 import find from './components/find/find.vue';
 import bangdan from './components/bangdan/bangdan.vue';
+import TopList from './components/TopList/TopList.vue'
 
 Vue.config.productionTip = false;
 
@@ -15,11 +17,29 @@ Vue.use(Vuex);
 Vue.prototype.$ajax = Axios;
 /* eslint-disable no-new */
 
+
+
+
 const routes = [
-	{path: '/music', component: music},
-	{path: '/find', component: find},
-	{path: '/bangdan', component: bangdan}
+	{
+        path: '/music',
+        component: music
+    },
+	{
+        path: '/find',
+        component: find
+    },
+	{
+        path: '/bangdan',
+        component: bangdan
+    },
+    {
+        path: '/TopList',
+        component: TopList
+
+    }
 ];
+
 
 const router = new Router({
 	routes:routes,
@@ -28,18 +48,22 @@ const store = new Vuex.Store({
     state: {
         isPlaying: false,
         Music: {
-            img:'http://imgcache.qq.com/music/photo/album_300/82/300_albumpic_35182_0.jpg',
-            music: 'http://ws.stream.qqmusic.qq.com/9059607.m4a?fromtag=46',
-            music_name: '不要说话',
-            singer: '陈奕迅',
-            id: '9059607',
-            mid: '002B2EAA3brD5b',
-            index:''
+            img:'../static/16pic_1792828_b.webp',
+            music: '',
+            music_name: '',
+            singer: '',
+            id: '',
+            mid: '',
+            index:'',
+            isLove: false
         },
         audio: {},
-        oldMusic: [],
-        loveMusic: [],
-        searchHistory: []
+        oldMusic: loadPlay(),
+        loveMusic: loadFavorite(),
+        currentList:[],
+        topList:[],
+        topUrl:'',
+        searchHistory: loadSearch()
     },
     mutations: {
         playMusic(state, data) {
@@ -49,6 +73,8 @@ const store = new Vuex.Store({
             state.Music.singer = data.singer;
             state.Music.id = data.id;
             state.Music.mid = data.mid;
+            state.Music.index = data.index;
+            state.Music.isLove = data.isLove;
         },
         isplay(state, flag) {
           state.isPlaying = flag;
@@ -59,17 +85,30 @@ const store = new Vuex.Store({
         setLove(state, flag) {
             state.Music.isLove = flag;
         },
+        pushList(state, list) {
+            state.currentList.length = 0;
+            list.forEach((item) => {
+                state.currentList.push(item);
+            })
+        },
         addHistory(state, musics) {
+            if(musics === 0) {
+                state.searchHistory.length = 0;
+                clearSearch();
+            }else{
             state.searchHistory.push(musics);
+            saveSearch(musics)
             let hash = {};
             // 数组去重
             state.searchHistory = state.searchHistory.reduce(function(item,next) {
                 hash[next] ? '' : hash[next] = true && item.push(next);
                 return item;
-            }, [])
+            }, []);}
         },
         addLove(state, musics) {
             state.loveMusic.push(musics);
+            saveFavorite(musics);
+            console.log(loadFavorite())
             let hash = {};
             // 数组去重
             state.loveMusic = state.loveMusic.reduce(function(item,next) {
@@ -77,10 +116,17 @@ const store = new Vuex.Store({
                 return item;
             }, [])
         },
+        delLove(state, music) {
+            var index = '';
+            deleteFavorite(music);
+            state.loveMusic.forEach((item) => {
+                if(music.id === item.id) {
+                    index = i;
+                    state.loveMusic.splice(index,1);
+                }
+            })
+        },
         addOld(state, music) {
-            if(music == 0) {
-                state.oldMusic.length = 0;
-            }else{
                 state.oldMusic.push(music);
                 let hash = {};
                 // 数组去重
@@ -88,8 +134,13 @@ const store = new Vuex.Store({
                     hash[next.id] ? '' : hash[next.id] = true && item.push(next);
                     return item;
                 }, [])
-            }
         }
+
+
+
+
+
+
     }
 })
 
@@ -99,9 +150,6 @@ const app = new Vue({
 	router,
     store,
 	template: '<App/>',
-	components: { App },
-    data: {
-        eventBus: new Vue()
-    }
+	components: { App }
 }).$mount('#app')
 

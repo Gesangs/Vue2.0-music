@@ -4,14 +4,9 @@
             <p class="myLove" :class="{active: isActive}" @click.stop="switchLove">我喜欢的</p>
             <p class="recent" :class="{active: !isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
-        <!-- <p class="suiji">
-            <span class="icon icon-suiji"></span>
-            随机播放全部
-        </p> -->
-
-        <div class="oldList" ref="oldlist" v-show="!isActive">
+        <scroll class="oldList" :data="oldmusic" ref="oldlist" v-show="!isActive">
           <ul>
-            <li v-for="item in oldmusic" @click="Mplay(item)">
+            <li v-for="(item,index) in oldmusic" @click="Mplay(oldmusic,index)">
               <img :src="item.img" alt="">
               <div>
                 <span>{{ item.music_name }}</span>
@@ -19,45 +14,48 @@
               </div>
             </li><li></li>
           </ul>
-        </div>
-        <div class="loveList" ref="lovelist" v-show="isActive">
+        </scroll>
+        <scroll class="loveList" :data="lovemusic" ref="lovelist" v-show="isActive">
           <ul>
-            <li v-for="item in lovemusic" @click="Mplay(item)">
+            <li v-for="(item,index) in lovemusic" @click="Mplay(lovemusic,index)">
               <img :src="item.img" alt="">
-              <div>
+              <div class="delll">
                 <span>{{ item.music_name }}</span>
                 <span>{{ item.singer }}</span>
+                <!-- <span class="dell" @click.stop="deletefavorite(item,index)"></span> -->
               </div>
-            </li><li></li>
+            </li>
+            <li></li>
           </ul>
-        </div>
+        </scroll>
     </div>
     </div>
 </template>
 
 <script>
- import BScroll from 'better-scroll';
+ import Scroll from '../scroll.vue';
+ import {deleteFavorite,loadPlay,loadFavorite} from "../../api/localStorage.js"
 export default {
+  components: {
+          Scroll
+        },
     data() {
         return {
-            oldmusic:[],
-            lovemusic:[],
+            oldmusic:loadPlay(),
+            liindex:'',
+            lovemusic:loadFavorite(),
             isActive: true,
         }
-    },
-    created() {
-        this.oldmusic = this.$store.state.oldMusic;
-        this.lovemusic = this.$store.state.loveMusic;
     },
     watch:{
             oldmusic:function() {
                  this.$nextTick(() => {
-                this._initOldScroll();
+                this.$refs.oldlist.refresh()
             })
             },
             lovemusic:function() {
                  this.$nextTick(() => {
-                this._initLoveScroll();
+                this.$refs.lovelist.refresh()
             })
             },
         },
@@ -65,36 +63,21 @@ export default {
         switchRecent() {
             this.isActive = false;
             this.$nextTick(() => {
-                this._initOldScroll();
+                this.$refs.oldlist.refresh()
             })
         },
         switchLove() {
             this.isActive = true;
+            this.$nextTick(() => {
+                this.$refs.lovelist.refresh()
+            })
         },
-        _initOldScroll() {
-        this.oldScorll = new BScroll(this.$refs.oldlist, {
-          click: true,
-          HWCompositing: true,
-          preventDefault: false
-        });
-      },
-      _initLoveScroll() {
-        this.loveScorll = new BScroll(this.$refs.lovelist, {
-          click: true,
-          HWCompositing: true,
-          preventDefault: false
-        });
-      },
-      Mplay(item) {
-        let music = {
-          img: item.img,
-          music: item.music,
-          music_name: item.music_name,
-          singer: item.singer,
-          id: item.id,
-          mid: item.mid
-        };
-          this.$store.commit('playMusic', music);
+        // deletefavorite(item,index) {
+        //   deleteFavorite(item);
+        // },
+      Mplay(list, item) {
+          this.$store.commit('pushList', list);
+          this.$store.commit('playMusic', this.$store.state.currentList[item]);
           this.$store.commit('isplay', {isPLaying:true});
           this.$store.state.audio.play();
       },
@@ -167,5 +150,19 @@ export default {
   position: absolute;
   width: 100%;
   overflow: hidden;
+}
+
+.delll {
+  position: relative;
+}
+.dell {
+  width: 20px;
+  height: 20px;
+  background: url(del.svg);
+  background-size: cover;
+  position: absolute;
+  margin:19px 19px 0 0;
+  top: 1px;
+  right: 1px;
 }
 </style>

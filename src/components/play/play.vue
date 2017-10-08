@@ -2,50 +2,56 @@
   <div class="contorller" :style="{height: playHeight}" @click="Display">
       <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
       <div class="img clearfix" :class="{imgPlay: isDisplay}" :style="{background: Img}" >
-          <div class="img-top"></div>
-          <div class="img-bottom"></div>
+          <div class="img-back"></div>
       </div>
       <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
-          <p class="gequ">{{ Music.music_name || '不要说话' }}</p>
-          <p class="geshou">{{ Music.singer || '陈奕迅'  }}</p>
+          <p class="gequ">{{ Music.music_name || '轻听'}}</p>
+          <p class="geshou">{{ Music.singer}}</p>
       </div>
-      <div class="fullGeci" ref="geci" v-show="isFullLyric && isDisplay"  @click="togglefull">
-        <div class="ly-wrapper"  ref="lyricList" :data="currentLyric && currentLyric.lines">
+      <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
+        <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
+          <div style="width: 80%;margin: 0 auto;overflow: hidden;">
           <div v-if="currentLyric">
             <p ref="lyricLine" class="text" v-for="(line,index) in currentLyric.lines" :class="{'current': currentLineNum === index}" >{{ line.txt }}</p>
           </div>
         </div>
+        </scroll>
       </div>
-      <div class="geci" v-show="isDisplay" @click="togglefull">
+      <div class="geci" v-show="isDisplay && !isFullLyric" @click="togglefull">
         <p>{{ playingLyric }}</p>
       </div>
       <transition name="normal">
       <div class="contorl" :class="{'control-play':isDisplay}">
-          <span class="iconfont icon-loop" @click.stop="isLoop" v-show="isDisplay"></span>
+          <span class="iconfont icon-loop" :class="[isLoop ? loop : unloop]" @click.stop="setLoop" v-show="isDisplay"></span>
           <span class="iconfont icon-pre" @click.stop="pre" v-show="isDisplay"></span>
           <span :class="[isPlay ? errorClass : trueClass]" class="iconfont" @click.stop="ready"></span>
           <span class="iconfont icon-next"  @click.stop="next"></span>
           <span :class="[Music.isLove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
       </div>
     </transition>
-      <audio :src="Music.music || audioUrl" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @progress="getLyric"></audio>
+      <audio :src="Music.music" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop"></audio>
       <div class="progressBar" ref="progressBar">
         <div class="progress" ref="progress"></div>
       </div>
   </div>
 </template>
-<!--  @play="readyLyric" -->
 <script>
-import BScroll from 'better-scroll';
+import Scroll from '../scroll.vue'
 import {getLyric} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
 export default {
+  components: {
+            Scroll
+        },
     data() {
         return {
           playHeight: '69px',
           isDisplay: false,
           isFullLyric:false,
+          isLoop:false,
+          loop: 'icon-loop',
+          unloop: 'icon-unloop',
           trueClass: 'icon-play',
           errorClass: 'icon-unplay',
           loveClass: 'icon-hongxin',
@@ -53,8 +59,7 @@ export default {
           currentTime: 0,
           currentLyric: null,
           currentLineNum:0,
-          playingLyric:'',
-          audioUrl:'http://ws.stream.qqmusic.qq.com/9059607.m4a?fromtag=46'
+          playingLyric:''
         };
     },
     mounted() {
@@ -73,6 +78,9 @@ export default {
           const offsetWidth = barWidth * percent
           this.$refs.progress.style.width = `${offsetWidth}px`;
         }
+      },
+      isLove() {
+        return this.$store.state.Music.isLove;
       }
     },
     computed: {
@@ -81,13 +89,16 @@ export default {
     },
     Img() {
       if(! this.Music.img) {
-        return 'url(http://imgcache.qq.com/music/photo/album_300/82/300_albumpic_35182_0.jpg)';
+        return 'url(../../static/16pic_1792828_b.webp)';
       }else {
         return 'url(' + this.Music.img + ')';
       }
     },
     isPlay() {
       return this.$store.state.isPlaying;
+    },
+    currentList() {
+      return this.$store.state.currentList;
     }
     },
     methods: {
@@ -99,10 +110,9 @@ export default {
         togglefull() {
           this.isFullLyric = !(this.isFullLyric);
           this.$nextTick(() => {
-            this._initLyricScroll()
+             this.$refs.lyricList.refresh()
           })
         },
-
         // 收回
         unDisplay() {
           this.playHeight = '69px',
@@ -129,33 +139,25 @@ export default {
           }).then((lyric) => {
             if(this.currentLyric) {
               this.currentLyric.stop();
-              console.log("stop");
             }
             this.currentLyric = new Lyric(lyric, this.handleLyric);
             this.$nextTick(() => {
               if (this.isPlay) {
-            this.currentLyric.play();
+                this.currentLyric.play();
               }
             })
           })
         },
         handleLyric({lineNum, txt}) {
           this.currentLineNum = lineNum;
-          if (lineNum > 7) {
-          let lineEl = this.$refs.lyricLine[lineNum - 7]
-          this.lyricScorll.scrollToElement(lineEl, 500)
+          if (lineNum > 6) {
+          let lineEl = this.$refs.lyricLine[lineNum - 6]
+          this.$refs.lyricList.scrollToElement(lineEl, 500)
         } else {
           this.$refs.lyricList.scrollTo(0, 0, 1000)
         }
           this.playingLyric = txt;
         },
-        _initLyricScroll() {
-        this.lyricScorll = new BScroll(this.$refs.lyricList, {
-          click: true,
-          HWCompositing: true,
-          preventDefault: false
-        });
-      },
         updateTime(e) {
          this.currentTime = e.target.currentTime;
         },
@@ -164,18 +166,52 @@ export default {
           let au = this.$refs.audio;
           this.$store.commit("audioDom", au);
         },
+        next() {
+          var index = this.Music.index + 1;
+          if(index === this.currentList.length) {
+            index = 0;
+          }
+          var currentMusic = [];
+          currentMusic.push(this.currentList[index]) ;
+          this.$store.commit('playMusic', currentMusic[0]);
+          this.$store.commit("addOld",currentMusic[0]);
+        },
+        pre() {
+          var index;
+          if(this.Music.index === 0) {
+            index = this.currentList.length - 1;
+          } else {
+            index = this.Music.index - 1;
+          }
+          var currentMusic = [];
+          currentMusic.push(this.currentList[index]) ;
+          this.$store.commit('playMusic', currentMusic[0]);
+          this.$store.commit("addOld",currentMusic[0]);
+        },
+        setLoop() {
+          this.isLoop = !(this.isLoop);
+        },
         Love(item) {
+          if(this.Music.isLove) {
+            this.$store.commit('setLove',false);
+            this.$store.commit('delLove',item);
+          }else{
           let music = {
               img: item.img,
               music: item.music,
               music_name: item.music_name,
               singer: item.singer,
               id: item.id,
-              mid: item.mid
+              mid: item.mid,
+              index: this.$store.state.loveMusic.length,
+              isLove: true
             };
+          this.$store.commit('setLove',true);
           this.$store.commit('addLove',music);
-          console.log(this.$store.state.loveMusic);
+          console.log("loveMusic");
+          console.log(this.$store.state.loveMusic)
         }
+      }
     }
 };
 </script>
@@ -187,34 +223,27 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 20;
-    background-color: rgb(1,186,144);
-    box-shadow: 7px 0 7px 0 rgb(1,186,144);
-    transition: height 0.4s;
+    background-color: rgb(196,176,152);
+    box-shadow: 7px 0 7px 0 rgb(196,176,152);
     transform: translate3d(0,0,0);
+    transition: all 0.4s;
 }
 
 .contorller .img{
     width: 64px;
     height: 64px;
     background-size: cover !important;
+    background-position: center center;
     position: relative;
-    transition: height 0.3s;
-    transition: width 0.3s;
-    transform: translate3d(0,0,0);
+    transform: translate3d(0,1px,0);
+    transition: all 0.4s;
 }
 
-.img .img-top{
-    width: 100%;
-    height: 30%;
-    background: linear-gradient(rgb(1,186,144), transparent);
-}
 
-.img .img-bottom {
-    width: 100%;
-    height: 20%;
-    position: absolute;
-    bottom: -1px;
-    background: linear-gradient(transparent, rgb(1,186,144));
+.img .img-back {
+  width: 100%;
+  height: 101%;
+  background: linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152));
 }
 
 .imgPlay {
@@ -224,16 +253,17 @@ export default {
 
 .title {
     position: absolute;
-    top:0;
-    left: 4.8em;
-    transition: all 0.5s;
+    top:0px;
+    left: 8em;
+    transition: left 0.4s ease;
     transform: translate3d(0,0,0);
     z-index: 26;
+    font-size: 62.5%;
 }
 
 
 .title .gequ {
-    font-weight: bold;
+    font-size: 14px;
     line-height: 40px;
     text-align: center;
 }
@@ -250,8 +280,8 @@ export default {
     justify-content: center;
     bottom: 20px;
     right: 20px;
-    /*transition: top 1s;
-    transform: translate3d(0,0,0);*/
+    transition: top 1s;
+    transform: translate3d(0,0,0);
     vertical-align: middle;
     /* 中线对齐 */
     align-items: center;
@@ -264,7 +294,7 @@ export default {
 
 
 .title-play {
-    top: 65%;
+    top: 62%;
     left:50%;
     transform: translate(-50%);
 }
@@ -296,6 +326,13 @@ clear:both;
 
 .icon-loop {
   background: url(img/loop.svg) no-repeat;
+  background-size: cover;
+  width: 28px;
+  height: 28px;
+  margin: 1px 0;
+}
+.icon-unloop {
+  background: url(img/lbloop.svg) no-repeat;
   background-size: cover;
   width: 28px;
   height: 28px;
@@ -381,13 +418,13 @@ clear:both;
 .fullGeci {
   width: 100%;
   height: 100%;
-  background-color: rgba(1,186,144,0.9);
+  background-color: rgba(196,176,152,0.9);
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   z-index: 25;
-  line-height: 25px;
+  line-height: 35px;
 }
 .fullGeci p {
   text-align: center;
@@ -396,7 +433,7 @@ clear:both;
 
 .ly-wrapper {
   margin: 95px 0 20px 0;
-  position: absolute;
+  /*position: absolute;*/
   left: 0;
   right: 0;
   height: 66%;

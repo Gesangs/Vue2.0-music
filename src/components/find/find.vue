@@ -19,31 +19,34 @@
           <ul>
           <p v-for="item in history" @click="search(item)">
             {{ item }}
-            <!-- <span class="iconfont icon-del_1"></span> -->
           </p>
           </ul>
         </div>
       </div>
       <!-- 搜索结果 -->
-      <div class="sResult" ref="resultList"  v-show="isShowkey">
+      <scroll :data="musics" class="sResult" ref="resultList"  v-show="isShowkey">
         <ul>
-        <li v-for="item in musics" @click="Splay(item)">
-          <img :src="handleImg(item)" alt="">
+        <li v-for="(item,index) in musics" @click="Splay(item, index)">
+          <img :src="item.img" alt="">
           <div>
-            <span>{{ strDecode(item.songname) }}</span>
-            <span>{{ strDecode(handleSinger(item)) }}</span>
+            <span>{{ item.music_name }}</span>
+            <span>{{ item.singer }}</span>
           </div>
         </li><li></li>
       </ul>
-      </div>
+      </scroll>
     </div>
 </template>
 
 <script>
- import BScroll from 'better-scroll';
+ import Scroll from '../scroll.vue'
  import {getHotKey,search} from '../../api/search.js';
  import {ERR_OK} from '../../api/config.js';
+ import {saveSearch, clearSearch, savePlay, loadSearch} from "../../api/localStorage.js"
   export default {
+    components: {
+          Scroll
+        },
     data() {
         return {
           msg: '',
@@ -56,37 +59,24 @@
     },
     created() {
       this._gethotKey();
-      this.history = this.$store.state.searchHistory;
+      this.history = loadSearch();
     },
     watch: {
-      history: function() {
-        return this.$store.state.searchHistory;
-      }
+      // history: function() {
+      //   return this.$store.state.searchHistory;
+      // }
     },
     methods: {
-      // 去抖函数的实现
-    // debounce(fn, delta, context) {
-    //     var timeoutID = null;
-    //     return function() {
-    //       clearTimeout(timeoutID);
-    //       var args = arguments;
-    //       timeoutID = setTimeout(function() {
-    //         fn.apply(context, args);
-    //       }, delta);
-    //     };
-    //   },
       // 搜索
       search(msg) {
         msg = msg.trim();
         this.msg = msg;
             search(msg, 1, false, 15).then((res) => {
           if(res.code === ERR_OK) {
-            this.musics = res.data.song.list;
-            console.log(this.musics)
+            this.musics = this.handleList(res.data.song.list);
             this.isShowkey = true;
             this.$store.commit("addHistory",msg);
             this.$nextTick(() => {
-              this._initResultScroll();
               this.history = this.$store.state.searchHistory;
             })
           }
@@ -111,20 +101,29 @@
           return sing.singer[0].name;
         }
       },
+      handleList(list) {
+        const List = [];
+        for(let i = 0;i<list.length;i++) {
+          let music = {
+          img: this.handleImg(list[i]),
+          music:this.handleMusic(list[i]),
+          music_name: this.strDecode(list[i].songname),
+          singer: this.strDecode(this.handleSinger(list[i])),
+          id: list[i].songid,
+          mid: list[i].songmid,
+          index: i
+        };
+        List.push(music);
+        };
+        this.musics = List;
+        return List;
+      },
       Focus() {
         this.isShowkey = true;
       },
       Blur() {
         this.isShowkey = false;
         this.musics = [];
-      },
-      // 滚动插件
-      _initResultScroll() {
-        this.resultScorll = new BScroll(this.$refs.resultList, {
-          click: true,
-          HWCompositing: true,
-          preventDefault: false
-        });
       },
       _gethotKey() {
         getHotKey().then((res) => {
@@ -134,18 +133,12 @@
         })
       },
       // 点击播放
-      Splay(item) {
-        let music = {
-          img: this.handleImg(item),
-          music:this.handleMusic(item),
-          music_name: this.strDecode(item.songname),
-          singer: this.strDecode(this.handleSinger(item)),
-          id: item.songid,
-          mid: item.songmid
-        };
-          this.$store.commit('playMusic', music);
+      Splay(item,index) {
+          this.$store.commit('playMusic', item);
+          this.$store.commit('pushList', this.musics);
+          savePlay(item);
           this.$store.commit('isplay', {isPLaying:true});
-          this.$store.commit("addOld",music);
+          this.$store.commit("addOld",item);
           this.$store.state.audio.play();
       },
       // 解决外语显示不正常
@@ -156,7 +149,7 @@
     },
     delHistory() {
       this.del = false;
-      this.$store.commit("addOld",0);
+      this.$store.commit("addHistory",0);
       this.history.length = 0;
     }
   }
@@ -167,7 +160,7 @@
 .find {
   position: absolute;
   width: 100%;
-  top: 102px;
+  top: 100px;
   bottom: 4em;
   overflow: hidden;
 }
@@ -253,6 +246,7 @@ li >div {
 li > div > span:nth-child(1) {
     display: block;
     margin-top: 12px;
+    font-size: 14px;
     color: rgb(1,186,144);
 }
 li > div > span:nth-child(2) {

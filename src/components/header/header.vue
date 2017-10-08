@@ -2,8 +2,7 @@
   <div class="header">
     <div class="shang">
         <span class="iconfont icon-mune"></span>
-        <span>悦  听</span>
-        <span class="iconfont icon-search"></span>
+        <span>轻&nbsp;&nbsp;听</span>
     </div>
     <div class="xia">
         <router-link to="/music" class="item">
@@ -39,13 +38,14 @@
 .shang {
     height: 10%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row ;
 }
 
 .shang span {
     font-size: 20px;
-    margin: 20px 40px 0 40px;
+    margin: 10px 10px 10px 30px;
     line-height: 20px;
+    padding: 5px;
 }
 
 
@@ -61,9 +61,9 @@
 .xia .item {
     flex: 1;
     display: block;
-    height: 50px;
+    height: 35px;
     text-align: center;
-    line-height: 50px;
+    line-height: 35px;
     text-decoration: none;
     color: #fff;
     font-size: 18px;
@@ -80,11 +80,6 @@
 
 .icon-mune {
     background: url(mune.svg) no-repeat;
-    background-size: cover;
-}
-
-.icon-search {
-    background: url(fangdajing.svg) no-repeat;
     background-size: cover;
 }
 </style>
