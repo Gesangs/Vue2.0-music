@@ -18,27 +18,27 @@ npm run dev
 ## 插件
 
 - better-scroll
-这可能是移动端最好用的滚动插件了
+> 这可能是移动端最好用的滚动插件了
 
 - jsonp
-axios不支持跨域，只好用这货咯
+> axios不支持跨域，只好用这货咯
 
 - js-base64 
-Decode拉取过来的歌词文件
+> Decode拉取过来的歌词文件
 
 - lyric-parser
-用来控制歌词文件，配合BS让歌词动起来
+> 用来控制歌词文件，配合BS让歌词动起来
 
 - good-storage
-本地存储
+> 本地存储
 
 ## 技术栈
 
 - express
-vue-cli用的这货，上线的时候也是用的这货
+> vue-cli用的这货，上线的时候也是用的这货
 
 - webpack
-vue-cli自带咯，用起来很顺手，图片转base64啊，热更新啊，模块化打包啊该有的都有
+> vue-cli自带咯，用起来很顺手，图片转base64啊，热更新啊，模块化打包啊该有的都有
 
 ## 一点小总结
 
