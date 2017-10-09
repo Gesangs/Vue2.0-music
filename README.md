@@ -2,7 +2,7 @@
 **vue + vue-router + vuex + axios**
 
 
-**在线演示**👉 [轻听](www.gesangs.com:3000)
+**在线演示**👉 [轻听](http://www.gesangs.com:3000)
 
 ## Build Setup
 
