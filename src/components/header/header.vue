@@ -1,8 +1,12 @@
 <template>
   <div class="header">
     <div class="shang">
-        <span class="iconfont icon-mune"></span>
+        <span class="iconfont icon-mune" @click="mune"></span>
         <span>轻&nbsp;&nbsp;听</span>
+    </div>
+    <div class="mune" v-if="isClick">
+        <a href="https://github.com/Gesangs/Vue2.0-music"><span class="mune1"></span></a>
+        <span style="width:160px; margin-top:20px;"><a href="https://github.com/Gesangs/Vue2.0-music">如果你喜欢这个app，点击这里加颗星~</a></span>
     </div>
     <div class="xia">
         <router-link to="/music" class="item">
@@ -19,7 +23,18 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+            return {
+                isClick:false
+            }
+        },
+    methods: {
+        mune() {
+            this.isClick = !this.isClick;
+        }
+    }
+  };
 </script>
 
 <style>
@@ -81,6 +96,36 @@
 .icon-mune {
     background: url(mune.svg) no-repeat;
     background-size: cover;
+}
+
+.mune {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    width: 250px;
+    height: 400px;
+    background: rgba(0,0,0,0.8);
+    z-index: 30;
+    border-radius: 10px;
+    display: flex;
+    align-items:center;
+    flex-direction:column;
+}
+
+.mune a{
+    color: #fff;
+}
+.mune1 {
+    background: url(github.jpg);
+    display: block;
+    border-radius: 40px;
+    background-size: cover;
+    width: 40px;
+    margin-top: 120px;
+    height: 40px;
 }
 </style>
 

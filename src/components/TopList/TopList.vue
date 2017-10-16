@@ -1,11 +1,12 @@
 <template>
+  <transition name="slide">
   <div class="TopList">
     <span class="fanhui" @click="fanhui"></span>
     <img :src="topurl" alt="" class="topImg">
     <scroll class="toplist" :data="toplist">
           <ul>
             <li v-for="item in toplist" @click="Tplay(item)">
-              <img :src="item.img" alt="">
+              <img v-lazy="item.img" alt="">
               <div>
                 <span>{{ item.music_name }}</span>
                 <span>{{ item.singer }}</span>
@@ -14,6 +15,7 @@
           </ul>
         </scroll>
   </div>
+  </transition>
 </template>
 <script>
 import Scroll from '../scroll.vue';
@@ -28,13 +30,15 @@ import {savePlay} from "../../api/localStorage.js"
           topurl:''
         }
       },
-      created() {
-        var timer = setTimeout(() => {
+      create() {
            this.toplist = this.handleList(this.topList);
            this.topurl = this.$store.state.topUrl;
-        }, 800);
-        timer = null;
       },
+      mounted() {
+        this.toplist = [];
+        this.toplist = this.handleList(this.topList);
+           this.topurl = this.$store.state.topUrl;
+         },
       computed: {
         topList() {
           return this.$store.state.topList;
@@ -98,7 +102,7 @@ import {savePlay} from "../../api/localStorage.js"
 
 <style>
 .TopList {
-  position: absolute;
+  position: fixed;
   width: 100%;
   bottom: 70px;
   top: 0;
@@ -120,13 +124,21 @@ import {savePlay} from "../../api/localStorage.js"
 }
 .topImg {
   width: 100%;
-  height: 250px;
+  height: 200px;
 }
 .toplist {
   height: 100%;
   position: absolute;
   width: 100%;
-  top: 250px;
+  top: 200px;
   overflow: hidden;
 }
+
+.slide-enter-active, .slide-leave-active {
+    transition: all 0.3s;
+}
+
+  .slide-enter, .slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
 </style>

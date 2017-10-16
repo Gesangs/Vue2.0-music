@@ -17,12 +17,12 @@
         </scroll>
         <scroll class="loveList" :data="lovemusic" ref="lovelist" v-show="isActive">
           <ul>
-            <li v-for="(item,index) in lovemusic" @click="Mplay(lovemusic,index)">
+            <li v-for="(item,index) in lovemusic" @click="Mplay(lovemusic,index)" v-model="lovemusic">
               <img :src="item.img" alt="">
               <div class="delll">
                 <span>{{ item.music_name }}</span>
                 <span>{{ item.singer }}</span>
-                <!-- <span class="dell" @click.stop="deletefavorite(item,index)"></span> -->
+                <span class="dell" @click.stop="deletefavorite(item,index)"></span>
               </div>
             </li>
             <li></li>
@@ -72,9 +72,10 @@ export default {
                 this.$refs.lovelist.refresh()
             })
         },
-        // deletefavorite(item,index) {
-        //   deleteFavorite(item);
-        // },
+        deletefavorite(item,index) {
+          deleteFavorite(item);
+          this.lovemusic.splice(index,1);
+        },
       Mplay(list, item) {
           this.$store.commit('pushList', list);
           this.$store.commit('playMusic', this.$store.state.currentList[item]);
@@ -107,7 +108,7 @@ export default {
     font-size: 14px;
     padding: 5px 0;
     border-radius: 5px 0px 0px 5px;
-    border: 1px solid rgb(1,186,144);
+    border: 1px solid rgb(1,186,144);/*#01BA90*/
 }
 
 .recent {

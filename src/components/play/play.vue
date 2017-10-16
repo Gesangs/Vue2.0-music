@@ -223,7 +223,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 20;
-    background-color: rgb(196,176,152);
+    background-color: rgb(196,176,152);/*#C4B098*/
     box-shadow: 7px 0 7px 0 rgb(196,176,152);
     transform: translate3d(0,0,0);
     transition: all 0.4s;

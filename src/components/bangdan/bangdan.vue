@@ -2,7 +2,7 @@
     <div class="rank">
         <scroll :data="topList" class="rankscorll" ref="ranklist">
             <div>
-            <router-link to="/TopList"v-for="item in topList">
+            <div v-for="item in topList">
                 <div @click="selectItem(item)" class="rankList" >
                 <img :src="item.picUrl" alt="">
                 <div class="rankRight">
@@ -11,9 +11,10 @@
                     </p>
                 </div>
             </div>
-            </router-link>
+            </div>
         </div>
     </scroll>
+    <router-view></router-view>
 </div>
 </template>
 
@@ -42,12 +43,13 @@ import Scroll from '../scroll.vue'
             },
             selectItem(item) {
                 getMusicList(item.id).then((res) => {
-                    if(res.code === 0) {
-                        this.$store.state.topList = [];
-                       this.$store.state.topList = res.songlist
-                       this.$store.state.topUrl = res.topinfo.MacDetailPicUrl;
-                    }
+                     this.$store.commit("setToplist", res.songlist);
+                    this.$store.commit("setTopUrl", res.topinfo.pic_h5);
+                    }).then(() => {
+                    this.$router.push({
+                        path:`/bangdan/${item.id}`
                 });
+                })
 
             }
         }

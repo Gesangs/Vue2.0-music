@@ -27,7 +27,7 @@
       <scroll :data="musics" class="sResult" ref="resultList"  v-show="isShowkey">
         <ul>
         <li v-for="(item,index) in musics" @click="Splay(item, index)">
-          <img :src="item.img" alt="">
+          <img v-lazy="item.img" alt="">
           <div>
             <span>{{ item.music_name }}</span>
             <span>{{ item.singer }}</span>
