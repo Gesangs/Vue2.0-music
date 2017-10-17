@@ -4,26 +4,20 @@
     <span class="fanhui" @click="fanhui"></span>
     <img :src="topurl" alt="" class="topImg">
     <scroll class="toplist" :data="toplist">
-          <ul>
-            <li v-for="item in toplist" @click="Tplay(item)">
-              <img v-lazy="item.image" alt="">
-              <div>
-                <span>{{ item.name }}</span>
-                <span>{{ item.singer }}</span>
-              </div>
-            </li>
-          </ul>
-        </scroll>
+        <song-list :songs="toplist"></song-list>
+    </scroll>
   </div>
   </transition>
 </template>
 <script>
 import Scroll from '../../base/scroll.vue';
-import {savePlay} from "../../api/localStorage.js";
-import {handleSong} from "../../base/song.js"
+import SongList from '../../base/song-list.vue';
+import {savePlay} from '../../api/localStorage.js';
+import {handleSong} from '../../base/song.js'
     export default {
       components: {
-          Scroll
+          Scroll,
+          SongList
         },
       data() {
         return {
@@ -53,7 +47,6 @@ import {handleSong} from "../../base/song.js"
           let music = handleSong(item.data)
         List.push(music);
         });
-        console.log(List);
         return List;
       },
       Tplay(item) {

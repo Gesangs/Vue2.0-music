@@ -10,20 +10,20 @@ export default class Song {
         this.url = url
     }
 }
-
+// 拼接url、处理歌曲名
 export function handleSong(music) {
     return new Song({
         id: music.songid,
         mid: music.songmid,
-        singer: strDecode(handleSinger(music.singer)),
-        name: strDecode(music.songname),
+        singer: handleSinger(music.singer),
+        name: music.songname,
         album: music.albumname,
         duration: music.interval,
         image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${music.albummid}.jpg?max_age=2592000`,
         url: `http://ws.stream.qqmusic.qq.com/${music.songid}.m4a?fromtag=46`
     })
 }
-
+// 可能会有多名歌手
 function handleSinger(singer) {
         let ret = []
       if (!singer) {
@@ -34,10 +34,3 @@ function handleSinger(singer) {
       })
       return ret.join(' | ')
       }
-
-
-function strDecode(str) {
-      return str.replace(/&#(x)?([^&]{1,5});?/g,function($,$1,$2) {
-          return String.fromCharCode(parseInt($2 , $1 ? 16:10));
-      });
-    }

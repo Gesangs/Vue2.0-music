@@ -5,28 +5,10 @@
             <p class="recent" :class="{active: !isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
         <scroll class="oldList" :data="oldmusic" ref="oldlist" v-show="!isActive">
-          <ul>
-            <li v-for="(item,index) in oldmusic" @click="Mplay(oldmusic,index)">
-              <img :src="item.img" alt="">
-              <div>
-                <span>{{ item.music_name }}</span>
-                <span>{{ item.singer }}</span>
-              </div>
-            </li><li></li>
-          </ul>
+          <song-list :songs="oldmusic"></song-list>
         </scroll>
         <scroll class="loveList" :data="lovemusic" ref="lovelist" v-show="isActive">
-          <ul>
-            <li v-for="(item,index) in lovemusic" @click="Mplay(lovemusic,index)" v-model="lovemusic">
-              <img :src="item.img" alt="">
-              <div class="delll">
-                <span>{{ item.music_name }}</span>
-                <span>{{ item.singer }}</span>
-                <span class="dell" @click.stop="deletefavorite(item,index)"></span>
-              </div>
-            </li>
-            <li></li>
-          </ul>
+          <song-list :songs="lovemusic"></song-list>
         </scroll>
     </div>
     </div>
@@ -34,10 +16,12 @@
 
 <script>
  import Scroll from '../../base/scroll.vue';
- import {deleteFavorite,loadPlay,loadFavorite} from "../../api/localStorage.js"
+ import SongList from '../../base/song-list.vue';
+ import {deleteFavorite,loadPlay,loadFavorite} from '../../api/localStorage.js'
 export default {
   components: {
-          Scroll
+          Scroll,
+          SongList
         },
     data() {
         return {

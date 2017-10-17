@@ -25,27 +25,21 @@
       </div>
       <!-- 搜索结果 -->
       <scroll :data="musics" class="sResult" ref="resultList"  v-show="isShowkey">
-        <ul>
-        <li v-for="(item,index) in musics" @click="Splay(item, index)">
-          <img v-lazy="item.image" alt="">
-          <div>
-            <span>{{ item.name }}</span>
-            <span>{{ item.singer }}</span>
-          </div>
-        </li><li></li>
-      </ul>
+        <song-list :songs="musics"></song-list>
       </scroll>
     </div>
 </template>
 
 <script>
- import Scroll from '../../base/scroll.vue'
+ import Scroll from '../../base/scroll.vue';
+ import SongList from '../../base/song-list.vue';
  import {getHotKey,search} from '../../api/search.js';
  import {handleSong} from '../../base/song.js';
- import {saveSearch, clearSearch, savePlay, loadSearch} from "../../api/localStorage.js"
+ import {saveSearch, clearSearch, savePlay, loadSearch} from '../../api/localStorage.js'
   export default {
     components: {
-          Scroll
+          Scroll,
+          SongList
         },
     data() {
         return {
@@ -98,15 +92,6 @@
             this.hotkey = res.data.hotkey.splice(0,12);
           }
         })
-      },
-      // 点击播放
-      Splay(item,index) {
-          this.$store.commit('playMusic', item);
-          this.$store.commit('pushList', this.musics);
-          savePlay(item);
-          this.$store.commit('isplay', {isPLaying:true});
-          this.$store.commit("addOld",item);
-          this.$store.state.audio.play();
       },
     delHistory() {
       this.del = false;
@@ -187,37 +172,6 @@
   width: 100%;
   top: 57px;
   overflow: hidden;
-}
-li {
-    width:100%;
-    height: 60px;
-    display: flex;
-}
-li > img {
-    flex: 0 0 35px;
-    width: 35px;
-    height: 35px;
-    margin: 15px;
-}
-li >div {
-    flex: 1;
-    height: 64px;
-    border-bottom: 1px solid rgba(1,186,144,0.3);
-}
-li > div > span:nth-child(1) {
-    display: block;
-    margin-top: 12px;
-    font-size: 14px;
-    color: rgb(1,186,144);
-}
-li > div > span:nth-child(2) {
-    display: block;
-    margin-top: 5px;
-    font-size: 12px;
-}
-li > span {
-    display: block;
-    float: right;
 }
 .find .iconfont {
   width: 18px;

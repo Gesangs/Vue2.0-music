@@ -5,8 +5,8 @@
           <div class="img-back"></div>
       </div>
       <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
-          <p class="gequ">{{ Music.name || '轻听'}}</p>
-          <p class="geshou">{{ Music.singer}}</p>
+          <p class="gequ" v-html="Music.name || '轻听'"></p>
+          <p class="geshou" v-html="Music.singer"></p>
       </div>
       <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
         <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
