@@ -68,9 +68,9 @@ const store = new Vuex.Store({
     state: {
         isPlaying: false,
         Music: {
-            img:'../static/16pic_1792828_b.webp',
-            music: '',
-            music_name: '',
+            image:'../static/16pic_1792828_b.webp',
+            url: '',
+            name: '',
             singer: '',
             id: '',
             mid: '',
@@ -93,9 +93,9 @@ const store = new Vuex.Store({
             state.topUrl = topurl;
         },
         playMusic(state, data) {
-            state.Music.img = data.img;
-            state.Music.music = data.music;
-            state.Music.music_name = data.music_name;
+            state.Music.image = data.image;
+            state.Music.url = data.url;
+            state.Music.name = data.name;
             state.Music.singer = data.singer;
             state.Music.id = data.id;
             state.Music.mid = data.mid;

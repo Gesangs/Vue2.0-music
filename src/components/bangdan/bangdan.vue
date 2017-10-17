@@ -20,7 +20,7 @@
 
 <script>
 import {getTopList,getMusicList} from '../../api/rank.js';
-import Scroll from '../scroll.vue'
+import Scroll from '../../base/scroll.vue'
     export default {
         components: {
             Scroll

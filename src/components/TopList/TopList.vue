@@ -6,9 +6,9 @@
     <scroll class="toplist" :data="toplist">
           <ul>
             <li v-for="item in toplist" @click="Tplay(item)">
-              <img v-lazy="item.img" alt="">
+              <img v-lazy="item.image" alt="">
               <div>
-                <span>{{ item.music_name }}</span>
+                <span>{{ item.name }}</span>
                 <span>{{ item.singer }}</span>
               </div>
             </li>
@@ -18,8 +18,9 @@
   </transition>
 </template>
 <script>
-import Scroll from '../scroll.vue';
-import {savePlay} from "../../api/localStorage.js"
+import Scroll from '../../base/scroll.vue';
+import {savePlay} from "../../api/localStorage.js";
+import {handleSong} from "../../base/song.js"
     export default {
       components: {
           Scroll
@@ -30,62 +31,29 @@ import {savePlay} from "../../api/localStorage.js"
           topurl:''
         }
       },
-      create() {
-           this.toplist = this.handleList(this.topList);
-           this.topurl = this.$store.state.topUrl;
-      },
       mounted() {
-        this.toplist = [];
         this.toplist = this.handleList(this.topList);
-           this.topurl = this.$store.state.topUrl;
+        this.topurl = this.topUrl;
          },
       computed: {
         topList() {
           return this.$store.state.topList;
+        },
+        topUrl() {
+          return this.$store.state.topUrl;
         }
       },
       methods: {
         fanhui() {
           this.$router.go(-1);
         },
-        handleImg(img) {
-        return "https://y.gtimg.cn/music/photo_new/T002R300x300M000"+ img.albummid +".jpg?max_age=2592000";
-      },
-      handleMusic(music) {
-        return "http://ws.stream.qqmusic.qq.com/"+ music.songid +".m4a?fromtag=46";
-      },
-      handleSinger(sing) {
-        let len = sing.singer.length;
-        let name = [];
-        if(len) {
-          for(let i=0; i < sing.singer.length;i++) {
-            name.push(sing.singer[i].name);
-          }
-          return name.join(" | ");
-        }else{
-          return sing.singer[0].name;
-        }
-      },
-      strDecode(str) {
-      return str.replace(/&#(x)?([^&]{1,5});?/g,function($,$1,$2) {
-          return String.fromCharCode(parseInt($2 , $1 ? 16:10));
-      });
-    },
       handleList(list) {
         const List = [];
-        for(let i = 0;i<list.length;i++) {
-          let music = {
-          img: this.handleImg(list[i].data),
-          music:this.handleMusic(list[i].data),
-          music_name: this.strDecode(list[i].data.songname),
-          singer: this.strDecode(this.handleSinger(list[i].data)),
-          id: list[i].data.songid,
-          mid: list[i].data.songmid,
-          index: i
-        };
+        list.forEach((item) => {
+          let music = handleSong(item.data)
         List.push(music);
-        };
-        this.musics = List;
+        });
+        console.log(List);
         return List;
       },
       Tplay(item) {

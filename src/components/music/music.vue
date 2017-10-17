@@ -33,7 +33,7 @@
 </template>
 
 <script>
- import Scroll from '../scroll.vue';
+ import Scroll from '../../base/scroll.vue';
  import {deleteFavorite,loadPlay,loadFavorite} from "../../api/localStorage.js"
 export default {
   components: {

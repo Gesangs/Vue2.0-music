@@ -27,9 +27,9 @@
       <scroll :data="musics" class="sResult" ref="resultList"  v-show="isShowkey">
         <ul>
         <li v-for="(item,index) in musics" @click="Splay(item, index)">
-          <img v-lazy="item.img" alt="">
+          <img v-lazy="item.image" alt="">
           <div>
-            <span>{{ item.music_name }}</span>
+            <span>{{ item.name }}</span>
             <span>{{ item.singer }}</span>
           </div>
         </li><li></li>
@@ -39,9 +39,9 @@
 </template>
 
 <script>
- import Scroll from '../scroll.vue'
+ import Scroll from '../../base/scroll.vue'
  import {getHotKey,search} from '../../api/search.js';
- import {ERR_OK} from '../../api/config.js';
+ import {handleSong} from '../../base/song.js';
  import {saveSearch, clearSearch, savePlay, loadSearch} from "../../api/localStorage.js"
   export default {
     components: {
@@ -61,18 +61,13 @@
       this._gethotKey();
       this.history = loadSearch();
     },
-    watch: {
-      // history: function() {
-      //   return this.$store.state.searchHistory;
-      // }
-    },
     methods: {
       // 搜索
       search(msg) {
         msg = msg.trim();
         this.msg = msg;
             search(msg, 1, false, 15).then((res) => {
-          if(res.code === ERR_OK) {
+          if(res.code === 0) {
             this.musics = this.handleList(res.data.song.list);
             this.isShowkey = true;
             this.$store.commit("addHistory",msg);
@@ -82,40 +77,12 @@
           }
       })
     },
-      // 拼接url
-      handleImg(img) {
-        return "https://y.gtimg.cn/music/photo_new/T002R300x300M000"+ img.albummid +".jpg?max_age=2592000";
-      },
-      handleMusic(music) {
-        return "http://ws.stream.qqmusic.qq.com/"+ music.songid +".m4a?fromtag=46";
-      },
-      handleSinger(sing) {
-        let len = sing.singer.length;
-        let name = [];
-        if(len) {
-          for(let i=0; i < sing.singer.length;i++) {
-            name.push(sing.singer[i].name);
-          }
-          return name.join(" | ");
-        }else{
-          return sing.singer[0].name;
-        }
-      },
       handleList(list) {
         const List = [];
-        for(let i = 0;i<list.length;i++) {
-          let music = {
-          img: this.handleImg(list[i]),
-          music:this.handleMusic(list[i]),
-          music_name: this.strDecode(list[i].songname),
-          singer: this.strDecode(this.handleSinger(list[i])),
-          id: list[i].songid,
-          mid: list[i].songmid,
-          index: i
-        };
+        list.forEach((item) => {
+          let music = handleSong(item)
         List.push(music);
-        };
-        this.musics = List;
+        });
         return List;
       },
       Focus() {
@@ -127,7 +94,7 @@
       },
       _gethotKey() {
         getHotKey().then((res) => {
-          if (res.code === ERR_OK) {
+          if (res.code === 0) {
             this.hotkey = res.data.hotkey.splice(0,12);
           }
         })
@@ -141,12 +108,6 @@
           this.$store.commit("addOld",item);
           this.$store.state.audio.play();
       },
-      // 解决外语显示不正常
-      strDecode(str) {
-      return str.replace(/&#(x)?([^&]{1,5});?/g,function($,$1,$2) {
-          return String.fromCharCode(parseInt($2 , $1 ? 16:10));
-      });
-    },
     delHistory() {
       this.del = false;
       this.$store.commit("addHistory",0);

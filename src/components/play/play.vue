@@ -5,7 +5,7 @@
           <div class="img-back"></div>
       </div>
       <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
-          <p class="gequ">{{ Music.music_name || '轻听'}}</p>
+          <p class="gequ">{{ Music.name || '轻听'}}</p>
           <p class="geshou">{{ Music.singer}}</p>
       </div>
       <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
@@ -29,14 +29,14 @@
           <span :class="[Music.isLove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
       </div>
     </transition>
-      <audio :src="Music.music" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop"></audio>
+      <audio :src="Music.url" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop"></audio>
       <div class="progressBar" ref="progressBar">
         <div class="progress" ref="progress"></div>
       </div>
   </div>
 </template>
 <script>
-import Scroll from '../scroll.vue'
+import Scroll from '../../base/scroll.vue'
 import {getLyric} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
@@ -88,10 +88,10 @@ export default {
       return this.$store.state.Music;
     },
     Img() {
-      if(! this.Music.img) {
+      if(! this.Music.image) {
         return 'url(../../static/16pic_1792828_b.webp)';
       }else {
-        return 'url(' + this.Music.img + ')';
+        return 'url(' + this.Music.image + ')';
       }
     },
     isPlay() {
