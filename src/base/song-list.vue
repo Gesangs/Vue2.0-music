@@ -26,12 +26,14 @@ import {savePlay} from '../api/localStorage.js'
         },
         methods: {
             Splay(item,index) {
-          this.$store.commit('playMusic', item);
-          this.$store.commit('pushList', this.songs);
-          savePlay(item);
-          this.$store.commit('isplay', {isPLaying:true});
-          this.$store.commit("addOld",item);
-          this.$store.state.audio.play();
+                const i = {index:index};
+                Object.assign(item,i);
+              this.$store.commit('playMusic', item);
+              this.$store.commit('pushList', this.songs);
+              savePlay(item);
+              this.$store.commit('isplay', {isPLaying:true});
+              this.$store.commit("addOld",item);
+              this.$store.state.audio.play();
             }
 
         }

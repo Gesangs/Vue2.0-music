@@ -121,7 +121,9 @@ const store = new Vuex.Store({
         },
         pushList(state, list) {
             state.currentList.length = 0;
-            list.forEach((item) => {
+            list.forEach((item,index) => {
+                let i = {index:index};
+                Object.assign(item,i);
                 state.currentList.push(item);
             })
         },

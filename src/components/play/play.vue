@@ -171,10 +171,8 @@ export default {
           if(index === this.currentList.length) {
             index = 0;
           }
-          var currentMusic = [];
-          currentMusic.push(this.currentList[index]) ;
-          this.$store.commit('playMusic', currentMusic[0]);
-          this.$store.commit("addOld",currentMusic[0]);
+          this.$store.commit('playMusic', this.currentList[index]);
+          this.$store.commit("addOld", this.currentList[index]);
         },
         pre() {
           var index;
@@ -183,10 +181,10 @@ export default {
           } else {
             index = this.Music.index - 1;
           }
-          var currentMusic = [];
-          currentMusic.push(this.currentList[index]) ;
-          this.$store.commit('playMusic', currentMusic[0]);
-          this.$store.commit("addOld",currentMusic[0]);
+          console.log(index);
+          console.log(this.currentList);
+          this.$store.commit('playMusic', this.currentList[index]);
+          this.$store.commit("addOld", this.currentList[index]);
         },
         setLoop() {
           this.isLoop = !(this.isLoop);
