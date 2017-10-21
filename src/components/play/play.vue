@@ -163,7 +163,7 @@ export default {
         },
         // 获取audio传入find组件实现点击播放，移动端不支持autoplay
         getAudio() {
-          let au = this.$refs.audio;
+          const au = this.$refs.audio;
           this.$store.commit("audioDom", au);
         },
         next() {

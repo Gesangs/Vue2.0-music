@@ -1,9 +1,7 @@
 <template>
   <div>
     <v-header></v-header>
-    <transition name="fade">
       <router-view></router-view>
-    </transition>
     <v-play></v-play>
   </div>
 </template>
@@ -26,11 +24,4 @@ a   {
   color: black;
   cursor:text;
 }
- .fade-enter-avtive, .fade-leave-active {
-    transition: opacity .5s
-}
-
-  .fade-enter, .fade-leave-to {
-    opacity: 0
-  }
 </style>

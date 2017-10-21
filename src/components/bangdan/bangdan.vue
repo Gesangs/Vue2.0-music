@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {getTopList,getMusicList} from '../../api/rank.js';
+import {getTopList} from '../../api/rank.js';
 import Scroll from '../../base/scroll.vue'
     export default {
         components: {
@@ -42,15 +42,10 @@ import Scroll from '../../base/scroll.vue'
                 })
             },
             selectItem(item) {
-                getMusicList(item.id).then((res) => {
-                     this.$store.commit("setToplist", res.songlist);
-                    this.$store.commit("setTopUrl", res.topinfo.pic_h5);
-                    }).then(() => {
-                    this.$router.push({
+                this.$router.push({
                         path:`/bangdan/${item.id}`
                 });
-                })
-
+                this.$store.commit("setToplist", item);
             }
         }
     };

@@ -9,51 +9,51 @@
 
   export default {
     props: {
-      probeType: {        // 滚动的类型，1表示会派发事件，会截流
+      probeType: {
         type: Number,
         default: 1
       },
-      click: {           // 是否允许在滚动上点击，可能和fastclick有冲突，可以用class="needsclick"解决
+      click: {
         type: Boolean,
         default: true
       },
-      listenScroll: {   // 是否派发滚动事件
+      listenScroll: {
         type: Boolean,
         default: false
       },
       data: {
-        type: Array,    // 传入的列表数据
+        type: Array,
         default: null
       },
-      pullup: {         // 是否派发滚动到底部的事件，用于上拉加载
+      pullup: {
         type: Boolean,
         default: false
       },
-      beforeScroll: {   // 是否派发列表滚动开始的事件
+      beforeScroll: {
         type: Boolean,
         default: false
       },
-      refreshDelay: {   // 当数据更新后，刷新scroll的延时
+      refreshDelay: {
         type: Number,
-        default: 20
+        default: 30
       }
     },
     mounted() {
-      setTimeout(() => {      // 20是保证dom已经ready
+      setTimeout(() => {
         this._initScroll()
-      }, 20)
+      }, 30)
     },
     methods: {
       _initScroll() {
-        if (!this.$refs.wrapper) {    // 确保dom已经就绪
+        if (!this.$refs.wrapper) {
           return
         }
-        this.scroll = new BScroll(this.$refs.wrapper, {   // 在mounted时初始化一个better-scroll对象
+        this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           click: this.click
         })
 
-        if (this.listenScroll) {      // 如果有监听就触发一个事件并把相关参数传出去
+        if (this.listenScroll) {
           let me = this
           this.scroll.on('scroll', (pos) => {
             me.$emit('scroll', pos)
@@ -61,37 +61,37 @@
         }
 
         if (this.pullup) {
-          this.scroll.on('scrollEnd', () => {       // 适应底部
+          this.scroll.on('scrollEnd', () => {
             if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
               this.$emit('scrollToEnd')
             }
           })
         }
 
-        if (this.beforeScroll) {        // 开始滚动之前钩子
+        if (this.beforeScroll) {
           this.scroll.on('beforeScrollStart', () => {
             this.$emit('beforeScroll')
           })
         }
       },
-      disable() {     // 禁用滚动
+      disable() {
         this.scroll && this.scroll.disable()
       },
-      enable() {      // 允许滚动
+      enable() {
         this.scroll && this.scroll.enable()
       },
-      refresh() {     // 刷新
+      refresh() {
         this.scroll && this.scroll.refresh()
       },
-      scrollTo() {    // 滚动到固定位置
+      scrollTo() {
         this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
       },
-      scrollToElement() {   // 滚动到固定 dom
+      scrollToElement() {
         this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
       }
     },
     watch: {
-      data() {  // 监控容器内部高度变化
+      data() {
         setTimeout(() => {
           this.refresh()
         }, this.refreshDelay)

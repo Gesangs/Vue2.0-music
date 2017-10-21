@@ -9,7 +9,7 @@
         <span style="width:160px; margin-top:20px;"><a href="https://github.com/Gesangs/Vue2.0-music">如果你喜欢这个app，点击这里加颗星~</a></span>
     </div>
     <div class="xia">
-        <router-link to="/music" class="item">
+        <router-link to="/user" class="item">
           我的
         </router-link>
         <router-link to="/find" class="item">

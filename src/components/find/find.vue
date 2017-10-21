@@ -31,15 +31,15 @@
 </template>
 
 <script>
- import Scroll from '../../base/scroll.vue';
  import SongList from '../../base/song-list.vue';
+ import Scroll from '../../base/scroll.vue';
  import {getHotKey,search} from '../../api/search.js';
  import {handleSong} from '../../base/song.js';
  import {saveSearch, clearSearch, savePlay, loadSearch} from '../../api/localStorage.js'
   export default {
     components: {
-          Scroll,
-          SongList
+          SongList,
+          Scroll
         },
     data() {
         return {

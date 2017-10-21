@@ -72,50 +72,45 @@ export default {
 
 <style>
 .music {
-  position: absolute;
-  width: 100%;
-  top: 100px;
-  bottom: 4em;
-  overflow: hidden;
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    bottom: 4em;
+    overflow: hidden;
 }
-
 .Tab {
     width: 100%;
     display: flex;
     margin: 10px 0;
     justify-content: center;
 }
-
 .myLove, .recent {
     width: 40%;
     text-align: center;
     font-size: 14px;
     padding: 5px 0;
     border-radius: 5px 0px 0px 5px;
-    border: 1px solid rgb(1,186,144);/*#01BA90*/
+    border: 1px solid rgb(1, 186, 144);
+    /*#01BA90*/
 }
-
 .recent {
     border-radius: 0px 5px 5px 0px;
     border-left: none;
 }
-
 .myLove {
     border-right: none;
 }
-
 .active {
-    background-color: rgb(1,186,144);
+    background-color: rgb(1, 186, 144);
     color: #fff;
 }
-
 .suiji {
     width: 30%;
     margin: 15px auto;
     height: 30px;
     line-height: 30px;
     border-radius: 30px;
-    border: 1px solid rgb(1,186,144);
+    border: 1px solid rgb(1, 186, 144);
     text-align: center;
     padding: 0 10px;
     font-size: 13px;
@@ -130,24 +125,23 @@ export default {
     background: url(suiji.svg) no-repeat;
     background-size: cover;
 }
-.oldList {
-  height: 100%;
-  position: absolute;
-  width: 100%;
-  overflow: hidden;
+.oldList, .loveList {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
 }
-
 .delll {
-  position: relative;
+    position: relative;
 }
 .dell {
-  width: 20px;
-  height: 20px;
-  background: url(del.svg);
-  background-size: cover;
-  position: absolute;
-  margin:19px 19px 0 0;
-  top: 1px;
-  right: 1px;
+    width: 20px;
+    height: 20px;
+    background: url(del.svg);
+    background-size: cover;
+    position: absolute;
+    margin: 19px 19px 0 0;
+    top: 1px;
+    right: 1px;
 }
 </style>

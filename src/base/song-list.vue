@@ -1,4 +1,5 @@
 <template>
+    <transition name="fade">
     <div class="song-list">
         <ul>
             <li v-for="(item, index) in songs" @click="Splay(item, index)">
@@ -11,6 +12,7 @@
             <li></li>
         </ul>
     </div>
+</transition>
 </template>
 
 <script>
@@ -68,4 +70,13 @@ import {savePlay} from '../api/localStorage.js'
     display: block;
     float: right;
 }
+.fade-enter-avtive, .fade-leave-active {
+    animation-delay: 0.3s;
+    transition: opacity 0.5s
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0
+  }
+
 </style>

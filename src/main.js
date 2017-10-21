@@ -13,8 +13,8 @@ Vue.use(VueLazyload, {
 })
 
 
-const music = (resolve) => {
-  import('./components/music/music.vue').then((module) => {
+const user = (resolve) => {
+  import('./components/user/user.vue').then((module) => {
     resolve(module)
   })
 }
@@ -23,12 +23,16 @@ const bangdan = (resolve) => {
     resolve(module)
   })
 }
-const TopList = (resolve) => {
-  import('./components/TopList/TopList.vue').then((module) => {
+const SingerDetail = (resolve) => {
+  import('./components/singer-detail/singer-detail.vue').then((module) => {
     resolve(module)
   })
 }
-
+const RankDetail = (resolve) => {
+  import('./components/rank-detail/rank-detail.vue').then((module) => {
+    resolve(module)
+  })
+}
 
 
 Vue.config.productionTip = false;
@@ -43,19 +47,23 @@ Vue.prototype.$ajax = Axios;
 
 const routes = [
 	{
-        path: '/music',
-        component: music
+        path: '/user',
+        component: user
     },
 	{
         path: '/find',
-        component: find
+        component: find,
+        children: [{
+            path: ':id',
+            component: SingerDetail
+        }]
     },
 	{
         path: '/bangdan',
         component: bangdan,
         children: [{
             path: ':id',
-            component: TopList
+            component: RankDetail
         }]
     }
 ];
@@ -81,16 +89,16 @@ const store = new Vuex.Store({
         oldMusic: loadPlay(),
         loveMusic: loadFavorite(),
         currentList:[],
-        topList:[],
-        topUrl:'',
+        musicList:[],
+        musicImg:'',
         searchHistory: loadSearch()
     },
     mutations: {
-        setToplist(state,toplist) {
-            state.topList = toplist;
+        setToplist(state,musiclist) {
+            state.musicList = musiclist;
         },
-        setTopUrl(state,topurl) {
-            state.topUrl = topurl;
+        setTopUrl(state,musicimg) {
+            state.musicImg = musicimg;
         },
         playMusic(state, data) {
             state.Music.image = data.image;
