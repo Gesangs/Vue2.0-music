@@ -89,7 +89,7 @@ const store = new Vuex.Store({
         oldMusic: loadPlay(),
         loveMusic: loadFavorite(),
         currentList:[],
-        musicList:[],
+        musicList:{},
         musicImg:'',
         searchHistory: loadSearch()
     },
@@ -122,8 +122,7 @@ const store = new Vuex.Store({
         pushList(state, list) {
             state.currentList.length = 0;
             list.forEach((item,index) => {
-                let i = {index:index};
-                Object.assign(item,i);
+                item = Object.assign({},item,{index:index});
                 state.currentList.push(item);
             })
         },

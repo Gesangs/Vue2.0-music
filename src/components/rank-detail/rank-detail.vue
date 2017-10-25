@@ -32,11 +32,20 @@ import {getMusicList} from '../../api/rank.js';
             }
             getMusicList(this.topList.id).then((res) => {
               if (res.code === 0) {
-                this.img = res.topinfo.pic_h5;
-                this.songs = res.songlist;
+                console.log(res);
+                this.img = res.topinfo.pic_v12;
+                this.songs = this.handleList(res.songlist);
               }
             })
           },
+          handleList(list) {
+            const List = [];
+            list.forEach((item) => {
+              let music = handleSong(item.data)
+            List.push(music);
+            });
+            return List;
+          }
         }
     }
 </script>

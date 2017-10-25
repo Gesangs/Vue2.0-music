@@ -181,8 +181,6 @@ export default {
           } else {
             index = this.Music.index - 1;
           }
-          console.log(index);
-          console.log(this.currentList);
           this.$store.commit('playMusic', this.currentList[index]);
           this.$store.commit("addOld", this.currentList[index]);
         },

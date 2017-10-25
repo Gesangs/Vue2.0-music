@@ -1,11 +1,14 @@
 <template>
   <transition name="slide">
   <div class="musicList">
-    <span class="fanhui" @click="fanhui"></span>
-    <img :src="musicImg" alt="" class="musicImg">
+    <div class="listTitle">
+      <!-- <span class="fanhui" @click="fanhui"></span>
+      <span>{{ listTitle }}</span> -->
+    </div>
+    <div class="musicImg" :style="{background: Img}"></div>
     <div class="bglayer" ref="bglayer"></div>
     <scroll class="musiclist" :data="musicList">
-        <song-list :songs="handleList(musicList)"></song-list>
+        <song-list :songs="musicList"></song-list>
         <div v-show="!musicList.length" class="loading-container">
           <loading></loading>
         </div>
@@ -24,6 +27,11 @@ import {handleSong} from '../song.js';
           Scroll,
           Loading
         },
+        computed: {
+          Img() {
+            return `url(${this.musicImg}) no-repeat`;
+          }
+        },
       props: {
         musicList: {
           type: Array,
@@ -32,20 +40,16 @@ import {handleSong} from '../song.js';
         musicImg: {
           type: String,
           default: ''
-          }
+          },
+        listTitle: {
+          type: String,
+          default: ''
+        }
         },
       methods: {
         fanhui() {
           this.$router.back();
         },
-      handleList(list) {
-        const List = [];
-        list.forEach((item) => {
-          let music = handleSong(item.data)
-        List.push(music);
-        });
-        return List;
-      }
       }
     }
 </script>
@@ -70,11 +74,14 @@ import {handleSong} from '../song.js';
   height: 30px;
   background: url(fanhui.svg) no-repeat;
   background-size: cover;
-  margin:10px;
+  margin: 10px 0 0 10px;
 }
 .musicImg {
   width: 100%;
-  height: 200px;
+  height: 250px;
+  padding-top: -50px;
+  background-position: center!important;
+  background-size: cover!important;
 }
 .bglayer {
   width: 100%;
@@ -85,10 +92,17 @@ import {handleSong} from '../song.js';
   height: 100%;
   position: absolute;
   width: 100%;
-  top: 200px;
+  top: 250px;
   overflow: hidden;
+  background-color: #fff;
 }
-
+/*.listTitle {
+  display: flex;
+  width: 100%;
+  height: 70px;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.3);
+}*/
 .slide-enter-active, .slide-leave-active {
     transition: all 0.3s;
 }

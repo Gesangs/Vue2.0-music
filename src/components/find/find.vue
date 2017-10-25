@@ -24,9 +24,13 @@
         </div>
       </div>
       <!-- 搜索结果 -->
+        <div class="singer" @click="searchSinger(singer.mid)" v-show="isShowkey">
+          歌手：{{ singer.name }}
+        </div>
       <scroll :data="musics" class="sResult" ref="resultList"  v-show="isShowkey">
         <song-list :songs="musics"></song-list>
       </scroll>
+      <router-view></router-view>
     </div>
 </template>
 
@@ -48,7 +52,8 @@
           hotkey:[],
           history:[],
           del: true,
-          isShowkey: false
+          isShowkey: false,
+          singer: {}
         };
     },
     created() {
@@ -61,21 +66,28 @@
         msg = msg.trim();
         this.msg = msg;
             search(msg, 1, false, 15).then((res) => {
-          if(res.code === 0) {
-            this.musics = this.handleList(res.data.song.list);
-            this.isShowkey = true;
-            this.$store.commit("addHistory",msg);
-            this.$nextTick(() => {
-              this.history = this.$store.state.searchHistory;
-            })
-          }
+              if(res.code === 0) {
+                this.musics = this.handleList(res.data.song.list);
+                this.isShowkey = true;
+                this.singer = res.data.song.list["0"].singer[0];
+                this.$store.commit("addHistory",msg);
+                this.$nextTick(() => {
+                  this.history = this.$store.state.searchHistory;
+                })
+              }
       })
+    },
+    searchSinger(id) {
+      this.$router.push({
+            path:`/find/${id}`
+          });
+      this.$store.commit("setToplist", this.singer);
     },
       handleList(list) {
         const List = [];
         list.forEach((item) => {
           let music = handleSong(item)
-        List.push(music);
+          List.push(music);
         });
         return List;
       },
@@ -170,7 +182,7 @@
   height: 100%;
   position: absolute;
   width: 100%;
-  top: 57px;
+  top: 107px;
   overflow: hidden;
 }
 .find .iconfont {
@@ -190,5 +202,11 @@
   background-size: cover;
   position: absolute;
   right: 45px;
+}
+
+.singer {
+  width: 100%;
+  padding: 15px 0 15px 20px;
+  font-size: 17px;
 }
 </style>

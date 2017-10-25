@@ -26,8 +26,7 @@ import {savePlay} from '../api/localStorage.js'
         },
         methods: {
             Splay(item,index) {
-                const i = {index:index};
-                Object.assign(item,i);
+              item = Object.assign({},item,{index:index});
               this.$store.commit('playMusic', item);
               this.$store.commit('pushList', this.songs);
               savePlay(item);
