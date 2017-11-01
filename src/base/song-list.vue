@@ -34,7 +34,6 @@ import {savePlay} from '../api/localStorage.js'
               this.$store.commit("addOld",item);
               this.$store.state.audio.play();
             }
-
         }
     }
 </script>

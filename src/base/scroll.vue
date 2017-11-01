@@ -17,9 +17,13 @@
         type: Boolean,
         default: true
       },
+      tap: {
+        type: Boolean,
+        default: true
+      },
       listenScroll: {
         type: Boolean,
-        default: false
+        default: true
       },
       data: {
         type: Array,
