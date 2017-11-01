@@ -1,13 +1,13 @@
 <template>
   <div class="header">
     <div class="shang">
-        <span class="iconfont icon-mune" @click="mune"></span>
+        <!-- <span class="iconfont icon-mune" @click="mune"></span> -->
         <span>轻&nbsp;&nbsp;听</span>
     </div>
-    <div class="mune" v-if="isClick">
+    <!-- <div class="mune" v-if="isClick">
         <a href="https://github.com/Gesangs/Vue2.0-music"><span class="mune1"></span></a>
         <span style="width:160px; margin-top:20px;"><a href="https://github.com/Gesangs/Vue2.0-music">如果你喜欢这个app，点击这里加颗星~</a></span>
-    </div>
+    </div> -->
     <div class="xia">
         <router-link to="/user" class="item">
           我的
@@ -51,22 +51,22 @@
 }
 
 .shang {
-    height: 10%;
-    display: flex;
-    flex-direction: row ;
+    /*display: flex;
+    flex-direction: row;*/
 }
 
 .shang span {
+    display: block;
     font-size: 20px;
-    margin: 10px 10px 10px 30px;
+    margin: 0 auto;
     line-height: 20px;
     padding: 5px;
+    text-align: center;
 }
 
 
 
 .xia {
-    height: 10%;
     padding: 5px 10px 3px 10px;
     display: flex;
     justify-content: center;
@@ -76,12 +76,12 @@
 .xia .item {
     flex: 1;
     display: block;
-    height: 35px;
+    height: 30px;
     text-align: center;
-    line-height: 35px;
+    line-height: 30px;
     text-decoration: none;
     color: #fff;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .xia .router-link-active {
@@ -89,8 +89,8 @@
 }
 
 .header .iconfont {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
 }
 
 .icon-mune {

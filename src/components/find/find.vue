@@ -123,7 +123,7 @@
 .find {
   position: absolute;
   width: 100%;
-  top: 100px;
+  top: 72px;
   bottom: 4em;
   overflow: hidden;
 }
@@ -187,7 +187,7 @@
   height: 100%;
   position: absolute;
   width: 100%;
-  top: 107px;
+  top: 102px;
   overflow: hidden;
 }
 .find .iconfont {
@@ -211,7 +211,8 @@
 
 .singer {
   width: 100%;
-  padding: 15px 0 15px 20px;
+  padding: 10px 0 10px 20px;
   font-size: 17px;
+  border-bottom: 1px solid rgba(1,186,144,0.8);
 }
 </style>

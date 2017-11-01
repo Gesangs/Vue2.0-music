@@ -46,7 +46,7 @@ export default {
         },
     data() {
         return {
-          playHeight: '69px',
+          playHeight: '59px',
           isDisplay: false,
           isFullLyric:false,
           isLoop:false,
@@ -115,7 +115,7 @@ export default {
         },
         // 收回
         unDisplay() {
-          this.playHeight = '69px',
+          this.playHeight = '59px',
           this.isDisplay = false
         },
         // 切换播放状态
@@ -225,8 +225,8 @@ export default {
     transition: all 0.4s;
 }
 .contorller .img{
-    width: 64px;
-    height: 64px;
+    width: 54px;
+    height: 54px;
     background-size: cover !important;
     background-position: center center;
     position: relative;
@@ -266,7 +266,7 @@ export default {
     position: absolute;
     display: flex;
     justify-content: center;
-    bottom: 20px;
+    bottom: 10px;
     right: 20px;
     transition: top 1s;
     transform: translate3d(0,0,0);
