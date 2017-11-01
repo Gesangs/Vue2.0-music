@@ -32,7 +32,6 @@ import {getMusicList} from '../../api/rank.js';
             }
             getMusicList(this.topList.id).then((res) => {
               if (res.code === 0) {
-                console.log(res);
                 this.img = res.topinfo.pic_v12;
                 this.songs = this.handleList(res.songlist);
               }

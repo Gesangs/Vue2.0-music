@@ -2,8 +2,8 @@
   <transition name="slide">
   <div class="musicList">
     <div class="listTitle">
-      <!-- <span class="fanhui" @click="fanhui"></span>
-      <span>{{ listTitle }}</span> -->
+      <span class="fanhui" @click="fanhui"></span>
+      <span>{{ listTitle }}</span>
     </div>
     <div class="musicImg" :style="{background: Img}"></div>
     <div class="bglayer" ref="bglayer"></div>

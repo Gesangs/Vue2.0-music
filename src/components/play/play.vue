@@ -224,7 +224,6 @@ export default {
     transform: translate3d(0,0,0);
     transition: all 0.4s;
 }
-
 .contorller .img{
     width: 64px;
     height: 64px;
@@ -234,19 +233,17 @@ export default {
     transform: translate3d(0,1px,0);
     transition: all 0.4s;
 }
-
-
 .img .img-back {
   width: 100%;
   height: 101%;
   background: linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152));
 }
-
 .imgPlay {
   width: 100% !important;
   height: 55% !important;
+  transform-origin: top left!importa/*nt;
+  transform: scale3d(5.859375, 5.859375, 0)!important;*/
 }
-
 .title {
     position: absolute;
     top:0px;
@@ -256,20 +253,15 @@ export default {
     z-index: 26;
     font-size: 62.5%;
 }
-
-
 .title .gequ {
     font-size: 14px;
     line-height: 40px;
     text-align: center;
 }
-
 .title .geshou {
     font-size: 13px;
     text-align: center;
 }
-
-
 .contorl {
     position: absolute;
     display: flex;
@@ -283,18 +275,14 @@ export default {
     align-items: center;
     z-index: 25;
 }
-
 .contorl span + span {
     margin-left: 30px;
 }
-
-
 .title-play {
     top: 62%;
     left:50%;
     transform: translate(-50%);
 }
-
 .control-play {
     width: 100%;
     right: 0;
@@ -303,7 +291,6 @@ export default {
     justify-content: center;
     font-size: 30px;
 }
-
 .clearfix:after,
 .clearfix:before
 {
@@ -314,12 +301,10 @@ display:table;
 {
 clear:both;
 }
-
 .iconfont {
   width: 30px;
   height: 30px;
 }
-
 .icon-loop {
   background: url(img/loop.svg) no-repeat;
   background-size: cover;
@@ -344,7 +329,6 @@ clear:both;
   background: url(img/play.svg) no-repeat;
   background-size: cover;
 }
-
 .icon-unplay {
   width: 35px;
   height: 35px;
@@ -395,7 +379,6 @@ clear:both;
   background-color: #fff;
   z-index: 25;
 }
-
 .geci {
   width: 100%;
   position: absolute;
@@ -410,7 +393,6 @@ clear:both;
   text-align: center;
   font-size: 13px;
 }
-
 .fullGeci {
   width: 100%;
   height: 100%;
@@ -426,7 +408,6 @@ clear:both;
   text-align: center;
   font-size: 13px;
 }
-
 .ly-wrapper {
   margin: 95px 0 20px 0;
   /*position: absolute;*/
