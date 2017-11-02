@@ -247,19 +247,19 @@ export default {
 .title {
     position: absolute;
     top:0px;
-    left: 8em;
+    left: 7em;
     transition: left 0.4s ease;
     transform: translate3d(0,0,0);
     z-index: 26;
     font-size: 62.5%;
 }
 .title .gequ {
-    font-size: 14px;
-    line-height: 40px;
+    font-size: 0.75rem;
+    line-height: 30px;
     text-align: center;
 }
 .title .geshou {
-    font-size: 13px;
+    font-size: 0.75rem;
     text-align: center;
 }
 .contorl {
