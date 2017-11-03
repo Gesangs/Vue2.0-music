@@ -23,13 +23,25 @@ import {savePlay} from '../api/localStorage.js'
             }
         },
         methods: {
+            // 判断这首歌是否在喜欢列表中
+            isLove(music) {
+                let loveMusic = this.$store.state.loveMusic;
+                for(let i = 0; i < loveMusic.length; i++) {
+                    if(loveMusic[i].id == music.id) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            // 点击播放
             Splay(item,index) {
-              item = Object.assign({},item,{index:index});
-              this.$store.commit('playMusic', item);
+              var islove = this.isLove(item);
+              var music = Object.assign({},item,{index:index,isLove:islove});
+              this.$store.commit('playMusic', music);
               this.$store.commit('pushList', this.songs);
-              savePlay(item);
+              savePlay(music);
               this.$store.commit('isplay', {isPLaying:true});
-              this.$store.commit("addOld",item);
+              this.$store.commit("addOld",music);
               this.$store.state.audio.play();
             }
         }

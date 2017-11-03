@@ -62,6 +62,7 @@
     },
     methods: {
       // 当焦点在输入框， 滚动搜索结果时使输入框失去焦点
+      // 因为在移动端浏览器中，焦点在输入框时，点击或滚动将呼出键盘
       Bblur() {
         document.activeElement.blur();
       },
@@ -87,6 +88,7 @@
           });
       this.$store.commit("setToplist", this.singer);
     },
+    // 遍历返回的数据，做数据提取处理
       handleList(list) {
         const List = [];
         list.forEach((item) => {

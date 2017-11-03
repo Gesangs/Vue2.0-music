@@ -77,6 +77,15 @@ const routes = [{
 }
 ];
 
+// 添加歌曲到播放历史和搜索历史时去除重复元素
+    const quchong = (arr) => {
+      let hash = {};
+        arr = arr.reduce(function (item, next) {
+          hash[next] ? '' : hash[next] = true && item.push(next);
+          return item;
+        }, []);
+        return arr;
+    };
 
 const router = new Router({
   routes: routes,
@@ -128,6 +137,7 @@ const store = new Vuex.Store({
     setLove(state, flag) {
       state.Music.isLove = flag;
     },
+    // 添加到播放列表
     pushList(state, list) {
       state.currentList.length = 0;
       list.forEach((item, index) => {
@@ -144,47 +154,32 @@ const store = new Vuex.Store({
       } else {
         state.searchHistory.push(musics);
         saveSearch(musics)
-        let hash = {};
-        // 数组去重
-        state.searchHistory = state.searchHistory.reduce(function (item, next) {
-          hash[next] ? '' : hash[next] = true && item.push(next);
-          return item;
-        }, []);
+        state.searchHistory = quchong(state.searchHistory)
       }
     },
     addLove(state, musics) {
       state.loveMusic.push(musics);
       saveFavorite(musics);
-      console.log(loadFavorite())
-      let hash = {};
-      // 数组去重
-      state.loveMusic = state.loveMusic.reduce(function (item, next) {
-        hash[next.id] ? '' : hash[next.id] = true && item.push(next);
-        return item;
-      }, [])
+      state.loveMusic = quchong(state.loveMusic);
     },
     delLove(state, music) {
       var index = '';
       deleteFavorite(music);
       state.loveMusic.forEach((item) => {
         if (music.id === item.id) {
-          index = i;
+          index = item;
           state.loveMusic.splice(index, 1);
         }
       })
     },
     addOld(state, music) {
       state.oldMusic.push(music);
-      let hash = {};
-      // 数组去重
-      state.oldMusic = state.oldMusic.reduce(function (item, next) {
-        hash[next.id] ? '' : hash[next.id] = true && item.push(next);
-        return item;
-      }, [])
     }
   }
 })
 
+
+// 默认页
 router.push('/find');
 
 const app = new Vue({

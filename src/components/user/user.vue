@@ -1,13 +1,13 @@
 <template>
     <div class="music">
         <div class="Tab">
-            <p class="myLove" :class="{active: isActive}" @click.stop="switchLove">我喜欢的</p>
-            <p class="recent" :class="{active: !isActive}" @click.stop="switchRecent">最近听的</p>
+            <p class="myLove" :class="{active: !isActive}" @click.stop="switchLove">我喜欢的</p>
+            <p class="recent" :class="{active: isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
-        <scroll class="oldList" :data="oldmusic" ref="oldlist" v-show="!isActive">
+        <scroll class="oldList" :data="oldmusic" ref="oldlist" v-show="isActive">
           <song-list :songs="oldmusic"></song-list>
         </scroll>
-        <scroll class="loveList" :data="lovemusic" ref="lovelist" v-show="isActive">
+        <scroll class="loveList" :data="lovemusic" ref="lovelist" v-show="!isActive">
           <song-list :songs="lovemusic"></song-list>
         </scroll>
     </div>
@@ -45,13 +45,15 @@ export default {
         },
     methods:{
         switchRecent() {
-            this.isActive = false;
+            this.isActive = true;
+            this.oldmusic = loadPlay();
             this.$nextTick(() => {
                 this.$refs.oldlist.refresh()
             })
         },
         switchLove() {
-            this.isActive = true;
+            this.isActive = false;
+            this.lovemusic = loadFavorite();
             this.$nextTick(() => {
                 this.$refs.lovelist.refresh()
             })
