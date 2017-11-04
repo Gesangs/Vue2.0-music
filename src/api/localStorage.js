@@ -101,3 +101,7 @@ export function loadFavorite() {
   return storage.get(FAVORITE_KEY, [])
 }
 
+export function clearAll() {
+  storage.set(PLAY_KEY, []);
+  storage.set(FAVORITE_KEY, []);
+}

@@ -56,7 +56,7 @@ import Scroll from '../../base/scroll.vue'
   position: absolute;
   width: 100%;
   top: 72px;
-  bottom: 4em;
+  bottom: 3.8em;
   overflow: hidden;
 }
 
@@ -67,6 +67,7 @@ import Scroll from '../../base/scroll.vue'
 
 .rankscorll {
     height: 100%;
+    bottom: 60px;
     overflow: hidden;
 }
 

@@ -39,7 +39,7 @@
  import Scroll from '../../base/scroll.vue';
  import {getHotKey,search} from '../../api/search.js';
  import {handleSong} from '../../base/song.js';
- import {saveSearch, clearSearch, savePlay, loadSearch} from '../../api/localStorage.js'
+ import {saveSearch, clearSearch, savePlay, loadSearch, clearAll} from '../../api/localStorage.js'
   export default {
     components: {
           SongList,
@@ -116,6 +116,7 @@
       this.del = false;
       this.$store.commit("addHistory",0);
       this.history.length = 0;
+      clearAll()
     }
   }
 }
@@ -126,7 +127,7 @@
   position: absolute;
   width: 100%;
   top: 72px;
-  bottom: 4em;
+  bottom: 3.8em;
   overflow: hidden;
 }
 .search {
@@ -186,10 +187,10 @@
   font-size: 14px;
 }
 .sResult {
-  height: 100%;
   position: absolute;
   width: 100%;
   top: 102px;
+  bottom: 1px;
   overflow: hidden;
 }
 .find .iconfont {

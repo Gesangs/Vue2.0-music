@@ -129,8 +129,8 @@ export default {
 }
 .oldList, .loveList {
     width: 100%;
-    height: 100%;
     position: absolute;
+    height: 100%;
     overflow: hidden;
 }
 .delll {

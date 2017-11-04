@@ -8,7 +8,6 @@
                 <span v-html="item.singer"></span>
               </div>
             </li>
-            <li></li>
         </ul>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="contorller" :style="{height: playHeight}" @click="Display">
     <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
-    <div class="img clearfix" :class="{imgPlay: isDisplay}" :style="{background: Img}" >
+    <div class="img clearfix" :class="{imgPlay: isDisplay}" :style="{background: Img}">
       <div class="img-back"></div>
     </div>
     <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">

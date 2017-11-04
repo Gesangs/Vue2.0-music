@@ -7,7 +7,12 @@
       </div>
       <div class="musicImg" :style="{background: Img}" ref="bgImg"></div>
       <div class="bglayer" ref="bglayer"></div>
-      <scroll class="musiclist" :data="musicList" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll" ref="musiclist">
+      <scroll class="musiclist"
+              :data="musicList"
+              :probe-type="probeType"
+              :listen-scroll="listenScroll"
+              @scroll="scroll"
+              ref="musiclist">
         <song-list :songs="musicList"></song-list>
         <div v-show="!musicList.length" class="loading-container">
           <loading></loading>
@@ -97,7 +102,7 @@ export default {
 .musicList {
   position: fixed;
   width: 100%;
-  bottom: 60px;
+  bottom: 55px;
   top: 0;
   left: 0;
   overflow: hidden;
@@ -130,11 +135,10 @@ export default {
   background-color: #fff;
 }
 .musiclist {
-  height: 100%;
   position: absolute;
   width: 100%;
   top: 260px;
-  /*overflow: hidden;*/
+  bottom: 10px;
   background-color: #fff;
 }
 .slide-enter-active, .slide-leave-active {
