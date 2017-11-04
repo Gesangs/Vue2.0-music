@@ -26,7 +26,7 @@
         <span class="iconfont icon-pre" @click.stop="pre" v-show="isDisplay"></span>
         <span :class="[isPlay ? errorClass : trueClass]" class="iconfont" @click.stop="ready"></span>
         <span class="iconfont icon-next"  @click.stop="next"></span>
-        <span :class="[Music.isLove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
+        <span :class="[isLove(Music) ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
       </div>
     </transition>
     <audio :src="Music.url" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop"></audio>
@@ -78,9 +78,6 @@ export default {
           const offsetWidth = barWidth * percent
           this.$refs.progress.style.width = `${offsetWidth}px`;
         }
-      },
-      isLove() {
-        return this.$store.state.Music.isLove;
       }
     },
     computed: {
@@ -98,6 +95,9 @@ export default {
       isPlay() {
         return this.$store.state.isPlaying;
       },
+      loveList() {
+            return this.$store.state.loveMusic;
+        },
       // 播放列表
       currentList() {
         return this.$store.state.currentList;
@@ -191,12 +191,17 @@ export default {
       setLoop() {
         this.isLoop = !(this.isLoop);
       },
+      // 判断这首歌是否在喜欢列表中
+      isLove(music) {
+          var index = this.loveList.findIndex((item) => {
+            return item.id === music.id;
+          })
+          return index > -1;
+      },
       Love(item) {
-        if(this.Music.isLove) {
-          this.$store.commit('setLove',false);
+        if(this.isLove(this.Music)) {
           this.$store.commit('delLove',item);
         }else{
-          this.$store.commit('setLove',true);
           this.$store.commit('addLove',item);
         }
       }

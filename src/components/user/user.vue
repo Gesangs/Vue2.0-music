@@ -4,11 +4,11 @@
             <p class="myLove" :class="{active: !isActive}" @click.stop="switchLove">我喜欢的</p>
             <p class="recent" :class="{active: isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
-        <scroll class="oldList" :data="oldmusic" ref="oldlist" v-show="isActive">
-          <song-list :songs="oldmusic"></song-list>
+        <scroll class="oldList" :data="oldList" ref="oldlist" v-show="isActive">
+          <song-list :songs="oldList"></song-list>
         </scroll>
-        <scroll class="loveList" :data="lovemusic" ref="lovelist" v-show="!isActive">
-          <song-list :songs="lovemusic"></song-list>
+        <scroll class="loveList" :data="loveList" ref="lovelist" v-show="!isActive">
+          <song-list :songs="loveList"></song-list>
         </scroll>
     </div>
     </div>
@@ -25,35 +25,27 @@ export default {
         },
     data() {
         return {
-            oldmusic:loadPlay(),
             liindex:'',
-            lovemusic:loadFavorite(),
             isActive: true,
         }
     },
-    watch:{
-            oldmusic:function() {
-                 this.$nextTick(() => {
-                this.$refs.oldlist.refresh()
-            })
-            },
-            lovemusic:function() {
-                 this.$nextTick(() => {
-                this.$refs.lovelist.refresh()
-            })
-            },
+    computed: {
+        loveList() {
+            return this.$store.state.loveMusic;
         },
+        oldList() {
+            return this.$store.state.oldMusic;
+        }
+    },
     methods:{
         switchRecent() {
             this.isActive = true;
-            this.oldmusic = loadPlay();
             this.$nextTick(() => {
                 this.$refs.oldlist.refresh()
             })
         },
         switchLove() {
             this.isActive = false;
-            this.lovemusic = loadFavorite();
             this.$nextTick(() => {
                 this.$refs.lovelist.refresh()
             })

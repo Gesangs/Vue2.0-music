@@ -100,8 +100,7 @@ const store = new Vuex.Store({
       singer: '',
       id: '',
       mid: '',
-      index: '',
-      isLove: false
+      index: ''
     },
     audio: {},
     oldMusic: loadPlay(),
@@ -126,16 +125,12 @@ const store = new Vuex.Store({
       state.Music.id = data.id;
       state.Music.mid = data.mid;
       state.Music.index = data.index;
-      state.Music.isLove = data.isLove;
     },
     isplay(state, flag) {
       state.isPlaying = flag;
     },
     audioDom(state, dom) {
       state.audio = dom;
-    },
-    setLove(state, flag) {
-      state.Music.isLove = flag;
     },
     // 添加到播放列表
     pushList(state, list) {
@@ -158,22 +153,16 @@ const store = new Vuex.Store({
       }
     },
     addLove(state, musics) {
-      state.loveMusic.push(musics);
       saveFavorite(musics);
-      state.loveMusic = quchong(state.loveMusic);
+      state.loveMusic = loadFavorite();
     },
     delLove(state, music) {
-      var index = '';
       deleteFavorite(music);
-      state.loveMusic.forEach((item) => {
-        if (music.id === item.id) {
-          index = item;
-          state.loveMusic.splice(index, 1);
-        }
-      })
+      state.loveMusic = loadFavorite();
     },
     addOld(state, music) {
-      state.oldMusic.push(music);
+      savePlay(music)
+      state.oldMusic = loadPlay();
     }
   }
 })

@@ -7,7 +7,7 @@
                 <span v-html="item.name"></span>
                 <span v-html="item.singer"></span>
               </div>
-            </li>
+            </li><li></li>
         </ul>
     </div>
 </template>
@@ -22,23 +22,11 @@ import {savePlay} from '../api/localStorage.js'
             }
         },
         methods: {
-            // 判断这首歌是否在喜欢列表中
-            isLove(music) {
-                let loveMusic = this.$store.state.loveMusic;
-                for(let i = 0; i < loveMusic.length; i++) {
-                    if(loveMusic[i].id == music.id) {
-                        return true;
-                    }
-                }
-                return false;
-            },
             // 点击播放
             Splay(item,index) {
-              var islove = this.isLove(item);
-              var music = Object.assign({},item,{index:index,isLove:islove});
+              const music = Object.assign({},item,{index:index});
               this.$store.commit('playMusic', music);
               this.$store.commit('pushList', this.songs);
-              savePlay(music);
               this.$store.commit('isplay', {isPLaying:true});
               this.$store.commit("addOld",music);
               this.$store.state.audio.play();
