@@ -6,6 +6,17 @@
               <div>
                 <span v-html="item.name"></span>
                 <span v-html="item.singer"></span>
+                <span></span>
+              </div>
+              <div v-if="false">
+                <span>歌曲：{{ item.name }}</span>
+                  <ul>
+                      <li>下一首播放</li>
+                      <li>添加到我喜欢</li>
+                      <li>歌手：{{ item.singer }}</li>
+                      <li>专辑：{{  }}</li>
+                      <li></li>
+                  </ul>
               </div>
             </li><li></li>
         </ul>
@@ -19,6 +30,10 @@ import {savePlay} from '../api/localStorage.js'
             songs: {
                 type: Array,
                 default: []
+            },
+            types: {
+                type: String,
+                default: 'normal'
             }
         },
         methods: {

@@ -33,16 +33,12 @@ const bangdan = (resolve) => {
     resolve(module)
   })
 }
-const SingerDetail = (resolve) => {
-  import ('./components/singer-detail/singer-detail.vue').then((module) => {
+const detailList = (resolve) => {
+  import ('./components/detail-list/detail-list.vue').then((module) => {
     resolve(module)
   })
 }
-const RankDetail = (resolve) => {
-  import ('./components/rank-detail/rank-detail.vue').then((module) => {
-    resolve(module)
-  })
-}
+
 
 
 Vue.config.productionTip = false;
@@ -62,19 +58,15 @@ const routes = [{
 {
   path: '/find',
   component: find,
-  children: [{
-    path: ':id',
-    component: SingerDetail
-  }]
 },
 {
   path: '/bangdan',
   component: bangdan,
-  children: [{
-    path: ':id',
-    component: RankDetail
-  }]
-}
+},
+{
+  path: '/detail',
+  component: detailList,
+},
 ];
 
 // 添加歌曲到播放历史和搜索历史时去除重复元素
@@ -106,13 +98,17 @@ const store = new Vuex.Store({
     oldMusic: loadPlay(),
     loveMusic: loadFavorite(),
     currentList: [],
-    musicList: {},
+    detailMid: '',
+    detailTypes: '',
     musicImg: '',
     searchHistory: loadSearch()
   },
   mutations: {
-    setToplist(state, musiclist) {
-      state.musicList = musiclist;
+    setDetailMid(state, mid) {
+      state.detailMid = mid;
+    },
+    setDetailTypes(state, type) {
+      state.detailTypes = type;
     },
     setTopUrl(state, musicimg) {
       state.musicImg = musicimg;

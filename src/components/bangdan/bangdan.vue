@@ -13,14 +13,14 @@
             </div>
             </div>
         </div>
+        <router-view></router-view>
     </scroll>
-    <router-view></router-view>
 </div>
 </template>
 
 <script>
 import {getTopList} from '../../api/rank.js';
-import Scroll from '../../base/scroll.vue'
+import Scroll from '../../base/scroll.vue';
     export default {
         components: {
             Scroll
@@ -42,10 +42,11 @@ import Scroll from '../../base/scroll.vue'
                 })
             },
             selectItem(item) {
+                this.$store.commit('setDetailTypes','rank')
                 this.$router.push({
-                        path:`/bangdan/${item.id}`
+                        path:`/detail`
                 });
-                this.$store.commit("setToplist", item);
+                this.$store.commit("setDetailMid", item.id);
             }
         }
     };

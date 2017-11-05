@@ -25,6 +25,30 @@ var app = express()
 
 var apiRoutes = express.Router()
 
+// apiRoutes.get('/album', function (req, res) {
+//   var url = 'https://c.y.qq.com//v8/fcg-bin/fcg_v8_album_info_cp.fcg';
+//   // albummid=000bBzKy0zyNUX&g_tk=5381&jsonpCallback=albuminfoCallback&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0
+
+//   axios.get(url, {
+//     headers: {
+//       referer: 'https://c.y.qq.com/',
+//       host: 'c.y.qq.com'
+//     },
+//     params: req.query
+//   }).then((response) => {
+//     var ret = response.data
+//     if (typeof ret === 'string') {
+//       var reg = /^\w+\(({[^()]+})\)$/
+//       var matches = ret.match(reg)
+//       if (matches) {
+//         ret = JSON.parse(matches[1])
+//       }
+//     }
+//     res.json(ret)
+//   }).catch((e) => {
+//     console.log(e)
+//   })
+// })
 apiRoutes.get('/lyric', function (req, res) {
   var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
 

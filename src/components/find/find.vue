@@ -2,7 +2,7 @@
     <div class="find">
       <!-- 搜索框 -->
       <div class="search">
-        <input type="search" placeholder="在线搜索" v-model="msg" @focus="Focus" @keyup.enter="search(msg)">
+        <input type="search" placeholder="歌曲、歌手、专辑" v-model="msg" @focus="Focus" @keyup.enter="search(msg)">
         <i v-show="isShowkey" @click="Blur">取消</i>
       </div>
       <!-- 热门搜索 -->
@@ -24,8 +24,11 @@
         </div>
       </div>
       <!-- 搜索结果 -->
-        <div class="singer" @click="searchSinger(singer.mid)" v-show="singer.name">
+        <div class="singer" @click="searchSingerAndAlbum(singer.mid,'singer')" v-show="singer.name">
           歌手：{{ singer.name }}
+        </div>
+        <div class="album" @click="searchSingerAndAlbum(album.mid,'album')" v-show="album.name">
+          专辑：{{ album.name }}
         </div>
       <scroll :data="musics" @scroll="Bblur()" class="sResult" ref="resultList"  v-show="isShowkey">
         <song-list :songs="musics"></song-list>
@@ -53,7 +56,8 @@
           history:[],
           del: true,
           isShowkey: false,
-          singer: {}
+          singer: {},
+          album: {}
         };
     },
     created() {
@@ -75,6 +79,9 @@
                 this.musics = this.handleList(res.data.song.list);
                 this.isShowkey = true;
                 this.singer = res.data.song.list["0"].singer[0];
+                this.album = {
+                  mid: res.data.song.list["0"].albummid,
+                  name: res.data.song.list["0"].albumname };
                 this.$store.commit("addHistory",msg);
                 this.$nextTick(() => {
                   this.history = this.$store.state.searchHistory;
@@ -82,11 +89,12 @@
               }
       })
     },
-    searchSinger(id) {
+    searchSingerAndAlbum(id,type) {
+      this.$store.commit('setDetailTypes',type)
+      this.$store.commit("setDetailMid", id);
       this.$router.push({
-            path:`/find/${id}`
+            path:`/detail`
           });
-      this.$store.commit("setToplist", this.singer);
     },
     // 遍历返回的数据，做数据提取处理
       handleList(list) {
@@ -189,7 +197,7 @@
 .sResult {
   position: absolute;
   width: 100%;
-  top: 102px;
+  top: 128px;
   bottom: 1px;
   overflow: hidden;
 }
@@ -212,10 +220,10 @@
   right: 45px;
 }
 
-.singer {
+.singer, .album {
   width: 100%;
   padding: 10px 0 10px 20px;
-  font-size: 17px;
+  font-size: 11px;
   border-bottom: 1px solid rgba(1,186,144,0.8);
 }
 </style>
