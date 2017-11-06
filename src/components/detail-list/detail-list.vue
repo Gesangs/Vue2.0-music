@@ -63,14 +63,12 @@ import {getMusicList} from '../../api/rank.js'
             const List = [];
             list.forEach((item) => {
               if(this.types === 'singer') {
-                var items = item.musicData;
+                List.push(handleSong(item.musicData));
               } else if(this.types === 'rank') {
-                var items = item.data;
+                List.push(handleSong(item.data));
               } else {
-                var items = item;
+                List.push(handleSong(item));
               };
-              let music = handleSong(items);
-            List.push(music);
             });
             return List;
           }

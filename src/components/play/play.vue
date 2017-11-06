@@ -87,7 +87,7 @@ export default {
       },
       Img() {
         if(! this.Music.image) {
-          return 'url(../../static/16pic_1792828_b.webp)';
+          return 'url(../../static/defa.jpg)';
         }else {
           return 'url(' + this.Music.image + ')';
         }

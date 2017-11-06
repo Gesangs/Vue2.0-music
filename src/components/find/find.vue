@@ -13,21 +13,22 @@
         </div>
       </div>
       <!-- 搜索历史 -->
-      <div class="searchHistory" v-show="del && !isShowkey &&  history[0]">
-        <div class="hot">搜索历史<span class="iconfont icon-del" @click="delHistory"></span></div>
+      <div class="searchHistory" v-show="!isShowkey &&  history[0]">
+        <div class="hot">搜索历史<span class="iconfont icon-del" @click="clearHistory"></span></div>
         <div class="historyList" ref="history">
           <ul>
           <p v-for="item in history" @click="search(item)">
             {{ item }}
+            <span class="iconfont icon-del_1" @click.stop="delHistory(item)"></span>
           </p>
           </ul>
         </div>
       </div>
       <!-- 搜索结果 -->
-        <div class="singer" @click="searchSingerAndAlbum(singer.mid,'singer')" v-show="singer.name">
+        <div class="singer" @click="searchSingerAndAlbum(singer.mid,'singer')" v-show="isShowkey && singer.name">
           歌手：{{ singer.name }}
         </div>
-        <div class="album" @click="searchSingerAndAlbum(album.mid,'album')" v-show="album.name">
+        <div class="album" @click="searchSingerAndAlbum(album.mid,'album')" v-show="isShowkey && album.name">
           专辑：{{ album.name }}
         </div>
       <scroll :data="musics" @scroll="Bblur()" class="sResult" ref="resultList"  v-show="isShowkey">
@@ -42,7 +43,6 @@
  import Scroll from '../../base/scroll.vue';
  import {getHotKey,search} from '../../api/search.js';
  import {handleSong} from '../../base/song.js';
- import {saveSearch, clearSearch, savePlay, loadSearch, clearAll} from '../../api/localStorage.js'
   export default {
     components: {
           SongList,
@@ -53,16 +53,18 @@
           msg: '',
           musics: [],
           hotkey:[],
-          history:[],
-          del: true,
           isShowkey: false,
           singer: {},
           album: {}
         };
     },
+    computed: {
+      history() {
+        return this.$store.state.searchHistory;
+      }
+    },
     created() {
       this._gethotKey();
-      this.history = loadSearch();
     },
     methods: {
       // 当焦点在输入框， 滚动搜索结果时使输入框失去焦点
@@ -83,9 +85,6 @@
                   mid: res.data.song.list["0"].albummid,
                   name: res.data.song.list["0"].albumname };
                 this.$store.commit("addHistory",msg);
-                this.$nextTick(() => {
-                  this.history = this.$store.state.searchHistory;
-                })
               }
       })
     },
@@ -120,11 +119,11 @@
           }
         })
       },
-    delHistory() {
-      this.del = false;
-      this.$store.commit("addHistory",0);
-      this.history.length = 0;
-      clearAll()
+    clearHistory() {
+      this.$store.commit('clearHistory');
+    },
+    delHistory(item) {
+      this.$store.commit('delHistory',item)
     }
   }
 }

@@ -65,8 +65,8 @@ const routes = [{
 },
 {
   path: '/detail',
-  component: detailList,
-},
+  component: detailList
+}
 ];
 
 // 添加歌曲到播放历史和搜索历史时去除重复元素
@@ -85,23 +85,15 @@ const router = new Router({
 const store = new Vuex.Store({
   state: {
     isPlaying: false,
-    Music: {
-      image: '../static/16pic_1792828_b.webp',
-      url: '',
-      name: '',
-      singer: '',
-      id: '',
-      mid: '',
-      index: ''
-    },
+    Music: {},
     audio: {},
     oldMusic: loadPlay(),
     loveMusic: loadFavorite(),
+    searchHistory: loadSearch(),
     currentList: [],
     detailMid: '',
     detailTypes: '',
     musicImg: '',
-    searchHistory: loadSearch()
   },
   mutations: {
     setDetailMid(state, mid) {
@@ -114,13 +106,7 @@ const store = new Vuex.Store({
       state.musicImg = musicimg;
     },
     playMusic(state, data) {
-      state.Music.image = data.image;
-      state.Music.url = data.url;
-      state.Music.name = data.name;
-      state.Music.singer = data.singer;
-      state.Music.id = data.id;
-      state.Music.mid = data.mid;
-      state.Music.index = data.index;
+      state.Music = data;
     },
     isplay(state, flag) {
       state.isPlaying = flag;
@@ -138,15 +124,17 @@ const store = new Vuex.Store({
         state.currentList.push(item);
       })
     },
-    addHistory(state, musics) {
-      if (musics === 0) {
-        state.searchHistory.length = 0;
-        clearSearch();
-      } else {
-        state.searchHistory.push(musics);
-        saveSearch(musics)
-        state.searchHistory = quchong(state.searchHistory)
-      }
+    addHistory(state, key) {
+      saveSearch(key)
+      state.searchHistory = loadSearch();
+    },
+    delHistory(state, key) {
+      deleteSearch(key);
+      state.searchHistory = loadSearch();
+    },
+    clearHistory(state) {
+      clearSearch();
+      state.searchHistory = loadSearch();
     },
     addLove(state, musics) {
       saveFavorite(musics);
