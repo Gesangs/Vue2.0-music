@@ -6,36 +6,16 @@
               <div>
                 <span v-html="item.name"></span>
                 <span v-html="item.singer"></span>
-                <span class="caidan" @click.stop="caidan(index)">菜单</span>
-              </div>
-              <div v-if="false">
-                <span>歌曲：{{ item.name }}</span>
-                  <ul>
-                      <li>下一首播放</li>
-                      <li>添加到我喜欢</li>
-                      <li>歌手：{{ item.singer }}</li>
-                      <li>专辑：{{  }}</li>
-                      <li></li>
-                  </ul>
               </div>
             </li><li></li>
         </ul>
-        <popup v-if="isShow" class="popup"></popup>
     </div>
 </template>
 
 <script>
 import {savePlay} from '../api/localStorage.js';
-import popup from '../components/popup/popup.vue';
+
     export default {
-      components: {
-        popup
-      },
-      data() {
-        return {
-          isShow: false
-        }
-      },
         props: {
             songs: {
                 type: Array,
@@ -55,25 +35,12 @@ import popup from '../components/popup/popup.vue';
               this.$store.commit('isplay', {isPLaying:true});
               this.$store.commit("addOld",music);
               this.$store.state.audio.play();
-            },
-            caidan() {
-              this.isShow = true;
             }
         }
     }
 </script>
 
 <style>
-.popup {
-      position: absolute;
-      width: 100%;
-      bottom: 55px;
-      top: -100px;
-      left: 0;
-      /*overflow: hidden;*/
-      z-index: 500;
-      background: rgba(7, 17, 27, 0.1);
-    }
     li {
     width:100%;
     height: 60px;
@@ -104,12 +71,5 @@ import popup from '../components/popup/popup.vue';
 .song-list li > span {
     display: block;
     float: right;
-}
-.caidan {
-  display: block;
-  float: right;
-  width: 30px;
-  height: 20px;
-  background-color: red;
 }
 </style>

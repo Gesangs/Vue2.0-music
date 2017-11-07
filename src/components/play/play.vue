@@ -5,7 +5,7 @@
       <div class="img-back"></div>
     </div>
     <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
-      <p class="gequ" v-html="Music.name || '轻听'"></p>
+      <p class="gequ" v-html="Music.name || '轻听'"  @click.stop="caidan()"></p>
       <p class="geshou" v-html="Music.singer"></p>
     </div>
     <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
@@ -33,19 +33,23 @@
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
+    <popup v-if="isShow" :musicDetail="Music"></popup>
   </div>
 </template>
 <script>
-import Scroll from '../../base/scroll.vue'
+import Scroll from '../../base/scroll.vue';
+import popup from '../popup/popup.vue';
 import {getLyric} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
 export default {
   components: {
-    Scroll
+    Scroll,
+    popup
   },
   data() {
     return {
+      isShow: false,
       playHeight: '59px',
       isDisplay: false,
       isFullLyric:false,
@@ -104,6 +108,9 @@ export default {
       }
     },
     methods: {
+      caidan() {
+              this.isShow = true;
+            },
       // 展开
       Display() {
         this.isDisplay = true,
