@@ -6,7 +6,7 @@
     </div>
     <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
       <p class="gequ" v-html="Music.name || '轻听'"  @click.stop="caidan()"></p>
-      <p class="geshou" v-html="Music.singer"></p>
+      <p class="geshou" v-html="singerName"></p>
     </div>
     <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
@@ -33,7 +33,7 @@
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
-    <popup v-if="isShow" :musicDetail="Music"></popup>
+    <popup v-if="isShow" :musicDetail="Music" :isShow="isShow" @caidan="caidan" @Love="Love(Music)"></popup>
   </div>
 </template>
 <script>
@@ -51,7 +51,6 @@ export default {
     return {
       isShow: false,
       playHeight: '59px',
-      isDisplay: false,
       isFullLyric:false,
       isLoop:false,
       loop: 'icon-loop',
@@ -89,6 +88,13 @@ export default {
       Music() {
         return this.$store.state.Music;
       },
+      singerName() {
+        if(!this.isPlay) {
+          return ' ';
+        } else {
+          return this.$store.state.Music.singer.name;
+        }
+      },
       Img() {
         if(! this.Music.image) {
           return 'url(../../static/defa.jpg)';
@@ -98,6 +104,9 @@ export default {
       },
       isPlay() {
         return this.$store.state.isPlaying;
+      },
+      isDisplay() {
+        return this.$store.state.isDisplay;
       },
       loveList() {
             return this.$store.state.loveMusic;
@@ -109,11 +118,11 @@ export default {
     },
     methods: {
       caidan() {
-              this.isShow = true;
-            },
+        this.isShow = !this.isShow;
+      },
       // 展开
       Display() {
-        this.isDisplay = true,
+        this.$store.commit('setDisplay', true);
         this.playHeight = '100%';
       },
       togglefull() {
@@ -125,7 +134,7 @@ export default {
         // 收回
         unDisplay() {
           this.playHeight = '59px',
-          this.isDisplay = false
+          this.$store.commit('setDisplay', false);
         },
         // 切换播放状态
         ready() {
@@ -249,7 +258,7 @@ export default {
   }
   .title {
     position: absolute;
-    top:0px;
+    top: 0px;
     left: 7em;
     transition: left 0.4s ease;
     transform: translate3d(0,0,0);

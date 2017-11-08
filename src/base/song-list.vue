@@ -5,7 +5,7 @@
               <img v-lazy="item.image" alt="">
               <div>
                 <span v-html="item.name"></span>
-                <span v-html="item.singer"></span>
+                <span v-html="item.singer.name"></span>
               </div>
             </li><li></li>
         </ul>

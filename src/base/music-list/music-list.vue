@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="musicList">
+    <div class="musicList" :style="listBottom">
       <div class="listTitle">
         <span class="fanhui" @click="fanhui"></span>
         <span>{{ listTitle }}</span>
@@ -35,6 +35,14 @@ export default {
   computed: {
     Img() {
       return `url(${this.musicImg}) no-repeat`;
+    },
+    listBottom() {
+      var listbottom = this.$store.state.isDisplay;
+      if(listbottom) {
+        return `bottom: 5px;`
+      } else {
+        return `bottom: 62px;`
+      }
     }
   },
   created() {
@@ -102,11 +110,11 @@ export default {
 .musicList {
   position: fixed;
   width: 100%;
-  bottom: 55px;
+  bottom: 62px;
   top: 0;
   left: 0;
   overflow: hidden;
-  z-index: 19;
+  z-index: 32;
   background: rgba(255,255,255,1);
 }
 

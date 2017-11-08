@@ -111,6 +111,7 @@
         this.isShowkey = false;
         this.musics = [];
         this.singer = {};
+        this.album = {};
       },
       _gethotKey() {
         getHotKey().then((res) => {

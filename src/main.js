@@ -12,7 +12,8 @@ import {
   deleteFavorite,
   loadSearch,
   loadFavorite,
-  loadPlay
+  loadPlay,
+  clearAll
 } from './api/localStorage.js'
 
 import App from './App';
@@ -94,8 +95,12 @@ const store = new Vuex.Store({
     detailMid: '',
     detailTypes: '',
     musicImg: '',
+    isDisplay: false
   },
   mutations: {
+    setDisplay(state, bool) {
+      state.isDisplay = bool;
+    },
     setDetailMid(state, mid) {
       state.detailMid = mid;
     },
@@ -135,6 +140,7 @@ const store = new Vuex.Store({
     clearHistory(state) {
       clearSearch();
       state.searchHistory = loadSearch();
+      clearAll()
     },
     addLove(state, musics) {
       saveFavorite(musics);

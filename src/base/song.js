@@ -35,9 +35,17 @@ export function handleSong(music) {
   return new Song({
     id: music.songid,
     mid: music.songmid,
-    singer: handleSinger(music.singer),
+    singer: {
+      name: handleSinger(music.singer),
+      id: music.singer[0].id,
+      mid: music.singer[0].mid
+    },
     name: music.songname,
-    album: music.albumname,
+    album: {
+      id: music.albumid,
+      mid: music.albummid,
+      name: music.albumname
+    },
     duration: music.interval,
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${music.albummid}.jpg?max_age=2592000`,
     url: `http://ws.stream.qqmusic.qq.com/${music.songid}.m4a?fromtag=46`
