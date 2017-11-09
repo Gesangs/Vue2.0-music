@@ -86,9 +86,13 @@ const store = new Vuex.Store({
     detailMid: '',
     detailTypes: '',
     musicImg: '',
-    isDisplay: false
+    isDisplay: false,
+    dialogMsg: 'error',
   },
   mutations: {
+    setdialogMsg(state, msg) {
+      state.dialogMsg = msg;
+    },
     setDisplay(state, bool) {
       state.isDisplay = bool;
     },

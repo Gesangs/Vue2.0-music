@@ -7,15 +7,21 @@
                 <span v-html="item.name"></span>
                 <span v-html="item.singer.name"></span>
               </div>
+              <p class="iconfont icon-Menu" @click.stop="caidan(item)"></p>
             </li><li></li>
         </ul>
+        <!-- <popup v-if="isShow" :musicDetail="currentItem" :isShow="isShow" @caidan="caidan" @Love="Love(currentItem)"></popup> -->
     </div>
 </template>
 
 <script>
 import {savePlay} from '../api/localStorage.js';
+import popup from '../components/popup/popup.vue';
 
     export default {
+      components: {
+        popup
+      },
         props: {
             songs: {
                 type: Array,
@@ -26,7 +32,25 @@ import {savePlay} from '../api/localStorage.js';
                 default: 'normal'
             }
         },
+        data() {
+          return {
+            isShow: false,
+            currentitem: {}
+          }
+        },
+        computed: {
+          loveList() {
+                return this.$store.state.loveMusic;
+            },
+          currentItem() {
+            return this.currentitem;
+          }
+        },
         methods: {
+            caidan(item) {
+              this.currentitem = item;
+              this.isShow = !this.isShow;
+            },
             // 点击播放
             Splay(item,index) {
               const music = Object.assign({},item,{index:index});
@@ -38,6 +62,22 @@ import {savePlay} from '../api/localStorage.js';
               // 添加到最近播放
               this.$store.commit("addOld",music);
               this.$store.state.audio.play();
+            },
+            isLove(music) {
+                var index = this.loveList.findIndex((item) => {
+                  return item.id === music.id;
+                })
+                return index > -1;
+            },
+            Love(item) {
+              if(this.isLove(item)) {
+                this.$store.commit('delLove',item);
+                this.$store.commit('setdialogMsg','已取消');
+              }else{
+                this.$store.commit('addLove',item);
+                this.$store.commit('setdialogMsg','已添加');
+              }
+              this.$emit('diaShow');
             }
         }
     }
@@ -74,5 +114,12 @@ import {savePlay} from '../api/localStorage.js';
 .song-list li > span {
     display: block;
     float: right;
+}
+.icon-Menu {
+  background: url(../components/play/img/menu.svg) no-repeat;
+  background-size: cover;
+  position: relative;
+  right: 30px;
+  top: 25px;
 }
 </style>

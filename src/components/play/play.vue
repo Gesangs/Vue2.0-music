@@ -5,7 +5,7 @@
     <div class="img clearfix" :class="{imgPlay: isDisplay}" :style="{background: Img}">
       <div class="img-back"></div>
     </div>
-    <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
+    <div class="title" v-show="!isShow" :class="{'title-play':isDisplay && !isFullLyric}">
       <p class="gequ" v-html="Music.name || '轻听'"></p>
       <p class="geshou" v-html="singerName"></p>
     </div>
@@ -37,7 +37,7 @@
       <div class="progress" ref="progress"></div>
     </div>
     <!-- 歌曲详情 -->
-    <popup v-if="isDisplay && isShow" :musicDetail="Music" :isShow="isShow" @caidan="caidan" @Love="Love(Music)"></popup>
+    <popup v-if="isDisplay && isShow" :musicDetail="Music" @caidan="caidan" @Love="Love(Music)"></popup>
   </div>
 </template>
 <script>
@@ -211,6 +211,12 @@ export default {
         this.$store.commit("addOld", this.currentList[index]);
       },
       setLoop() {
+        if(this.isLoop) {
+          this.$store.commit('setdialogMsg','列表循环');
+        } else {
+          this.$store.commit('setdialogMsg','单曲循环');
+        }
+        this.$emit('diaShow');
         this.isLoop = !(this.isLoop);
       },
       // 判断这首歌是否在喜欢列表中
@@ -224,9 +230,12 @@ export default {
       Love(item) {
         if(this.isLove(this.Music)) {
           this.$store.commit('delLove',item);
+          this.$store.commit('setdialogMsg','已取消');
         }else{
           this.$store.commit('addLove',item);
+          this.$store.commit('setdialogMsg','已添加');
         }
+        this.$emit('diaShow');
       }
     }
   };
@@ -269,7 +278,7 @@ export default {
     left: 7em;
     transition: left 0.4s ease;
     transform: translate3d(0,0,0);
-    z-index: 26;
+    z-index: 20;
     font-size: 62.5%;
   }
   .title .gequ {

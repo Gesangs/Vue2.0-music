@@ -1,7 +1,7 @@
 <!-- 歌曲详情 -->
 <template>
-  <transition name="upSlide">
-    <div class="popup" @click.stop.prevent="downpopup">
+  <transition name="popFade">
+    <div class="popup" @click.stop.prevent="downpopup" ref="pop">
         <div class="musicDetail">
             <p><span>歌曲：</span><span v-html="musicDetail.name"></span></p>
               <ul>
@@ -27,6 +27,13 @@
           default: false
         }
       },
+      created() {
+        const heights = window.innerHeight;
+        this.$nextTick(() => {
+           this.$refs.pop.style.height = heights;
+        console.log(heights,this.$refs.pop.style.height)
+         })
+      },
       methods: {
         // 跳转详情页
         searchSingerAndAlbum(id,type) {
@@ -49,24 +56,23 @@
 </script>
 <style>
     .popup {
-      position: fixed;
+      position: absolute;
       width: 100%;
-      bottom: 5px;
       top: 0;
       left: 0;
-      overflow: hidden;
-      z-index: 30;
-      background: rgba(7, 17, 27, 0.8);
+      height: 567px;
     }
-
     .musicDetail {
       position: absolute;
-      bottom: 0px;
-      left: 0;
-      width: 100%;
-      height: 45%;
-      z-index: 31;
-      background-color: #fff;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%,-50%,0);
+      width: 70%;
+      height: 267px;
+      z-index: 40;
+      background-color: rgb(243,243,243);
+      box-shadow: 0px 8px 10px 1px rgba(0,0,0,0.14);
+      border-radius: 8px;
     }
     .musicDetail > p {
       font-size: 12px;
@@ -74,15 +80,20 @@
     }
     .musicDetail > ul > li {
       height: 40px;
-      padding: 2px 10px;
+      width: 95%;
+      margin: 2px 10px;
+      font-size: 14px;
       line-height: 40px;
       border-bottom: 1px solid rgba(1,186,144,0.3);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
-    .upSlide-enter-active, .upSlide-leave-active {
+    .popFade-enter-active, .popFade-leave-active {
     transition: all 0.6s;
     }
-    .upSlide-enter, .upSlide-leave-to {
+    .popFade-enter, .popFade-leave-to {
       opacity: 0;
     }
 </style>
