@@ -31,8 +31,11 @@ import {savePlay} from '../api/localStorage.js';
             Splay(item,index) {
               const music = Object.assign({},item,{index:index});
               this.$store.commit('playMusic', music);
+              // 把所在列表所有歌曲存起来，以便控制上一首下一首
               this.$store.commit('pushList', this.songs);
+              // 设置播放状态
               this.$store.commit('isplay', {isPLaying:true});
+              // 添加到最近播放
               this.$store.commit("addOld",music);
               this.$store.state.audio.play();
             }
@@ -60,13 +63,13 @@ import {savePlay} from '../api/localStorage.js';
 .song-list li > div > span:nth-child(1) {
     display: block;
     margin-top: 12px;
-    font-size: 14px;
+    font-size: 12px;
     color: rgb(1,186,144);
 }
 .song-list li > div > span:nth-child(2) {
     display: block;
     margin-top: 5px;
-    font-size: 12px;
+    font-size: 11px;
 }
 .song-list li > span {
     display: block;

@@ -49,17 +49,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs.lovelist.refresh()
             })
-        },
-        deletefavorite(item,index) {
-          deleteFavorite(item);
-          this.lovemusic.splice(index,1);
-        },
-      Mplay(list, item) {
-          this.$store.commit('pushList', list);
-          this.$store.commit('playMusic', this.$store.state.currentList[item]);
-          this.$store.commit('isplay', {isPLaying:true});
-          this.$store.state.audio.play();
-      },
+        }
     }
 };
 </script>

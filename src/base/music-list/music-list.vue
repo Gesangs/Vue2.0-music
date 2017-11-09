@@ -3,9 +3,9 @@
     <div class="musicList" :style="listBottom">
       <div class="listTitle">
         <span class="fanhui" @click="fanhui"></span>
-        <span>{{ listTitle }}</span>
       </div>
       <div class="musicImg" :style="{background: Img}" ref="bgImg"></div>
+      <!-- 上划时遮住图片增大可视区域 -->
       <div class="bglayer" ref="bglayer"></div>
       <scroll class="musiclist"
               :data="musicList"
@@ -50,13 +50,14 @@ export default {
     this.listenScroll = true;
   },
   watch: {
+    // 监听滚动事件
     scrollY(newY) {
       var YY = Math.floor(Math.max(-217, newY));
       let zIndex = 0;
       let scale = 1;
       this.$refs.bglayer.style['transform'] = `translate3D(0 ,${YY}px, 0)`;
       this.$refs.bglayer.style['webkit-transform'] = `translate3D(0 ,${YY}px, 0)`;
-      // 下拉列表图片跟随缩放
+      // 下拉列表图片跟随缩放，计算缩放比例
       const precent = Math.abs((newY) / 260);
       if(newY > 0) {
         scale = 1 + precent;

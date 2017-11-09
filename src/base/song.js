@@ -35,12 +35,14 @@ export function handleSong(music) {
   return new Song({
     id: music.songid,
     mid: music.songmid,
+    // 歌手信息
     singer: {
       name: handleSinger(music.singer),
       id: music.singer[0].id,
       mid: music.singer[0].mid
     },
     name: music.songname,
+    // 专辑信息
     album: {
       id: music.albumid,
       mid: music.albummid,

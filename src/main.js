@@ -23,7 +23,7 @@ Vue.use(VueLazyload, {
   loading: require('./components/default.png')
 })
 
-
+// 页面懒加载，只有点击的时候才会加载
 const user = (resolve) => {
   import ('./components/user/user.vue').then((module) => {
     resolve(module)
@@ -51,7 +51,7 @@ Vue.prototype.$ajax = Axios;
 
 
 
-
+// 页面路由
 const routes = [{
   path: '/user',
   component: user
@@ -70,15 +70,6 @@ const routes = [{
 }
 ];
 
-// 添加歌曲到播放历史和搜索历史时去除重复元素
-    const quchong = (arr) => {
-      let hash = {};
-        arr = arr.reduce(function (item, next) {
-          hash[next] ? '' : hash[next] = true && item.push(next);
-          return item;
-        }, []);
-        return arr;
-    };
 
 const router = new Router({
   routes: routes,

@@ -1,13 +1,15 @@
 <template>
   <div class="contorller" :style="{height: playHeight}" @click="Display">
     <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
+    <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan()"></div>
     <div class="img clearfix" :class="{imgPlay: isDisplay}" :style="{background: Img}">
       <div class="img-back"></div>
     </div>
     <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
-      <p class="gequ" v-html="Music.name || '轻听'"  @click.stop="caidan()"></p>
+      <p class="gequ" v-html="Music.name || '轻听'"></p>
       <p class="geshou" v-html="singerName"></p>
     </div>
+    <!-- 歌词区块 -->
     <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
@@ -20,6 +22,7 @@
     <div class="geci" v-show="isDisplay && !isFullLyric" @click="togglefull">
       <p>{{ playingLyric }}</p>
     </div>
+    <!-- 播放控制区块 -->
     <transition name="normal">
       <div class="contorl" :class="{'control-play':isDisplay}">
         <span class="iconfont icon-loop" :class="[isLoop ? loop : unloop]" @click.stop="setLoop" v-show="isDisplay"></span>
@@ -33,7 +36,8 @@
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
-    <popup v-if="isShow" :musicDetail="Music" :isShow="isShow" @caidan="caidan" @Love="Love(Music)"></popup>
+    <!-- 歌曲详情 -->
+    <popup v-if="isDisplay && isShow" :musicDetail="Music" :isShow="isShow" @caidan="caidan" @Love="Love(Music)"></popup>
   </div>
 </template>
 <script>
@@ -86,6 +90,7 @@ export default {
     computed: {
       // 当前播放的音乐
       Music() {
+        console.log(this.$store.state.Music)
         return this.$store.state.Music;
       },
       singerName() {
@@ -125,6 +130,7 @@ export default {
         this.$store.commit('setDisplay', true);
         this.playHeight = '100%';
       },
+      // 歌词页面大小切换
       togglefull() {
         this.isFullLyric = !(this.isFullLyric);
         this.$nextTick(() => {
@@ -214,6 +220,7 @@ export default {
           })
           return index > -1;
       },
+      // 添加到我喜欢
       Love(item) {
         if(this.isLove(this.Music)) {
           this.$store.commit('delLove',item);
@@ -371,6 +378,15 @@ export default {
     margin: 20px 20px 10px 30px;
     position: absolute;
     top: 0;
+    z-index: 26;
+  }
+  .icon-menu {
+    background: url(img/menu.svg) no-repeat;
+    background-size: contain;
+    margin: 20px 0px 10px 30px;
+    position: absolute;
+    top: 0;
+    right: 20px;
     z-index: 26;
   }
   .current {

@@ -1,3 +1,4 @@
+<!-- 详情页面（包括歌手、专辑、榜单） -->
 <template>
     <music-list :music-list="songs" :music-img="img"></music-list>
 </template>
@@ -26,6 +27,7 @@ import {getMusicList} from '../../api/rank.js'
             }
         },
         created() {
+          // 判断传进来的歌曲列表的类型
           if(this.types === 'singer') {
             this._getSingerDetail()
           } else if(this.types === 'rank') {
@@ -62,6 +64,7 @@ import {getMusicList} from '../../api/rank.js'
           handleList(list) {
             const List = [];
             list.forEach((item) => {
+              // api返回的json数据格式不同
               if(this.types === 'singer') {
                 List.push(handleSong(item.musicData));
               } else if(this.types === 'rank') {

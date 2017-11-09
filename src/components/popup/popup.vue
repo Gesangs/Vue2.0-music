@@ -1,13 +1,14 @@
+<!-- 歌曲详情 -->
 <template>
   <transition name="upSlide">
     <div class="popup" @click.stop.prevent="downpopup">
         <div class="musicDetail">
-            <p>歌曲：<span v-html="musicDetail.name"></span></p>
+            <p><span>歌曲：</span><span v-html="musicDetail.name"></span></p>
               <ul>
                   <li>下一首播放</li>
                   <li @click.stop="setlove">添加到我喜欢</li>
-                  <li @click.stop="searchSingerAndAlbum(musicDetail.singer.mid,'singer')">歌手：<span v-html="musicDetail.singer.name"></span></li>
-                  <li @click.stop="searchSingerAndAlbum(musicDetail.album.mid,'album')">专辑：<span v-html="musicDetail.album.name"></span></li>
+                  <li @click.stop="searchSingerAndAlbum(musicDetail.singer.mid,'singer')"><span>歌手：</span><span v-html="musicDetail.singer.name"></span></li>
+                  <li @click.stop="searchSingerAndAlbum(musicDetail.album.mid,'album')"><span>专辑：</span><span v-html="musicDetail.album.name"></span></li>
                   <li>来源: {{  }}</li>
               </ul>
         </div>
@@ -27,6 +28,7 @@
         }
       },
       methods: {
+        // 跳转详情页
         searchSingerAndAlbum(id,type) {
         this.$store.commit('setDetailTypes',type)
         this.$store.commit("setDetailMid", id);
@@ -34,14 +36,16 @@
               path:`/detail`
             });
     },
+    // 通知父组件关闭详情页
     downpopup() {
       this.$emit('caidan')
       },
+    // 通知父组件把这首歌添加到我喜欢
     setlove() {
       this.$emit('Love')
     }
-    }
-    }
+  }
+}
 </script>
 <style>
     .popup {
@@ -76,9 +80,9 @@
     }
 
     .upSlide-enter-active, .upSlide-leave-active {
-  transition: all 0.6s;
-}
-.upSlide-enter, .upSlide-leave-to {
-  opacity: 0;
-}
+    transition: all 0.6s;
+    }
+    .upSlide-enter, .upSlide-leave-to {
+      opacity: 0;
+    }
 </style>

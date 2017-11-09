@@ -6,7 +6,7 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
-
+// 配置详情请查看 better-scroll官网
   export default {
     props: {
       probeType: {
@@ -77,12 +77,6 @@
             this.$emit('beforeScroll')
           })
         }
-      },
-      disable() {
-        this.scroll && this.scroll.disable()
-      },
-      enable() {
-        this.scroll && this.scroll.enable()
       },
       refresh() {
         this.scroll && this.scroll.refresh()

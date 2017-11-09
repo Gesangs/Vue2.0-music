@@ -1,6 +1,6 @@
 import jsonp from './jsonp.js'
 import {commonParams, options} from './config.js'
-
+// 获取热搜关键词
 export function getHotKey() {
   const url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
 
@@ -12,7 +12,7 @@ export function getHotKey() {
 
   return jsonp(url, data, options)
 }
-
+// 搜索接口
 export function search(query, page, zhida, perpage) {
   const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
 
@@ -36,7 +36,7 @@ export function search(query, page, zhida, perpage) {
 
   return jsonp(url, data, options)
 }
-
+// 获取歌手歌曲列表
 export function getSingerDetail(singerId) {
   const url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
 

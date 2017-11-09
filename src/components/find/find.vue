@@ -88,6 +88,7 @@
               }
       })
     },
+    // 详情跳转
     searchSingerAndAlbum(id,type) {
       this.$store.commit('setDetailTypes',type)
       this.$store.commit("setDetailMid", id);
@@ -113,6 +114,7 @@
         this.singer = {};
         this.album = {};
       },
+      // 获取热搜
       _gethotKey() {
         getHotKey().then((res) => {
           if (res.code === 0) {
@@ -120,6 +122,7 @@
           }
         })
       },
+      // 搜索历史记录
     clearHistory() {
       this.$store.commit('clearHistory');
     },
