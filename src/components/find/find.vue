@@ -43,6 +43,7 @@
  import Scroll from '../../base/scroll.vue';
  import {getHotKey,search} from '../../api/search.js';
  import {handleSong} from '../../base/song.js';
+ import {clearAll} from '../../api/localStorage.js';
   export default {
     components: {
           SongList,
@@ -125,6 +126,7 @@
       // 搜索历史记录
     clearHistory() {
       this.$store.commit('clearHistory');
+      clearAll()
     },
     delHistory(item) {
       this.$store.commit('delHistory',item)

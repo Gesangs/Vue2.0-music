@@ -85,7 +85,7 @@ import Scroll from '../../base/scroll.vue';
     font-size: 13px;
 }
 
-.rankRight p ,span {
+.rankRight > p ,.rankRight > span {
     width: 100%;
     /*文本超出宽度的时候省略号*/
     /*white-space: nowrap;

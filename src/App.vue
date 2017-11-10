@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-header></v-header>
-      <router-view></router-view>
+      <router-view @diaShow="diaShow"></router-view>
     <v-play @diaShow="diaShow"></v-play>
     <transition name="diaFade">
       <div class="dialog" v-show="dialogShow">{{ this.Msg }}</div>
@@ -42,7 +42,7 @@
 </script>
 
 <style>
-a   {
+a {
   text-decoration: none;
   color: black;
   cursor:text;

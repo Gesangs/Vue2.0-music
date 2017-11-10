@@ -28,11 +28,6 @@
         }
       },
       created() {
-        const heights = window.innerHeight;
-        this.$nextTick(() => {
-           this.$refs.pop.style.height = heights;
-        console.log(heights,this.$refs.pop.style.height)
-         })
       },
       methods: {
         // 跳转详情页
@@ -60,11 +55,11 @@
       width: 100%;
       top: 0;
       left: 0;
-      height: 567px;
+      bottom: 5px;
     }
     .musicDetail {
       position: absolute;
-      top: 50%;
+      top: 55%;
       left: 50%;
       transform: translate3d(-50%,-50%,0);
       width: 70%;
@@ -91,7 +86,7 @@
     }
 
     .popFade-enter-active, .popFade-leave-active {
-    transition: all 0.6s;
+    transition: all 0.4s;
     }
     .popFade-enter, .popFade-leave-to {
       opacity: 0;

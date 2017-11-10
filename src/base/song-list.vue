@@ -7,16 +7,16 @@
                 <span v-html="item.name"></span>
                 <span v-html="item.singer.name"></span>
               </div>
-              <p class="iconfont icon-Menu" @click.stop="caidan(item)"></p>
+              <p v-if="delShow" class="iconfont icon-del_1" @click.stop="deletes(item)"></p>
             </li><li></li>
         </ul>
-        <!-- <popup v-if="isShow" :musicDetail="currentItem" :isShow="isShow" @caidan="caidan" @Love="Love(currentItem)"></popup> -->
     </div>
 </template>
 
 <script>
 import {savePlay} from '../api/localStorage.js';
 import popup from '../components/popup/popup.vue';
+import axios from 'axios'
 
     export default {
       components: {
@@ -28,27 +28,29 @@ import popup from '../components/popup/popup.vue';
                 default: []
             },
             types: {
-                type: String,
-                default: 'normal'
+              type: String,
+              default: 'normal'
             }
         },
         data() {
           return {
             isShow: false,
-            currentitem: {}
+            delShow: false
+          }
+        },
+        created() {
+           this.delShow = false;
+          if(this.types == 'old' || this.types == 'love') {
+            this.delShow = true;
           }
         },
         computed: {
           loveList() {
                 return this.$store.state.loveMusic;
-            },
-          currentItem() {
-            return this.currentitem;
-          }
+            }
         },
         methods: {
             caidan(item) {
-              this.currentitem = item;
               this.isShow = !this.isShow;
             },
             // 点击播放
@@ -63,28 +65,19 @@ import popup from '../components/popup/popup.vue';
               this.$store.commit("addOld",music);
               this.$store.state.audio.play();
             },
-            isLove(music) {
-                var index = this.loveList.findIndex((item) => {
-                  return item.id === music.id;
-                })
-                return index > -1;
-            },
-            Love(item) {
-              if(this.isLove(item)) {
+            deletes(item) {
+              if(this.types === 'old') {
+                this.$store.commit('delOld',item);
+              } else {
                 this.$store.commit('delLove',item);
-                this.$store.commit('setdialogMsg','已取消');
-              }else{
-                this.$store.commit('addLove',item);
-                this.$store.commit('setdialogMsg','已添加');
               }
-              this.$emit('diaShow');
             }
         }
     }
 </script>
 
 <style>
-    li {
+li {
     width:100%;
     height: 60px;
     display: flex;
@@ -115,11 +108,9 @@ import popup from '../components/popup/popup.vue';
     display: block;
     float: right;
 }
-.icon-Menu {
-  background: url(../components/play/img/menu.svg) no-repeat;
-  background-size: cover;
-  position: relative;
-  right: 30px;
-  top: 25px;
+.song-list .icon-del_1 {
+  margin-top: 18px;
+  opacity: 0.4;
 }
+
 </style>

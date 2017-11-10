@@ -5,10 +5,10 @@
             <p class="recent" :class="{active: isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
         <scroll class="oldList" :data="oldList" ref="oldlist" v-show="isActive">
-          <song-list :songs="oldList"></song-list>
+          <song-list :songs="oldList" :types="'old'"></song-list>
         </scroll>
         <scroll class="loveList" :data="loveList" ref="lovelist" v-show="!isActive">
-          <song-list :songs="loveList"></song-list>
+          <song-list :songs="loveList" :types="'love'"></song-list>
         </scroll>
     </div>
     </div>

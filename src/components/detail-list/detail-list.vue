@@ -29,36 +29,42 @@ import {getMusicList} from '../../api/rank.js'
         created() {
           // 判断传进来的歌曲列表的类型
           if(this.types === 'singer') {
-            this._getSingerDetail()
+            return this._getSingerDetail()
           } else if(this.types === 'rank') {
-            this._getRankDetail()
+            return this._getRankDetail()
           } else {
-            this._getAlbumDetail()
+            return this._getAlbumDetail()
           };
         },
         methods: {
         _getSingerDetail() {
-            getSingerDetail(this.listMid).then((res) => {
+            return getSingerDetail(this.listMid).then((res) => {
               if (res.code === 0) {
                 this.img = `https://y.gtimg.cn/music/photo_new/T001R300x300M000${this.listMid}.jpg?max_age=2592000`;
-                this.songs = this.handleList(res.data.list);
+                return res.data.list
               }
+            }).then((res) => {
+              this.songs = this.handleList(res);
             })
           },
           _getRankDetail() {
-            getMusicList(this.listMid).then((res) => {
+            return getMusicList(this.listMid).then((res) => {
               if (res.code === 0) {
                 this.img = res.topinfo.pic_v12;;
-                this.songs = this.handleList(res.songlist);
+                return res.songlist;
               }
+            }).then((res) => {
+              this.songs = this.handleList(res);
             })
           },
           _getAlbumDetail() {
-            getAlbumDetail(this.listMid).then((res) => {
+            return getAlbumDetail(this.listMid).then((res) => {
               if (res.code === 0) {
                 this.img = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${res.data.mid}.jpg?max_age=2592000`;
-                this.songs = this.handleList(res.data.list);
+                return res.data.list;
               }
+            }).then((res) => {
+              this.songs = this.handleList(res);
             })
           },
           handleList(list) {

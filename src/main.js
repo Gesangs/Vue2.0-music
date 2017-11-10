@@ -12,13 +12,14 @@ import {
   deleteFavorite,
   loadSearch,
   loadFavorite,
+  deletePlay,
   loadPlay,
   clearAll
 } from './api/localStorage.js'
 
 import App from './App';
 import find from './components/find/find.vue';
-
+import play from './components/play/play.vue';
 Vue.use(VueLazyload, {
   loading: require('./components/default.png')
 })
@@ -147,6 +148,10 @@ const store = new Vuex.Store({
     },
     addOld(state, music) {
       savePlay(music)
+      state.oldMusic = loadPlay();
+    },
+    delOld(state, music) {
+      deletePlay(music)
       state.oldMusic = loadPlay();
     }
   }

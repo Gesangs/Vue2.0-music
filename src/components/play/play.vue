@@ -32,7 +32,7 @@
         <span :class="[isLove(Music) ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
       </div>
     </transition>
-    <audio :src="Music.url" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop"></audio>
+    <audio :src="Music.url" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
@@ -90,7 +90,6 @@ export default {
     computed: {
       // 当前播放的音乐
       Music() {
-        console.log(this.$store.state.Music)
         return this.$store.state.Music;
       },
       singerName() {
@@ -122,7 +121,18 @@ export default {
       }
     },
     methods: {
+      Error() {
+        this.$store.commit('setdialogMsg','无法播放');
+        this.$emit('diaShow');
+        this.$nextTick(() => {
+          this.$store.commit('delOld',this.Music)
+        })
+        this.next();
+      },
       caidan() {
+        if(!this.Music.url) {
+          return;
+        }
         this.isShow = !this.isShow;
       },
       // 展开
@@ -141,9 +151,13 @@ export default {
         unDisplay() {
           this.playHeight = '59px',
           this.$store.commit('setDisplay', false);
+          this.isShow = false;
         },
         // 切换播放状态
         ready() {
+          if(!this.Music.url) {
+          return;
+          }
           if(! this.isPlay) {
             this.$refs.audio.play();
             this.$store.commit('isplay', true);
@@ -193,6 +207,9 @@ export default {
         this.$store.commit("audioDom", au);
       },
       next() {
+        if(!this.Music.url) {
+          return;
+        }
         var index = this.Music.index + 1;
         if(index === this.currentList.length) {
           index = 0;
@@ -201,6 +218,9 @@ export default {
         this.$store.commit("addOld", this.currentList[index]);
       },
       pre() {
+        if(!this.Music.url) {
+          return;
+        }
         var index;
         if(this.Music.index === 0) {
           index = this.currentList.length - 1;
@@ -211,6 +231,9 @@ export default {
         this.$store.commit("addOld", this.currentList[index]);
       },
       setLoop() {
+        if(!this.Music.url) {
+          return;
+        }
         if(this.isLoop) {
           this.$store.commit('setdialogMsg','列表循环');
         } else {
@@ -228,6 +251,9 @@ export default {
       },
       // 添加到我喜欢
       Love(item) {
+        if(!this.Music.url) {
+          return;
+        }
         if(this.isLove(this.Music)) {
           this.$store.commit('delLove',item);
           this.$store.commit('setdialogMsg','已取消');
@@ -391,11 +417,10 @@ export default {
   }
   .icon-menu {
     background: url(img/menu.svg) no-repeat;
-    background-size: contain;
     margin: 20px 0px 10px 30px;
     position: absolute;
     top: 0;
-    right: 20px;
+    right: 15px;
     z-index: 26;
   }
   .current {
