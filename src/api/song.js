@@ -19,3 +19,14 @@ export function getLyric(mid) {
     return Promise.resolve(res.data)
   })
 }
+
+export function getColor(uu) {
+  const url = '/api/color'
+
+  const data = uu;
+  return axios.get(url, {
+    params: uu
+  }).then((res) => {
+    return Promise.resolve(res.body)
+  })
+}

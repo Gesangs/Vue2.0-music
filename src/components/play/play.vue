@@ -43,7 +43,7 @@
 <script>
 import Scroll from '../../base/scroll.vue';
 import popup from '../popup/popup.vue';
-import {getLyric} from '../../api/song.js';
+import {getLyric,getColor} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
 export default {
@@ -103,6 +103,7 @@ export default {
         if(! this.Music.image) {
           return 'url(../../static/defa.jpg)';
         }else {
+          this.setBackgroundColor();
           return 'url(' + this.Music.image + ')';
         }
       },
@@ -121,6 +122,23 @@ export default {
       }
     },
     methods: {
+      setBackgroundColor() {
+        getColor(this.Music.image).then((res) => {
+          console.log(res);
+        })
+        // RGBaster.colors(this.cacheExternalImage(this.Music.image), {
+        //   paletteSize: 5000, // 调色板大小
+        //   exclude: [ 'rgb(255,255,255)', 'rgb(0,0,0)' ],
+        //   success: function(payload) {
+        //       // payload.dominant是主色，RGB形式表示
+        //       // payload.secondary是次色，RGB形式表示
+        //       // payload.palette是调色板，含多个主要颜色，数组
+        //       alert(payload.dominant);
+        //       console.log(payload.secondary);
+        //       console.log(payload.palette);
+        //   }
+        // })
+      },
       Error() {
         this.$store.commit('setdialogMsg','无法播放');
         this.$emit('diaShow');

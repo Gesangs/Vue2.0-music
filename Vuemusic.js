@@ -1,9 +1,9 @@
 var express = require('express')
 var config = require('./config/index.js');
 var axios = require('axios')
+var http = require('http');
 
 var app = express()
-
 var apiRoutes = express.Router()
 
 apiRoutes.get('/getDiscList', function (req, res) {
@@ -20,7 +20,14 @@ apiRoutes.get('/getDiscList', function (req, res) {
     console.log(e)
   })
 })
-
+apiRoutes.get('/color', function(req,res){
+  var url = req.query;
+  axios.get(url).then((response) => {
+    response.pipe(res);
+  }).catch((e) => {
+    console.log(e)
+  })
+})
 apiRoutes.get('/lyric', function (req, res) {
   var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
 

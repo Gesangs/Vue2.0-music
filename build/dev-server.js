@@ -7,11 +7,14 @@ if (!process.env.NODE_ENV) {
 
 var opn = require('opn')
 var path = require('path')
+var gm = require('gm');
+var http = require('http');
+var request = require("request");
 var express = require('express')
 var webpack = require('webpack')
-var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
 var axios = require('axios')
+var bodyParser = require('body-parser');
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -22,33 +25,12 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+app.use(bodyParser.json());
 
 var apiRoutes = express.Router()
 
-// apiRoutes.get('/album', function (req, res) {
-//   var url = 'https://c.y.qq.com//v8/fcg-bin/fcg_v8_album_info_cp.fcg';
-//   // albummid=000bBzKy0zyNUX&g_tk=5381&jsonpCallback=albuminfoCallback&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0
+// http://localhost:2999/music/photo_new/T002R300x300M0000023bHKi1CKCXv.jpg?max_age=2592000
 
-//   axios.get(url, {
-//     headers: {
-//       referer: 'https://c.y.qq.com/',
-//       host: 'c.y.qq.com'
-//     },
-//     params: req.query
-//   }).then((response) => {
-//     var ret = response.data
-//     if (typeof ret === 'string') {
-//       var reg = /^\w+\(({[^()]+})\)$/
-//       var matches = ret.match(reg)
-//       if (matches) {
-//         ret = JSON.parse(matches[1])
-//       }
-//     }
-//     res.json(ret)
-//   }).catch((e) => {
-//     console.log(e)
-//   })
-// })
 apiRoutes.get('/lyric', function (req, res) {
   var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
 
@@ -71,6 +53,23 @@ apiRoutes.get('/lyric', function (req, res) {
   }).catch((e) => {
     console.log(e)
   })
+})
+apiRoutes.get('/color', function(req,res){
+  var url = req.query;
+      var options = {
+          url: url
+      };
+
+      function callback(error, response, body) {
+          if (!error && response.statusCode === 200) {
+              var contentType = response.headers['content-type'];
+              response.setEncoding('binary');
+              res.set('Content-Type', contentType);
+              res.send(body);
+          }
+      }
+
+      request.get(options, callback);
 })
 
 app.use('/api', apiRoutes)
