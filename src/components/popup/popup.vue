@@ -1,6 +1,6 @@
 <!-- 歌曲详情 -->
 <template>
-  <transition name="popFade">
+  <transition name="fade">
     <div class="popup" @click.stop.prevent="downpopup" ref="pop">
         <div class="musicDetail">
             <p><span>歌曲：</span><span v-html="musicDetail.name"></span></p>
@@ -83,12 +83,5 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-    }
-
-    .popFade-enter-active, .popFade-leave-active {
-    transition: all 0.4s;
-    }
-    .popFade-enter, .popFade-leave-to {
-      opacity: 0;
     }
 </style>

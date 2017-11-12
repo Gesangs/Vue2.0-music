@@ -1,16 +1,16 @@
 <template>
-  <div class="contorller" :style="{height: playHeight}" @click="Display">
+  <div class="contorller" :style="{height: playHeight, backgroundColor: setColor, color: fontColor}" @click="Display">
     <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
     <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan()"></div>
     <div class="img clearfix" :class="{imgPlay: isDisplay}" :style="{background: Img}">
-      <div class="img-back"></div>
+      <div class="img-back" :style="{background:setColors}"></div>
     </div>
     <div class="title" v-show="!isShow" :class="{'title-play':isDisplay && !isFullLyric}">
       <p class="gequ" v-html="Music.name || '轻听'"></p>
       <p class="geshou" v-html="singerName"></p>
     </div>
     <!-- 歌词区块 -->
-    <div class="fullGeci" v-show="isFullLyric && isDisplay"  @click="togglefull">
+    <div class="fullGeci" :style="{backgroundColor: setColor}" v-show="isFullLyric && isDisplay"  @click="togglefull">
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
           <div v-if="currentLyric">
@@ -46,6 +46,7 @@ import popup from '../popup/popup.vue';
 import {getLyric,getColor} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
+import '../../base/rgbaster.js';
 export default {
   components: {
     Scroll,
@@ -53,8 +54,11 @@ export default {
   },
   data() {
     return {
+      fontColor: '#000',
       isShow: false,
       playHeight: '59px',
+      setColor: 'rgb(196,176,152)',
+      setColors: 'linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))',
       isFullLyric:false,
       isLoop:false,
       loop: 'icon-loop',
@@ -103,7 +107,6 @@ export default {
         if(! this.Music.image) {
           return 'url(../../static/defa.jpg)';
         }else {
-          this.setBackgroundColor();
           return 'url(' + this.Music.image + ')';
         }
       },
@@ -122,23 +125,35 @@ export default {
       }
     },
     methods: {
-      setBackgroundColor() {
-        getColor(this.Music.image).then((res) => {
-          console.log(res);
+      // 获取图片主题色
+      getImageColor() {
+        var that = this;
+        var host = location.host;
+        // canvas不允许跨域资源调用方法，利用后台转发的方法，解决跨域问题。
+        var URl = `http://${host}/api/img?0=${this.Music.image}`;
+        // 把图片绘入canvas利用getImageData获取主题色
+        RGBaster.colors(URl, {
+          // 调色板大小
+          paletteSize: 5000,
+          // 颜色范围
+          exclude: [ 'rgb(255,255,255)', 'rgb(0,0,0)' ],
+          success: function(payload) {
+            // 设置背景色
+              that.setColor = payload.dominant;
+              that.setColors = `linear-gradient(${payload.dominant}, transparent, transparent,transparent,${payload.dominant})`;
+            // 提取颜色R、G、B值，转换成灰度值判断颜色深浅
+              let c = payload.dominant.match(/\d+/g);
+              let grayLevel = c[0] * 0.299 + c[1] * 0.587 + c[2] * 0.114;
+              if (grayLevel >= 192) {
+                // 若为深色，把文字设置为白色
+                that.fontColor = '#000';
+              } else {
+                that.fontColor = '#fff';
+              }
+          }
         })
-        // RGBaster.colors(this.cacheExternalImage(this.Music.image), {
-        //   paletteSize: 5000, // 调色板大小
-        //   exclude: [ 'rgb(255,255,255)', 'rgb(0,0,0)' ],
-        //   success: function(payload) {
-        //       // payload.dominant是主色，RGB形式表示
-        //       // payload.secondary是次色，RGB形式表示
-        //       // payload.palette是调色板，含多个主要颜色，数组
-        //       alert(payload.dominant);
-        //       console.log(payload.secondary);
-        //       console.log(payload.palette);
-        //   }
-        // })
       },
+      // 音乐无法加载时触发
       Error() {
         this.$store.commit('setdialogMsg','无法播放');
         this.$emit('diaShow');
@@ -147,6 +162,7 @@ export default {
         })
         this.next();
       },
+      // 右上角菜单键
       caidan() {
         if(!this.Music.url) {
           return;
@@ -189,6 +205,7 @@ export default {
         },
         // 获取歌词
         getLyric() {
+          this.getImageColor();
           getLyric(this.Music.mid).then((res) => {
            if(res.retcode === 0) {
             return Base64.decode(res.lyric)
@@ -224,6 +241,7 @@ export default {
         const au = this.$refs.audio;
         this.$store.commit("audioDom", au);
       },
+      // 下一首
       next() {
         if(!this.Music.url) {
           return;
@@ -235,6 +253,7 @@ export default {
         this.$store.commit('playMusic', this.currentList[index]);
         this.$store.commit("addOld", this.currentList[index]);
       },
+      // 上一首
       pre() {
         if(!this.Music.url) {
           return;
@@ -248,6 +267,7 @@ export default {
         this.$store.commit('playMusic', this.currentList[index]);
         this.$store.commit("addOld", this.currentList[index]);
       },
+      // 循环
       setLoop() {
         if(!this.Music.url) {
           return;
@@ -285,17 +305,15 @@ export default {
   };
   </script>
 
-  <style>
+  <style scopeId>
   .contorller {
     width: 100%;
     position: fixed;
     bottom: 0;
     left: 0;
     z-index: 20;
-    background-color: rgb(196,176,152);
-    box-shadow: 7px 0 7px 0 rgb(196,176,152);
     transform: translate3d(0,0,0);
-    transition: all 0.4s;
+    transition: all 0.4s cubic-bezier(.15,.65,.35,.97);
   }
   .contorller .img{
     width: 54px;
@@ -304,12 +322,11 @@ export default {
     background-position: center center;
     position: relative;
     transform: translate3d(0,1px,0);
-    transition: all 0.4s;
+    transition: all 0.4s cubic-bezier(.15,.65,.35,.97);
   }
   .img .img-back {
     width: 100%;
     height: 101%;
-    background: linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152));
   }
   .imgPlay {
     width: 100% !important;

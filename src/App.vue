@@ -3,7 +3,7 @@
     <v-header></v-header>
       <router-view @diaShow="diaShow"></router-view>
     <v-play @diaShow="diaShow"></v-play>
-    <transition name="diaFade">
+    <transition name="fade">
       <div class="dialog" v-show="dialogShow">{{ this.Msg }}</div>
     </transition>
   </div>
@@ -69,10 +69,10 @@ a {
   background: rgba(7, 17, 27, 0.8);
   z-index: 30;
 }
-.diaFade-enter-active, .diaFade-leave-active {
+.fade-enter-active, .fade-leave-active {
 transition: all 0.6s;
 }
-.diaFade-enter, .diaFade-leave-to {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 </style>

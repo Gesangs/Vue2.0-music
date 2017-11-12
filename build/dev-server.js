@@ -7,9 +7,7 @@ if (!process.env.NODE_ENV) {
 
 var opn = require('opn')
 var path = require('path')
-var gm = require('gm');
-var http = require('http');
-var request = require("request");
+var http = require('https');
 var express = require('express')
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.dev.conf')
@@ -28,8 +26,6 @@ var app = express()
 app.use(bodyParser.json());
 
 var apiRoutes = express.Router()
-
-// http://localhost:2999/music/photo_new/T002R300x300M0000023bHKi1CKCXv.jpg?max_age=2592000
 
 apiRoutes.get('/lyric', function (req, res) {
   var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
@@ -54,23 +50,24 @@ apiRoutes.get('/lyric', function (req, res) {
     console.log(e)
   })
 })
-apiRoutes.get('/color', function(req,res){
-  var url = req.query;
-      var options = {
-          url: url
-      };
 
-      function callback(error, response, body) {
-          if (!error && response.statusCode === 200) {
-              var contentType = response.headers['content-type'];
-              response.setEncoding('binary');
-              res.set('Content-Type', contentType);
-              res.send(body);
-          }
-      }
+// 图片转发
+apiRoutes.get('/img', function (req, res) {
+    var Url = req.query;
+    http.get(Url['0'], function (response) {
+        response.setEncoding('binary');  //二进制binary
+        var type = response.headers["content-type"];
+        var Data = '';
+        response.on('data', function (data) {    //加载到内存
+            Data += data;
+        }).on('end', function () {          //加载完
+            res.writeHead(200, { 'Access-Control-Allow-Origin': '*', "Content-Type": type });   //设置头，允许跨域
+            // res.write(Data , "binary");
+            res.end(new Buffer(Data, 'binary'));
+        })
+    })
+});
 
-      request.get(options, callback);
-})
 
 app.use('/api', apiRoutes)
 
