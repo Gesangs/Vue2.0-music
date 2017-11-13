@@ -51,6 +51,7 @@
 </script>
 <style>
     .popup {
+      color: #000;
       position: absolute;
       width: 100%;
       top: 0;

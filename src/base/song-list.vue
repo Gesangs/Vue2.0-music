@@ -1,13 +1,13 @@
 <template>
     <div class="song-list">
         <ul>
-            <li v-for="(item, index) in songs" @click="Splay(item, index)">
-              <img v-lazy="item.image" alt="">
+            <li v-for="(item, index) in songs" @click="Splay(item, index)" :class="{imgSelect: item.id == idSelect}">
+              <img v-lazy="item.image" alt="" >
               <div>
                 <span v-html="item.name"></span>
                 <span v-html="item.singer.name"></span>
               </div>
-              <p v-if="delShow" class="iconfont icon-del_1" @click.stop="deletes(item)"></p>
+              <p v-if="delShow" class="icon-del_1" @click.stop="deletes(item)"></p>
             </li><li></li>
         </ul>
     </div>
@@ -34,6 +34,7 @@ import axios from 'axios'
         },
         data() {
           return {
+            idSelect: null,
             isShow: false,
             delShow: false
           }
@@ -55,6 +56,7 @@ import axios from 'axios'
             },
             // 点击播放
             Splay(item,index) {
+              this.idSelect = item.id;
               const music = Object.assign({},item,{index:index});
               this.$store.commit('playMusic', music);
               // 把所在列表所有歌曲存起来，以便控制上一首下一首
@@ -86,11 +88,15 @@ li {
     flex: 0 0 35px;
     width: 35px;
     height: 35px;
-    margin: 15px;
+    margin: 15px 15px 15px 7px;
+}
+
+.song-list > ul > .imgSelect {
+  border-left: 8px solid rgb(1,186,144);
 }
 .song-list li >div {
     flex: 1;
-    height: 64px;
+    height: 60px;
     border-bottom: 1px solid rgba(1,186,144,0.3);
 }
 .song-list li > div > span:nth-child(1) {
@@ -109,7 +115,10 @@ li {
     float: right;
 }
 .song-list .icon-del_1 {
+  width: 30px;
+  height: 30px;
   margin-top: 18px;
+  right: 30px;
   opacity: 0.4;
 }
 

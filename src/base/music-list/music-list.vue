@@ -44,7 +44,7 @@ export default {
   watch: {
     // 监听滚动事件
     scrollY(newY) {
-      var YY = Math.floor(Math.max(-217, newY));
+      let YY = Math.floor(Math.max(-217, newY));
       let zIndex = 0;
       let scale = 1;
       this.$refs.bglayer.style['transform'] = `translate3D(0 ,${YY}px, 0)`;

@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 var apiRoutes = express.Router()
 
 apiRoutes.get('/lyric', function (req, res) {
-  var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+  const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
 
   axios.get(url, {
     headers: {
@@ -39,7 +39,7 @@ apiRoutes.get('/lyric', function (req, res) {
   }).then((response) => {
     var ret = response.data
     if (typeof ret === 'string') {
-      var reg = /^\w+\(({[^()]+})\)$/
+      const reg = /^\w+\(({[^()]+})\)$/
       var matches = ret.match(reg)
       if (matches) {
         ret = JSON.parse(matches[1])
@@ -53,16 +53,15 @@ apiRoutes.get('/lyric', function (req, res) {
 
 // 图片转发
 apiRoutes.get('/img', function (req, res) {
-    var Url = req.query;
-    http.get(Url['0'], function (response) {
+    const Url = (req.query)['0'];
+    http.get(Url, function (response) {
         response.setEncoding('binary');  //二进制binary
         var type = response.headers["content-type"];
-        var Data = '';
+        let Data = '';
         response.on('data', function (data) {    //加载到内存
             Data += data;
         }).on('end', function () {          //加载完
             res.writeHead(200, { 'Access-Control-Allow-Origin': '*', "Content-Type": type });   //设置头，允许跨域
-            // res.write(Data , "binary");
             res.end(new Buffer(Data, 'binary'));
         })
     })

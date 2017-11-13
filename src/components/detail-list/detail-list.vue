@@ -71,10 +71,10 @@ import {getMusicList} from '../../api/rank.js'
             const List = [];
             list.forEach((item) => {
               // api返回的json数据格式不同
-              if(this.types === 'singer') {
-                List.push(handleSong(item.musicData));
-              } else if(this.types === 'rank') {
+              if(this.types === 'rank') {
                 List.push(handleSong(item.data));
+              } else if(this.types === 'singer') {
+                List.push(handleSong(item.musicData));
               } else {
                 List.push(handleSong(item));
               };
