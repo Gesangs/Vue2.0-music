@@ -2,9 +2,6 @@
   <div class="contorller"
        :style="{height:playHeight, backgroundColor:setColor, color:fontColor}"
        @click="Display">
-      <!--  @touchstart.prevent.stop="touchAllStart"
-       @touchmove.prevent.stop="touchAllMove"
-       @touchend.prevent.stop="touchAllEnd" -->
     <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
     <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan()"></div>
     <div class="img clearfix"
@@ -276,37 +273,21 @@ export default {
       },
       touchEnd(e) {
         if(this.touch.deltaX > 0 && Math.abs(this.touch.deltaX) > 70) {
+          this.touch.deltaX = 0;
           this.pre();
         }
         if(this.touch.deltaX < 0 && Math.abs(this.touch.deltaX) > 70) {
+          this.touch.deltaX = 0;
           this.next();
         }
         if(this.touch.deltaY > 0 && Math.abs(this.touch.deltaY) > 70) {
+          this.touch.deltaY = 0;
           this.unDisplay();
+        } else {
+          return;
         }
         this.touch.initiated = false;
       },
-      // touchAllStart(e) {
-      //   if(this.isDisplay) {
-      //     return
-      //   } else {
-      //     this.touchStart(e);
-      //   }
-      // },
-      // touchAllMove(e) {
-      //   if(this.isDisplay) {
-      //     return
-      //   } else {
-      //     this.touchMove(e);
-      //   }
-      // },
-      // touchAllEnd(e) {
-      //   if(this.isDisplay) {
-      //     return
-      //   } else {
-      //     this.touchEnd(e);
-      //   }
-      // },
       next() {
         if(!this.Music.url) {
           return;
