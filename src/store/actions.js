@@ -7,10 +7,10 @@ export const isLove = function({commit, state}, musicId) {
 };
 // 添加到我喜欢
 export const Love = function({commit, state}, item) {
-  if(!state.Music.url) {
+  if(!item.url) {
     return;
   }
-  if(isLove({commit, state}, state.Music.id)) {
+  if(isLove({commit, state}, item.id)) {
     commit('delLove', item);
     commit('setdialogMsg', '已取消');
   }else{

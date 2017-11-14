@@ -63,7 +63,11 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
       },
       love(music) {
         this.Love(music);
-        this.islove = !this.islove;
+        if(this.islove) {
+          this.islove = false;
+        } else {
+          this.islove = true;
+        }
       },
       isOld(musicId) {
           let index = this.oldMusic.findIndex((item) => {

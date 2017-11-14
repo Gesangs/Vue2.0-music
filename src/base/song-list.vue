@@ -68,15 +68,8 @@ import popup from '../components/popup/popup.vue';
               // 设置播放状态
               this.isplay(true);
               // 添加到最近播放
-              this.$store.commit("addOld",music);
-              this.$store.state.audio.play();
-            },
-            deletes(item) {
-              if(this.types === 'old') {
-                this.$store.commit('delOld',item);
-              } else {
-                this.$store.commit('delLove',item);
-              }
+              this.addOld(music);
+              this.audio.play();
             }
         }
     }
