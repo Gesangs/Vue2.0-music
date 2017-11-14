@@ -4,17 +4,18 @@
             <p class="myLove" :class="{active: !isActive}" @click.stop="switchLove">我喜欢的</p>
             <p class="recent" :class="{active: isActive}" @click.stop="switchRecent">最近听的</p>
         </div>
-        <scroll class="oldList" :data="oldList" ref="oldlist" v-show="isActive">
-          <song-list :songs="oldList" :types="'old'"></song-list>
+        <scroll class="oldList" :data="oldMusic" ref="oldlist" v-show="isActive">
+          <song-list :songs="oldMusic" :types="'old'"></song-list>
         </scroll>
-        <scroll class="loveList" :data="loveList" ref="lovelist" v-show="!isActive">
-          <song-list :songs="loveList" :types="'love'"></song-list>
+        <scroll class="loveList" :data="loveMusic" ref="lovelist" v-show="!isActive">
+          <song-list :songs="loveMusic" :types="'love'"></song-list>
         </scroll>
     </div>
     </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
  import Scroll from '../../base/scroll.vue';
  import SongList from '../../base/song-list.vue';
  import {deleteFavorite,loadPlay,loadFavorite} from '../../api/localStorage.js'
@@ -30,12 +31,10 @@ export default {
         }
     },
     computed: {
-        loveList() {
-            return this.$store.state.loveMusic;
-        },
-        oldList() {
-            return this.$store.state.oldMusic;
-        }
+        ...mapGetters([
+            'loveMusic',
+            'oldMusic'
+        ])
     },
     methods:{
         switchRecent() {

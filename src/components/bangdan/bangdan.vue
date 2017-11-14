@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex';
 import {getTopList} from '../../api/rank.js';
 import Scroll from '../../base/scroll.vue';
     export default {
@@ -34,6 +35,10 @@ import Scroll from '../../base/scroll.vue';
             this._getRank()
         },
         methods: {
+            ...mapMutations([
+              'setDetailTypes',
+              'setDetailMid',
+            ]),
             _getRank() {
                 getTopList().then((res) => {
                     if(res.code === 0) {
@@ -42,11 +47,11 @@ import Scroll from '../../base/scroll.vue';
                 })
             },
             selectItem(item) {
-                this.$store.commit('setDetailTypes','rank')
+                this.setDetailTypes('rank');
                 this.$router.push({
                         path:`/detail`
                 });
-                this.$store.commit("setDetailMid", item.id);
+                this.setDetailMid(item.id);
             }
         }
     };

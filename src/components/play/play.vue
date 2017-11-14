@@ -13,11 +13,12 @@
            @touchmove.prevent="touchMove"
            @touchend.prevent="touchEnd"></div>
     </div>
-    <div class="title" v-show="!isShow" :class="{'title-play':isDisplay && !isFullLyric}">
+    <div class="title" :class="{'title-play':isDisplay && !isFullLyric}">
       <p class="gequ" v-html="Music.name || '轻听'"></p>
       <p class="geshou" v-html="singerName"></p>
     </div>
     <!-- 歌词区块 -->
+    <transition name="fade">
     <div class="fullGeci" :style="{backgroundColor: setColorf}" v-show="isFullLyric && isDisplay"  @click="togglefull">
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
@@ -27,6 +28,7 @@
         </div>
       </scroll>
     </div>
+  </transition>
     <div class="geci" v-show="isDisplay && !isFullLyric" @click="togglefull">
       <p>{{ playingLyric }}</p>
     </div>
@@ -34,19 +36,20 @@
       <div class="contorl" :class="{'control-play':isDisplay}">
         <span class="iconfont icon-loop" :class="[isLoop ? loop : unloop]" @click.stop="setLoop" v-show="isDisplay"></span>
         <span class="iconfont icon-pre" @click.stop="pre" v-show="isDisplay"></span>
-        <span :class="[isPlay ? errorClass : trueClass]" class="iconfont" @click.stop="ready"></span>
+        <span :class="[isPlaying ? unplayClass : playClass]" class="iconfont" @click.stop="ready"></span>
         <span class="iconfont icon-next"  @click.stop="next"></span>
-        <span :class="[isLove(Music) ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
+        <span :class="[islove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
       </div>
-    <audio :src="Music.url" ref="audio" :autoplay="isPlay" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop" @error="Error"></audio>
+    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
-    <!-- 歌曲详情 -->
-    <popup v-if="isDisplay && isShow" :musicDetail="Music" @caidan="caidan" @Love="Love(Music)"></popup>
+    <!-- 
+    <popup v-if="isDisplay && isShow" :musicDetail="Music" @caidan="caidan" @Love="Love(Music)"></popup> -->
   </div>
 </template>
 <script>
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 import Scroll from '../../base/scroll.vue';
 import popup from '../popup/popup.vue';
 import {getLyric,getColor} from '../../api/song.js';
@@ -60,9 +63,9 @@ export default {
   },
   data() {
     return {
+      islove: false,
       setColorf: `rgba(196,176,152,0.8)`,
       fontColor: '#000',
-      isShow: false,
       playHeight: '59px',
       setColor: 'rgb(196,176,152)',
       setColors: 'linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))',
@@ -70,8 +73,8 @@ export default {
       isLoop:false,
       loop: 'icon-loop',
       unloop: 'icon-unloop',
-      trueClass: 'icon-play',
-      errorClass: 'icon-unplay',
+      playClass: 'icon-play',
+      unplayClass: 'icon-unplay',
       loveClass: 'icon-hongxin',
       unloveClass: 'icon-aixin',
       currentTime: 0,
@@ -99,15 +102,22 @@ export default {
       }
     },
     computed: {
-      // 当前播放的音乐
-      Music() {
-        return this.$store.state.Music;
-      },
+      ...mapGetters([
+        'Music',
+        'isPlaying',
+        'isDisplay',
+        'loveMusic',
+        'currentList'
+        ]),
       singerName() {
-        if(!this.isPlay) {
+        if(!this.isPlaying) {
           return ' ';
         } else {
-          return this.$store.state.Music.singer.name;
+        this.islove = false;
+        this.isLove(this.Music.id).then((res) => {
+          this.islove = res;
+        })
+          return this.Music.singer.name;
         }
       },
       Img() {
@@ -116,25 +126,28 @@ export default {
         }else {
           return 'url(' + this.Music.image + ')';
         }
-      },
-      isPlay() {
-        return this.$store.state.isPlaying;
-      },
-      isDisplay() {
-        return this.$store.state.isDisplay;
-      },
-      loveList() {
-            return this.$store.state.loveMusic;
-        },
-      // 播放列表
-      currentList() {
-        return this.$store.state.currentList;
       }
     },
     created() {
       this.touch = {};
     },
     methods: {
+      ...mapMutations([
+        'setdialogMsg',
+        'delOld',
+        'setDisplay',
+        'isplay',
+        'audioDom',
+        'playMusic',
+        'addOld',
+        'addLove',
+        'selectmusic'
+        ]),
+      ...mapActions([
+        'Love',
+        'isLove',
+        'diaShow'
+        ]),
       // 获取图片主题色
       getImageColor() {
         const that = this;
@@ -144,7 +157,7 @@ export default {
         // 把图片绘入canvas利用getImageData获取主题色
         RGBaster.colors(URl, {
           // 调色板大小
-          paletteSize: 50,
+          paletteSize: 30,
           // 颜色排除
           exclude: [ 'rgb(255,255,255)', 'rgb(0,0,0)' ],
           success: function(payload) {
@@ -167,10 +180,10 @@ export default {
       },
       // 音乐无法加载时触发
       Error() {
-        this.$store.commit('setdialogMsg','部分歌曲无法播放，已自动跳过');
-        this.$emit('diaShow');
+        this.setdialogMsg('无法播放，已跳过');
+        this.diaShow();
         this.$nextTick(() => {
-          this.$store.commit('delOld',this.Music)
+          this.delOld(this.Music);
         })
         this.next();
       },
@@ -179,11 +192,11 @@ export default {
         if(!this.Music.url) {
           return;
         }
-        this.isShow = !this.isShow;
+        this.selectmusic(this.Music);
       },
       // 展开
       Display() {
-        this.$store.commit('setDisplay', true);
+        this.setDisplay(true)
         this.playHeight = '100%';
       },
       // 歌词页面大小切换
@@ -200,19 +213,19 @@ export default {
         unDisplay() {
           this.playHeight = '59px',
           this.$store.commit('setDisplay', false);
-          this.isShow = false;
+          this.setDisplay(false)
         },
         // 切换播放状态
         ready() {
           if(!this.Music.url) {
           return;
           }
-          if(! this.isPlay) {
+          if(! this.isPlaying) {
             this.$refs.audio.play();
-            this.$store.commit('isplay', true);
+            this.isplay(true)
           } else {
             this.$refs.audio.pause();
-            this.$store.commit('isplay', false);
+            this.isplay(false)
           }
           if (this.currentLyric) {
             this.currentLyric.togglePlay()
@@ -231,7 +244,7 @@ export default {
           }
           this.currentLyric = new Lyric(lyric, this.handleLyric);
           this.$nextTick(() => {
-            if (this.isPlay) {
+            if (this.isPlaying) {
               this.currentLyric.play();
             }
           })
@@ -254,7 +267,7 @@ export default {
       // 获取audio传入find组件实现点击播放，移动端不支持autoplay
       getAudio() {
         const au = this.$refs.audio;
-        this.$store.commit("audioDom", au);
+        this.audioDom(au);
       },
       // 下一首
       touchStart(e) {
@@ -288,6 +301,13 @@ export default {
         }
         this.touch.initiated = false;
       },
+      switchMusic(index){
+        this.addOld(this.currentList[index]);
+        this.$refs.audio.play();
+        this.playMusic(this.currentList[index]);
+        this.isplay(true);
+      },
+      // 下一首
       next() {
         if(!this.Music.url) {
           return;
@@ -296,10 +316,7 @@ export default {
         if(index === this.currentList.length) {
           index = 0;
         }
-        this.$store.commit('playMusic', this.currentList[index]);
-        this.$store.commit("addOld", this.currentList[index]);
-        this.$refs.audio.play();
-        this.$store.commit('isplay', true);
+        this.switchMusic(index);
       },
       // 上一首
       pre() {
@@ -312,10 +329,7 @@ export default {
         } else {
           index = this.Music.index - 1;
         }
-        this.$store.commit('playMusic', this.currentList[index]);
-        this.$store.commit("addOld", this.currentList[index]);
-        this.$refs.audio.play();
-        this.$store.commit('isplay', true);
+        this.switchMusic(index);
       },
       // 循环
       setLoop() {
@@ -323,34 +337,13 @@ export default {
           return;
         }
         if(this.isLoop) {
-          this.$store.commit('setdialogMsg','列表循环');
+          this.setdialogMsg('列表循环')
         } else {
-          this.$store.commit('setdialogMsg','单曲循环');
+          this.setdialogMsg('单曲循环')
         }
-        this.$emit('diaShow');
+        this.diaShow();
         this.isLoop = !(this.isLoop);
       },
-      // 判断这首歌是否在喜欢列表中
-      isLove(music) {
-          let index = this.loveList.findIndex((item) => {
-            return item.id === music.id;
-          })
-          return index > -1;
-      },
-      // 添加到我喜欢
-      Love(item) {
-        if(!this.Music.url) {
-          return;
-        }
-        if(this.isLove(this.Music)) {
-          this.$store.commit('delLove',item);
-          this.$store.commit('setdialogMsg','已取消');
-        }else{
-          this.$store.commit('addLove',item);
-          this.$store.commit('setdialogMsg','已添加');
-        }
-        this.$emit('diaShow');
-      }
     }
   };
   </script>
@@ -478,7 +471,7 @@ export default {
     height: 50px;
     bottom: 15%;
     line-height: 20px;
-    padding: 10px;
+    padding: 50px 10px;
     overflow: hidden;
     box-sizing: border-box;
   }

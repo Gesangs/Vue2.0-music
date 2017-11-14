@@ -1,55 +1,87 @@
 <!-- 歌曲详情 -->
 <template>
   <transition name="fade">
-    <div class="popup" @click.stop.prevent="downpopup" ref="pop">
+    <div class="popup" @click.stop.prevent="downpopup">
+      <transition name="slideY">
         <div class="musicDetail">
-            <p><span>歌曲：</span><span v-html="musicDetail.name"></span></p>
+            <p><span>歌曲：</span><span v-html="selectMusic.name"></span></p>
               <ul>
-                  <li>下一首播放</li>
-                  <li @click.stop="setlove">添加到我喜欢</li>
-                  <li @click.stop="searchSingerAndAlbum(musicDetail.singer.mid,'singer')"><span>歌手：</span><span v-html="musicDetail.singer.name"></span></li>
-                  <li @click.stop="searchSingerAndAlbum(musicDetail.album.mid,'album')"><span>专辑：</span><span v-html="musicDetail.album.name"></span></li>
-                  <li>来源: {{  }}</li>
+                  <li @click.stop="">下一首播放(未完成)</li>
+                  <li @click.stop="love(selectMusic)">{{ islove ? '已添加至喜欢' : '添加至喜欢' }}</li>
+                  <li @click.stop="searchSingerAndAlbum(selectMusic.singer.mid,'singer')"><span>歌手：</span><span v-html="selectMusic.singer.name"></span></li>
+                  <li @click.stop="searchSingerAndAlbum(selectMusic.album.mid,'album')"><span>专辑：</span><span v-html="selectMusic.album.name"></span></li>
+                  <li @click="deletes(selectMusic)" v-show="isold || islove">删除</li>
               </ul>
         </div>
+      </transition>
     </div>
   </transition>
 </template>
 <script>
+import {mapGetters, mapMutations, mapActions} from 'vuex';
     export default {
-      props: {
-        musicDetail: {
-          type: Object,
-          default:{}
-        },
-        isShow: {
-          type: Boolean,
-          default: false
+      computed: {
+        ...mapGetters([
+          'selectMusic',
+          'oldMusic'
+          ])
+      },
+      data() {
+        return {
+          islove: false,
+          isold: false
         }
       },
       created() {
+        this.isLove(this.selectMusic.id).then((res) => {
+          this.islove = res;
+        })
+        this.isOld(this.selectMusic.id)
       },
       methods: {
+        ...mapMutations([
+          'setDetailTypes',
+          'setDetailMid',
+          'setpopupShow',
+          'delOld',
+          'delLove'
+          ]),
+        ...mapActions([
+          'isLove',
+          'Love',
+          ]),
         // 跳转详情页
         searchSingerAndAlbum(id,type) {
-        this.$store.commit('setDetailTypes',type)
-        this.$store.commit("setDetailMid", id);
+        this.setDetailTypes(type)
+        this.setDetailMid(id);
         this.$router.push({
               path:`/detail`
             });
     },
-    // 通知父组件关闭详情页
     downpopup() {
-      this.$emit('caidan')
+      this.setpopupShow(false);
       },
-    // 通知父组件把这首歌添加到我喜欢
-    setlove() {
-      this.$emit('Love')
-    }
+      love(music) {
+        this.Love(music);
+        this.islove = !this.islove;
+      },
+      isOld(musicId) {
+          let index = this.oldMusic.findIndex((item) => {
+            return item.id == musicId;
+          })
+          this.isold = (index > -1);
+      },
+      deletes(item) {
+         if(this.isold) {
+           this.delOld(item);
+         } else {
+           this.delLove(item);
+         }
+       }
   }
 }
 </script>
-<style>
+<style scopeId>
     .popup {
       color: #000;
       position: absolute;
@@ -57,18 +89,17 @@
       top: 0;
       left: 0;
       bottom: 5px;
+      z-index: 29;
+      background-color: rgba(7,17,27,0.7);
     }
     .musicDetail {
       position: absolute;
-      top: 55%;
-      left: 50%;
-      transform: translate3d(-50%,-50%,0);
-      width: 70%;
-      height: 267px;
-      z-index: 40;
-      background-color: rgb(243,243,243);
-      box-shadow: 0px 8px 10px 1px rgba(0,0,0,0.14);
-      border-radius: 8px;
+      bottom: 0px;
+      left: 0;
+      width: 100%;
+      height: 55%;
+      z-index: 30;
+      background-color: #fff;
     }
     .musicDetail > p {
       font-size: 12px;

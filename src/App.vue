@@ -1,43 +1,34 @@
 <template>
   <div>
     <v-header></v-header>
-      <router-view @diaShow="diaShow"></router-view>
-    <v-play @diaShow="diaShow"></v-play>
+      <router-view></router-view>
+    <v-play></v-play>
     <transition name="fade">
-      <div class="dialog" v-show="dialogShow">{{ this.Msg }}</div>
+      <div class="dialog" v-show="dialogShow">{{ this.dialogMsg }}</div>
     </transition>
+    <v-popup v-if="popupShow"></v-popup>
   </div>
 </template>
 
 <script>
+  import {mapGetters, mapMutations, mapActions} from 'vuex';
   import header from './components/header/header.vue';
   import play from './components/play/play.vue';
+  import popup from './components/popup/popup.vue'
 
   export default {
     components: {
       "v-header":header,
-      "v-play":play
-    },
-    data() {
-      return {
-        dialogShow: false,
-      }
+      "v-play":play,
+      "v-popup":popup
     },
     computed: {
-      Msg() {
-        return this.$store.state.dialogMsg;
-      }
+      ...mapGetters([
+        'dialogMsg',
+        'dialogShow',
+        'popupShow'
+        ])
     },
-    methods: {
-      diaShow() {
-        clearTimeout(times);
-        this.dialogShow = true;
-        var that = this;
-        var times = setTimeout(function() {
-          that.dialogShow = false;
-        },1600)
-      }
-    }
   };
 </script>
 
@@ -74,5 +65,11 @@ transition: all 0.6s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+.slideY-enter-active, .slideY-leave-active {
+transition: all 0.6s;
+}
+.slideY-enter, .slideY-leave-to {
+  transform: translate3d(0, 100%, 0);
 }
 </style>

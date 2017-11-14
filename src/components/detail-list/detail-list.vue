@@ -3,6 +3,7 @@
     <music-list :music-list="songs" :music-img="img"></music-list>
 </template>
 <script>
+import {mapGetters} from 'vuex';
 import MusicList from '../../base/music-list/music-list.vue';
 import {savePlay} from '../../api/localStorage.js';
 import {handleSong} from '../../base/song.js';
@@ -19,18 +20,16 @@ import {getMusicList} from '../../api/rank.js'
             }
         },
         computed: {
-            listMid() {
-                return this.$store.state.detailMid;
-            },
-            types() {
-              return this.$store.state.detailTypes;
-            }
+            ...mapGetters([
+              'detailMid',
+              'detailTypes'
+              ])
         },
         created() {
           // 判断传进来的歌曲列表的类型
-          if(this.types === 'singer') {
+          if(this.detailTypes === 'singer') {
             return this._getSingerDetail()
-          } else if(this.types === 'rank') {
+          } else if(this.detailTypes === 'rank') {
             return this._getRankDetail()
           } else {
             return this._getAlbumDetail()
@@ -38,9 +37,9 @@ import {getMusicList} from '../../api/rank.js'
         },
         methods: {
         _getSingerDetail() {
-            return getSingerDetail(this.listMid).then((res) => {
+            return getSingerDetail(this.detailMid).then((res) => {
               if (res.code === 0) {
-                this.img = `https://y.gtimg.cn/music/photo_new/T001R300x300M000${this.listMid}.jpg?max_age=2592000`;
+                this.img = `https://y.gtimg.cn/music/photo_new/T001R300x300M000${this.detailMid}.jpg?max_age=2592000`;
                 return res.data.list
               }
             }).then((res) => {
@@ -48,7 +47,7 @@ import {getMusicList} from '../../api/rank.js'
             })
           },
           _getRankDetail() {
-            return getMusicList(this.listMid).then((res) => {
+            return getMusicList(this.detailMid).then((res) => {
               if (res.code === 0) {
                 this.img = res.topinfo.pic_v12;;
                 return res.songlist;
@@ -58,7 +57,7 @@ import {getMusicList} from '../../api/rank.js'
             })
           },
           _getAlbumDetail() {
-            return getAlbumDetail(this.listMid).then((res) => {
+            return getAlbumDetail(this.detailMid).then((res) => {
               if (res.code === 0) {
                 this.img = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${res.data.mid}.jpg?max_age=2592000`;
                 return res.data.list;
@@ -71,9 +70,9 @@ import {getMusicList} from '../../api/rank.js'
             const List = [];
             list.forEach((item) => {
               // api返回的json数据格式不同
-              if(this.types === 'rank') {
+              if(this.detailTypes === 'rank') {
                 List.push(handleSong(item.data));
-              } else if(this.types === 'singer') {
+              } else if(this.detailTypes === 'singer') {
                 List.push(handleSong(item.musicData));
               } else {
                 List.push(handleSong(item));

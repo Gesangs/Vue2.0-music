@@ -1,22 +1,22 @@
 <template>
     <div class="song-list">
         <ul>
-            <li v-for="(item, index) in songs" @click="Splay(item, index)" :class="{imgSelect: item.id == idSelect}">
+            <li v-for="(item, index) in songs" @click="Splay(item, index)" :class="{imgSelect: item.id === Music.id}">
               <img v-lazy="item.image" alt="" >
               <div>
                 <span v-html="item.name"></span>
                 <span v-html="item.singer.name"></span>
               </div>
-              <p v-if="delShow" class="icon-del_1" @click.stop="deletes(item)"></p>
+              <p class="icon-Menu" @click.stop="selectmusic(item)"></p>
             </li><li></li>
         </ul>
     </div>
 </template>
 
 <script>
+import {mapMutations,mapGetters} from 'vuex';
 import {savePlay} from '../api/localStorage.js';
 import popup from '../components/popup/popup.vue';
-import axios from 'axios'
 
     export default {
       components: {
@@ -34,7 +34,6 @@ import axios from 'axios'
         },
         data() {
           return {
-            idSelect: null,
             isShow: false,
             delShow: false
           }
@@ -46,23 +45,28 @@ import axios from 'axios'
           }
         },
         computed: {
-          loveList() {
-                return this.$store.state.loveMusic;
-            }
+          ...mapGetters([
+            'loveMusic',
+            'audio',
+            'Music'
+            ])
         },
         methods: {
-            caidan(item) {
-              this.isShow = !this.isShow;
-            },
+          ...mapMutations([
+            'playMusic',
+            'isplay',
+            'addOld',
+            'selectmusic',
+            'pushList',
+          ]),
             // 点击播放
             Splay(item,index) {
-              this.idSelect = item.id;
               const music = Object.assign({},item,{index:index});
-              this.$store.commit('playMusic', music);
+              this.playMusic(music);
               // 把所在列表所有歌曲存起来，以便控制上一首下一首
-              this.$store.commit('pushList', this.songs);
+              this.pushList(this.songs);
               // 设置播放状态
-              this.$store.commit('isplay', {isPLaying:true});
+              this.isplay(true);
               // 添加到最近播放
               this.$store.commit("addOld",music);
               this.$store.state.audio.play();
@@ -83,12 +87,14 @@ li {
     width:100%;
     height: 60px;
     display: flex;
+    border-left: 8px solid rgb(255,255,255);
 }
 .song-list li > img {
     flex: 0 0 35px;
+    box-sizing: content-box;
     width: 35px;
     height: 35px;
-    margin: 15px 15px 15px 7px;
+    padding: 15px 15px 15px 7px;
 }
 
 .song-list > ul > .imgSelect {
@@ -114,12 +120,12 @@ li {
     display: block;
     float: right;
 }
-.song-list .icon-del_1 {
+.song-list  .icon-Menu {
+  background: url(../../static/Menu.svg) no-repeat;
+  background-size: cover;
+  flex: 0 0 30px;
   width: 30px;
   height: 30px;
-  margin-top: 18px;
-  right: 30px;
-  opacity: 0.4;
+  margin: 15px 25px 15px 5px;
 }
-
 </style>

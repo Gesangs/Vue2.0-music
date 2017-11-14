@@ -13,11 +13,11 @@
         </div>
       </div>
       <!-- 搜索历史 -->
-      <div class="searchHistory" v-show="!isShowkey &&  history[0]">
+      <div class="searchHistory" v-show="!isShowkey &&  searchHistory[0]">
         <div class="hot">搜索历史<span class="iconfont icon-del" @click="clearHistory"></span></div>
         <div class="historyList" ref="history">
           <ul>
-          <p v-for="item in history" @click="search(item)">
+          <p v-for="item in searchHistory" @click="search(item)">
             {{ item }}
             <span class="iconfont icon-del_1" @click.stop="delHistory(item)"></span>
           </p>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+ import {mapGetters, mapMutations, mapActions} from 'vuex';
  import SongList from '../../base/song-list.vue';
  import Scroll from '../../base/scroll.vue';
  import {getHotKey,search} from '../../api/search.js';
@@ -60,14 +61,24 @@
         };
     },
     computed: {
-      history() {
-        return this.$store.state.searchHistory;
-      }
+      ...mapGetters([
+          'searchHistory'
+        ])
     },
     created() {
       this._gethotKey();
     },
     methods: {
+      ...mapMutations([
+        'addHistory',
+        'setDetailTypes',
+        'setDetailMid',
+        'clearHistory',
+        'delHistory'
+      ]),
+      ...mapActions([
+        'savePlayHistory'
+      ]),
       // 当焦点在输入框， 滚动搜索结果时使输入框失去焦点
       // 因为在移动端浏览器中，焦点在输入框时，点击或滚动将呼出键盘
       Bblur() {
@@ -85,14 +96,14 @@
                 this.album = {
                   mid: res.data.song.list["0"].albummid,
                   name: res.data.song.list["0"].albumname };
-                this.$store.commit("addHistory",msg);
+                this.addHistory(msg);
               }
       })
     },
     // 详情跳转
     searchSingerAndAlbum(id,type) {
-      this.$store.commit('setDetailTypes',type)
-      this.$store.commit("setDetailMid", id);
+      this.setDetailTypes(type);
+      this.setDetailMid(id);
       this.$router.push({
             path:`/detail`
           });
@@ -123,19 +134,12 @@
           }
         })
       },
-      // 搜索历史记录
-    clearHistory() {
-      this.$store.commit('clearHistory');
-      clearAll()
-    },
-    delHistory(item) {
-      this.$store.commit('delHistory',item)
-    }
   }
 }
 </script>
 
-<style>
+<style scopeId>
+@import './font_find/iconfont.css'
 .find {
   position: absolute;
   width: 100%;
@@ -202,33 +206,23 @@
 .sResult {
   position: absolute;
   width: 100%;
-  top: 128px;
+  top: 198px;
   bottom: 1px;
   overflow: hidden;
 }
-.find .iconfont {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-}
-.icon-del {
-  background: url(del.svg) no-repeat;
-  background-size: cover;
-  position: absolute;
-  right: 45px;
-  top: 3px;
-}
-.icon-del_1 {
-  background: url(del_1.svg) no-repeat;
-  background-size: cover;
-  position: absolute;
-  right: 45px;
-}
-
 .singer, .album {
   width: 100%;
   padding: 10px 0 10px 20px;
   font-size: 11px;
   border-bottom: 1px solid rgba(1,186,144,0.8);
+}
+
+.find .icon-del, .find .icon-del_1 {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  font-size: 18px!important;
+  float: right;
+  color: black;
 }
 </style>
