@@ -2,6 +2,8 @@ export const isPlaying = state => state.isPlaying
 
 export const Music = state => state.Music
 
+export const Image = state => `url(${state.Music.image})`
+
 export const selectMusic = state => state.selectMusic
 
 export const audio = state => state.audio
@@ -17,8 +19,6 @@ export const currentList = state => state.currentList
 export const detailMid = state => state.detailMid
 
 export const detailTypes = state => state.detailTypes
-
-export const musicImg = state => state.musicImg
 
 export const isDisplay = state => state.isDisplay
 

@@ -24,7 +24,13 @@ export const Love = function({commit, state}, item) {
 export const diaShow = function({commit}) {
   clearTimeout(times);
   commit('setdialogShow', true);
-  let times = setTimeout(function() {
+  var times = setTimeout(function() {
     commit('setdialogShow', false);
   },1600)
+}
+
+export const insertNext = function({commit, state}, music) {
+  commit('insertCurrentList', music);
+  commit('setpopupShow', false);
+  console.log(state.currentList)
 }

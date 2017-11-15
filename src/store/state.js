@@ -2,11 +2,30 @@ import {
   loadSearch,
   loadFavorite,
   loadPlay,
-} from '../api/localStorage.js'
+} from '../api/localStorage.js';
+import Song from '../base/song.js';
+
 
 const state = {
     isPlaying: false,
-    Music: {},
+    Music: {
+        id: '',
+        mid: '',
+        singer: {
+          name: '',
+          id: '',
+          mid:''
+        },
+        name: '',
+        album: {
+          id: '',
+          mid: '',
+          name: ''
+        },
+        duration: '',
+        image: '../../static/defa.jpg',
+        url: ''
+    },
     selectMusic: {},
     audio: {},
     oldMusic: loadPlay(),
@@ -15,7 +34,6 @@ const state = {
     currentList: [],
     detailMid: '',
     detailTypes: '',
-    musicImg: '',
     isDisplay: false,
     dialogMsg: 'error',
     dialogShow: false,

@@ -120,7 +120,7 @@ export default {
   background: url(fanhui.svg) no-repeat rgba(7, 17, 27, 0.2);
   background-size: cover;
   margin: 10px 0 0 10px;
-  z-index: 40;
+  z-index: 32;
 }
 .musicImg {
   position: relative;

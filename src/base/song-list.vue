@@ -63,11 +63,8 @@ import popup from '../components/popup/popup.vue';
             Splay(item,index) {
               const music = Object.assign({},item,{index:index});
               this.playMusic(music);
-              // 把所在列表所有歌曲存起来，以便控制上一首下一首
               this.pushList(this.songs);
-              // 设置播放状态
               this.isplay(true);
-              // 添加到最近播放
               this.addOld(music);
               this.audio.play();
             }
@@ -92,6 +89,7 @@ li {
 
 .song-list > ul > .imgSelect {
   border-left: 8px solid rgb(1,186,144);
+  background-color: rgb(235,237,239);
 }
 .song-list li >div {
     flex: 1;

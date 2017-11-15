@@ -6,7 +6,7 @@
     <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan()"></div>
     <div class="img clearfix"
          :class="{imgPlay: isDisplay}"
-         :style="{background: Img}">
+         :style="{background: Image}">
       <div class="img-back"
            :style="{background:setColors}"
            @touchstart.prevent="touchStart"
@@ -55,7 +55,7 @@ import popup from '../popup/popup.vue';
 import {getLyric,getColor} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
-import '../../base/rgbaster.js';
+import '../../base/rgbaster.min.js';
 export default {
   components: {
     Scroll,
@@ -107,25 +107,15 @@ export default {
         'isPlaying',
         'isDisplay',
         'loveMusic',
-        'currentList'
+        'currentList',
+        'Image'
         ]),
       singerName() {
-        if(!this.isPlaying) {
-          return ' ';
-        } else {
         this.islove = false;
         this.isLove(this.Music.id).then((res) => {
           this.islove = res;
         })
-          return this.Music.singer.name;
-        }
-      },
-      Img() {
-        if(! this.Music.image) {
-          return 'url(../../static/defa.jpg)';
-        }else {
-          return 'url(' + this.Music.image + ')';
-        }
+        return this.Music.singer.name;
       }
     },
     created() {
@@ -180,12 +170,15 @@ export default {
       },
       // 音乐无法加载时触发
       Error() {
+        if(!this.Music.url) {
+          return;
+        }
         this.setdialogMsg('无法播放，已跳过');
         this.diaShow();
         this.$nextTick(() => {
           this.delOld(this.Music);
+          this.next();
         })
-        this.next();
       },
       // 右上角菜单键
       caidan() {
@@ -269,7 +262,7 @@ export default {
         const au = this.$refs.audio;
         this.audioDom(au);
       },
-      // 下一首
+      // 滑动切歌
       touchStart(e) {
         this.touch.initiated = true;
         const touch = e.touches[0];

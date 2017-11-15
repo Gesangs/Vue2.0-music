@@ -57,6 +57,16 @@ const mutations = {
       state.currentList.push(item);
     })
   },
+  insertCurrentList(state, music) {
+    let list = state.currentList;
+    let index = list.findIndex((item) => {
+        return item.id === music.id;
+      })
+    if(index > -1) {
+      list.splice(index, 1);
+    }
+    list.splice(state.Music.index + 1, 0, music)
+  },
   addHistory(state, key) {
     saveSearch(key)
     state.searchHistory = loadSearch();

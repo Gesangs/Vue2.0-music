@@ -3,13 +3,13 @@
   <transition name="fade">
     <div class="popup" @click.stop.prevent="downpopup">
       <transition name="slideY">
-        <div class="musicDetail">
+        <div class="musicDetail" @click.stop="">
             <p><span>歌曲：</span><span v-html="selectMusic.name"></span></p>
               <ul>
-                  <li @click.stop="">下一首播放(未完成)</li>
-                  <li @click.stop="love(selectMusic)">{{ islove ? '已添加至喜欢' : '添加至喜欢' }}</li>
-                  <li @click.stop="searchSingerAndAlbum(selectMusic.singer.mid,'singer')"><span>歌手：</span><span v-html="selectMusic.singer.name"></span></li>
-                  <li @click.stop="searchSingerAndAlbum(selectMusic.album.mid,'album')"><span>专辑：</span><span v-html="selectMusic.album.name"></span></li>
+                  <li @click="insertNext(selectMusic)">下一首播放(未完成)</li>
+                  <li @click="love(selectMusic)">{{ islove ? '已添加至喜欢' : '添加至喜欢' }}</li>
+                  <li @click="searchSingerAndAlbum(selectMusic.singer.mid,'singer')"><span>歌手：</span><span v-html="selectMusic.singer.name"></span></li>
+                  <li @click="searchSingerAndAlbum(selectMusic.album.mid,'album')"><span>专辑：</span><span v-html="selectMusic.album.name"></span></li>
                   <li @click="deletes(selectMusic)" v-show="isold || islove">删除</li>
               </ul>
         </div>
@@ -49,9 +49,11 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
         ...mapActions([
           'isLove',
           'Love',
+          'insertNext'
           ]),
         // 跳转详情页
         searchSingerAndAlbum(id,type) {
+        this.setpopupShow(false);
         this.setDetailTypes(type)
         this.setDetailMid(id);
         this.$router.push({
@@ -65,6 +67,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
         this.Love(music);
         if(this.islove) {
           this.islove = false;
+          this.setpopupShow(false);
         } else {
           this.islove = true;
         }
@@ -81,6 +84,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
          } else {
            this.delLove(item);
          }
+         this.setpopupShow(false)
        }
   }
 }
@@ -93,7 +97,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
       top: 0;
       left: 0;
       bottom: 5px;
-      z-index: 29;
+      z-index: 33;
       background-color: rgba(7,17,27,0.7);
     }
     .musicDetail {
@@ -101,8 +105,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
       bottom: 0px;
       left: 0;
       width: 100%;
-      height: 55%;
-      z-index: 30;
+      height: 45%;
       background-color: #fff;
     }
     .musicDetail > p {
