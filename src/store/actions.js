@@ -34,3 +34,12 @@ export const insertNext = function({commit, state}, music) {
   commit('setpopupShow', false);
   console.log(state.currentList)
 }
+
+export const Splay = function({commit, state}, obj) {
+  const music = Object.assign({},obj.item,{index:obj.index});
+  commit("playMusic", music);
+  if(obj.songlist) {commit("pushList", obj.songlist);}
+  commit("isplay", true);
+  commit("addOld", music);
+  state.audio.play();
+}

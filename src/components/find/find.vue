@@ -31,7 +31,7 @@
         <div class="album" @click="searchSingerAndAlbum(album.mid,'album')" v-show="isShowkey && album.name">
           专辑：{{ album.name }}
         </div>
-      <scroll :data="musics" @scroll="Bblur()" class="sResult" ref="resultList"  v-show="isShowkey">
+      <scroll :data="musics" @scroll="Bblur()" class="sResult" v-show="isShowkey">
         <song-list :songs="musics"></song-list>
       </scroll>
       <router-view></router-view>

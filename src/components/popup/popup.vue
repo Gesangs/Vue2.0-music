@@ -6,7 +6,7 @@
         <div class="musicDetail" @click.stop="">
             <p><span>歌曲：</span><span v-html="selectMusic.name"></span></p>
               <ul>
-                  <li @click="insertNext(selectMusic)">下一首播放(未完成)</li>
+                  <li @click="insertNext(selectMusic)">下一首播放</li>
                   <li @click="love(selectMusic)">{{ islove ? '已添加至喜欢' : '添加至喜欢' }}</li>
                   <li @click="searchSingerAndAlbum(selectMusic.singer.mid,'singer')"><span>歌手：</span><span v-html="selectMusic.singer.name"></span></li>
                   <li @click="searchSingerAndAlbum(selectMusic.album.mid,'album')"><span>专辑：</span><span v-html="selectMusic.album.name"></span></li>

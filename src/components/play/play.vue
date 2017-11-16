@@ -37,15 +37,14 @@
         <span class="iconfont icon-loop" :class="[isLoop ? loop : unloop]" @click.stop="setLoop" v-show="isDisplay"></span>
         <span class="iconfont icon-pre" @click.stop="pre" v-show="isDisplay"></span>
         <span :class="[isPlaying ? unplayClass : playClass]" class="iconfont" @click.stop="ready"></span>
-        <span class="iconfont icon-next"  @click.stop="next"></span>
+        <span class="iconfont icon-next"  @click.stop="next"  v-show="isDisplay"></span>
         <span :class="[islove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
+        <span class="iconfont icon-list"  @click.stop="showlist" v-show="!isDisplay"></span>
       </div>
     <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
-    <!-- 
-    <popup v-if="isDisplay && isShow" :musicDetail="Music" @caidan="caidan" @Love="Love(Music)"></popup> -->
   </div>
 </template>
 <script>
@@ -59,7 +58,7 @@ import '../../base/rgbaster.min.js';
 export default {
   components: {
     Scroll,
-    popup
+    popup,
   },
   data() {
     return {
@@ -130,7 +129,6 @@ export default {
         'audioDom',
         'playMusic',
         'addOld',
-        'addLove',
         'selectmusic'
         ]),
       ...mapActions([
@@ -138,6 +136,12 @@ export default {
         'isLove',
         'diaShow'
         ]),
+      showlist() {
+        if(!this.Music.url) {
+          return;
+        }
+        this.$emit('showLists')
+      },
       // 获取图片主题色
       getImageColor() {
         const that = this;
@@ -340,7 +344,7 @@ export default {
     }
   };
   </script>
-  <style scopeId>
+  <style scoped>
   @import './font_play/iconfont.css';
   .contorller {
     width: 100%;

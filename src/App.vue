@@ -2,11 +2,12 @@
   <div>
     <v-header></v-header>
       <router-view></router-view>
-    <v-play></v-play>
+    <v-play @showLists="showplaylist"></v-play>
     <transition name="fade">
       <div class="dialog" v-show="dialogShow">{{ this.dialogMsg }}</div>
     </transition>
     <v-popup v-if="popupShow"></v-popup>
+    <v-list ref="playList"></v-list>
   </div>
 </template>
 
@@ -14,21 +15,29 @@
   import {mapGetters, mapMutations, mapActions} from 'vuex';
   import header from './components/header/header.vue';
   import play from './components/play/play.vue';
-  import popup from './components/popup/popup.vue'
+  import popup from './components/popup/popup.vue';
+  import currentList from './components/currentList/currentList.vue';
 
   export default {
     components: {
       "v-header":header,
       "v-play":play,
-      "v-popup":popup
+      "v-popup":popup,
+      "v-list": currentList
     },
     computed: {
       ...mapGetters([
         'dialogMsg',
         'dialogShow',
-        'popupShow'
+        'popupShow',
+        'isShowList'
         ])
     },
+    methods: {
+      showplaylist() {
+        this.$refs.playList.show();
+      }
+    }
   };
 </script>
 

@@ -74,7 +74,6 @@ export default {
     padding: 5px 0;
     border-radius: 5px 0px 0px 5px;
     border: 1px solid rgb(1, 186, 144);
-    /*#01BA90*/
 }
 .recent {
     border-radius: 0px 5px 5px 0px;
@@ -87,27 +86,13 @@ export default {
     background-color: rgb(1, 186, 144);
     color: #fff;
 }
-.suiji {
-    width: 30%;
-    margin: 15px auto;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 30px;
-    border: 1px solid rgb(1, 186, 144);
-    text-align: center;
-    padding: 0 10px;
-    font-size: 13px;
-}
 .music .icon {
     width: 16px;
     height: 16px;
     vertical-align: middle;
     display: inline-block;
 }
-.icon-suiji {
-    background: url(suiji.svg) no-repeat;
-    background-size: cover;
-}
+
 .oldList, .loveList {
     width: 100%;
     position: absolute;

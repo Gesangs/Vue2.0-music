@@ -37,7 +37,7 @@ const state = {
     isDisplay: false,
     dialogMsg: 'error',
     dialogShow: false,
-    popupShow: false
+    popupShow: false,
 }
 
 export default state

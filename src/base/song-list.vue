@@ -1,7 +1,7 @@
 <template>
     <div class="song-list">
         <ul>
-            <li v-for="(item, index) in songs" @click="Splay(item, index)" :class="{imgSelect: item.id === Music.id}">
+            <li v-for="(item, index) in songs" @click="Splay({songlist: songs,item:item,index:index})" :class="{imgSelect: item.id === Music.id}">
               <img v-lazy="item.image" alt="" >
               <div>
                 <span v-html="item.name"></span>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {mapMutations,mapGetters} from 'vuex';
+import {mapMutations,mapGetters,mapActions} from 'vuex';
 import {savePlay} from '../api/localStorage.js';
 import popup from '../components/popup/popup.vue';
 
@@ -35,7 +35,8 @@ import popup from '../components/popup/popup.vue';
         data() {
           return {
             isShow: false,
-            delShow: false
+            delShow: false,
+            songList: this.songs,
           }
         },
         created() {
@@ -59,15 +60,18 @@ import popup from '../components/popup/popup.vue';
             'selectmusic',
             'pushList',
           ]),
+          ...mapActions([
+            'Splay'
+            ])
             // 点击播放
-            Splay(item,index) {
-              const music = Object.assign({},item,{index:index});
-              this.playMusic(music);
-              this.pushList(this.songs);
-              this.isplay(true);
-              this.addOld(music);
-              this.audio.play();
-            }
+            // Splay(item,index) {
+            //   const music = Object.assign({},item,{index:index});
+            //   this.playMusic(music);
+            //   this.pushList(this.songs);
+            //   this.isplay(true);
+            //   this.addOld(music);
+            //   this.audio.play();
+            // }
         }
     }
 </script>
@@ -77,18 +81,18 @@ li {
     width:100%;
     height: 60px;
     display: flex;
-    border-left: 8px solid rgb(255,255,255);
+    border-left: 5px solid rgb(255,255,255);
 }
 .song-list li > img {
     flex: 0 0 35px;
     box-sizing: content-box;
     width: 35px;
     height: 35px;
-    padding: 15px 15px 15px 7px;
+    padding: 15px 15px 15px 10px;
 }
 
 .song-list > ul > .imgSelect {
-  border-left: 8px solid rgb(1,186,144);
+  border-left: 5px solid rgb(1,186,144);
   background-color: rgb(235,237,239);
 }
 .song-list li >div {
