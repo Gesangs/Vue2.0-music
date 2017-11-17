@@ -70,15 +70,19 @@ a {
   z-index: 30;
 }
 .fade-enter-active, .fade-leave-active {
-transition: all 0.6s;
+transition: all 0.5s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-.slideY-enter-active, .slideY-leave-active {
-transition: all 0.6s;
+.slideB-enter-active, .slideB-leave-active,
+.slideU-enter-active, .slideU-leave-active {
+transition: all 0.4s;
 }
-.slideY-enter, .slideY-leave-to {
-  transform: translate3d(0, 100%, 0);
+.slideB-enter, .slideB-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
+.slideU-enter, .slideU-leave-to {
+  transform: translate3d(-100%, 0, 0);
 }
 </style>

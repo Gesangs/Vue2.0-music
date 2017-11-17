@@ -1,4 +1,5 @@
 <template>
+    <transition name="slideB">
     <div class="rank">
         <scroll :data="topList" class="rankscorll" ref="ranklist">
             <div>
@@ -15,7 +16,7 @@
         </div>
         <router-view></router-view>
     </scroll>
-</div>
+</div></transition>
 </template>
 
 <script>
@@ -64,6 +65,7 @@ import Scroll from '../../base/scroll.vue';
   top: 72px;
   bottom: 3.8em;
   overflow: hidden;
+  background-color: #fff;
 }
 
 .rankList {

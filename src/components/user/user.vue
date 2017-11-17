@@ -1,4 +1,5 @@
 <template>
+    <transition name="slideU">
     <div class="music">
         <div class="Tab">
             <p class="myLove" :class="{active: !isActive}" @click.stop="switchLove">我喜欢的</p>
@@ -12,6 +13,7 @@
         </scroll>
     </div>
     </div>
+</transition>
 </template>
 
 <script>
@@ -60,6 +62,7 @@ export default {
     top: 72px;
     bottom: 4em;
     overflow: hidden;
+    background-color: #fff;
 }
 .Tab {
     width: 100%;

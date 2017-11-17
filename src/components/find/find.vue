@@ -1,4 +1,5 @@
 <template>
+  <transition name="fade">
     <div class="find">
       <!-- 搜索框 -->
       <div class="search">
@@ -36,6 +37,7 @@
       </scroll>
       <router-view></router-view>
     </div>
+  </transition>
 </template>
 
 <script>
@@ -146,6 +148,7 @@
   top: 72px;
   bottom: 3.8em;
   overflow: hidden;
+  background-color: #fff;
 }
 .search {
     width: 100%;
@@ -225,4 +228,9 @@
   float: right;
   color: black;
 }
+
+.find .icon-del {
+  right: 15px;
+}
+
 </style>
