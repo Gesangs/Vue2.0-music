@@ -34,14 +34,16 @@
     </div>
     <!-- 播放控制区块 -->
       <div class="contorl" :class="{'control-play':isDisplay}">
-        <span class="iconfont icon-loop" :class="[isLoop ? loop : unloop]" @click.stop="setLoop" v-show="isDisplay"></span>
+        <span class="iconfont"
+        :class="[modeIndex === 0 ? Mode[modeIndex] : modeIndex === 1 ? Mode[modeIndex] : Mode[modeIndex]]"
+        @click.stop="setLoop" v-show="isDisplay"></span>
         <span class="iconfont icon-pre" @click.stop="pre" v-show="isDisplay"></span>
         <span :class="[isPlaying ? unplayClass : playClass]" class="iconfont" @click.stop="ready"></span>
         <span class="iconfont icon-next"  @click.stop="next"  v-show="isDisplay"></span>
         <span :class="[islove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
         <span class="iconfont icon-list"  @click.stop="showlist" v-show="!isDisplay"></span>
       </div>
-    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="isLoop" @error="Error"></audio>
+    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="modeIndex === 0" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
@@ -68,10 +70,9 @@ export default {
       playHeight: '59px',
       setColor: 'rgb(196,176,152)',
       setColors: 'linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))',
-      isFullLyric:false,
-      isLoop:false,
-      loop: 'icon-loop',
-      unloop: 'icon-unloop',
+      isFullLyric: false,
+      Mode: ['icon-loop','icon-randoms','icon-unloop'],
+      modeIndex: 2,
       playClass: 'icon-play',
       unplayClass: 'icon-unplay',
       loveClass: 'icon-hongxin',
@@ -299,19 +300,23 @@ export default {
         this.touch.initiated = false;
       },
       switchMusic(index){
-        this.addOld(this.currentList[index]);
-        this.$refs.audio.play();
         this.playMusic(this.currentList[index]);
         this.isplay(true);
+        this.$refs.audio.play();
+        this.addOld(this.currentList[index]);
       },
       // 下一首
       next() {
         if(!this.Music.url) {
           return;
         }
+        const len =this.currentList.length;
         let index = this.Music.index + 1;
-        if(index === this.currentList.length) {
+        if(index === len) {
           index = 0;
+        }
+        if(this.modeIndex === 1) {
+          index = Math.floor(Math.random() * len);
         }
         this.switchMusic(index);
       },
@@ -321,8 +326,9 @@ export default {
           return;
         }
         let index;
+        const len = this.currentList.length;
         if(this.Music.index === 0) {
-          index = this.currentList.length - 1;
+          index = len - 1;
         } else {
           index = this.Music.index - 1;
         }
@@ -333,13 +339,16 @@ export default {
         if(!this.Music.url) {
           return;
         }
-        if(this.isLoop) {
-          this.setdialogMsg('列表循环')
-        } else {
+        this.modeIndex++;
+        if(this.modeIndex === 3) { this.modeIndex = 0}
+        if(this.modeIndex === 0) {
           this.setdialogMsg('单曲循环')
+        } else if(this.modeIndex === 1) {
+          this.setdialogMsg('随机播放')
+        } else {
+          this.setdialogMsg('列表循环')
         }
         this.diaShow();
-        this.isLoop = !(this.isLoop);
       },
     }
   };

@@ -22,18 +22,26 @@ const bangdan = (resolve) => {
     resolve(module)
   })
 }
-const detailList = (resolve) => {
-  import ('./components/detail-list/detail-list.vue').then((module) => {
+const albumDetail = (resolve) => {
+  import ('./components/detail-list/album-detail.vue').then((module) => {
+    resolve(module)
+  })
+}
+const rankDetail = (resolve) => {
+  import ('./components/detail-list/rank-detail.vue').then((module) => {
+    resolve(module)
+  })
+}
+const singerDetail = (resolve) => {
+  import ('./components/detail-list/singer-detail.vue').then((module) => {
     resolve(module)
   })
 }
 
 
-
 Vue.config.productionTip = false;
 
 Vue.use(Router);
-// Vue.use(Vuex);
 Vue.prototype.$ajax = Axios;
 /* eslint-disable no-new */
 
@@ -53,8 +61,16 @@ const routes = [{
   component: bangdan,
 },
 {
-  path: '/detail',
-  component: detailList
+  path: '/albumDetail',
+  component: albumDetail
+},
+{
+  path: '/singerDetail',
+  component: singerDetail
+},
+{
+  path: '/rankDetail',
+  component: rankDetail
 }
 ];
 

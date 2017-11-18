@@ -18,8 +18,6 @@ export const currentList = state => state.currentList
 
 export const detailMid = state => state.detailMid
 
-export const detailTypes = state => state.detailTypes
-
 export const isDisplay = state => state.isDisplay
 
 export const dialogMsg = state => state.dialogMsg

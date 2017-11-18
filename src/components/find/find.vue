@@ -26,10 +26,10 @@
         </div>
       </div>
       <!-- 搜索结果 -->
-        <div class="singer" @click="searchSingerAndAlbum(singer.mid,'singer')" v-show="isShowkey && singer.name">
+        <div class="singer" @click="searchSinger(singer.mid)" v-show="isShowkey && singer.name">
           歌手：{{ singer.name }}
         </div>
-        <div class="album" @click="searchSingerAndAlbum(album.mid,'album')" v-show="isShowkey && album.name">
+        <div class="album" @click="searchAlbum(album.mid)" v-show="isShowkey && album.name">
           专辑：{{ album.name }}
         </div>
       <scroll :data="musics" @scroll="Bblur()" class="sResult" v-show="isShowkey">
@@ -103,11 +103,16 @@
       })
     },
     // 详情跳转
-    searchSingerAndAlbum(id,type) {
-      this.setDetailTypes(type);
+    searchSinger(id) {
       this.setDetailMid(id);
       this.$router.push({
-            path:`/detail`
+            path:`/singerDetail`
+          });
+    },
+    searchAlbum(id) {
+      this.setDetailMid(id);
+      this.$router.push({
+            path:`/albumDetail`
           });
     },
     // 遍历返回的数据，做数据提取处理
@@ -230,7 +235,7 @@
 }
 
 .find .icon-del {
-  right: 15px;
+  margin-right: 25px;
 }
 
 </style>

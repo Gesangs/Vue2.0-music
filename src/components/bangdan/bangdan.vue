@@ -4,7 +4,7 @@
         <scroll :data="topList" class="rankscorll" ref="ranklist">
             <div>
             <div v-for="item in topList">
-                <div @click="selectItem(item)" class="rankList" >
+                <div @click="selectItem(item.id)" class="rankList" >
                 <img :src="item.picUrl" alt="">
                 <div class="rankRight">
                     <p class="song" v-for="(song,index) in item.songList">
@@ -37,7 +37,6 @@ import Scroll from '../../base/scroll.vue';
         },
         methods: {
             ...mapMutations([
-              'setDetailTypes',
               'setDetailMid',
             ]),
             _getRank() {
@@ -47,12 +46,11 @@ import Scroll from '../../base/scroll.vue';
                     }
                 })
             },
-            selectItem(item) {
-                this.setDetailTypes('rank');
+            selectItem(id) {
+                this.setDetailMid(id);
                 this.$router.push({
-                        path:`/detail`
+                        path:`/rankDetail`
                 });
-                this.setDetailMid(item.id);
             }
         }
     };

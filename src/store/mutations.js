@@ -28,9 +28,6 @@ const mutations = {
   setDetailMid(state, mid) {
     state.detailMid = mid;
   },
-  setDetailTypes(state, type) {
-    state.detailTypes = type;
-  },
   setTopUrl(state, musicimg) {
     state.musicImg = musicimg;
   },

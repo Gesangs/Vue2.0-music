@@ -33,7 +33,6 @@ const state = {
     searchHistory: loadSearch(),
     currentList: [],
     detailMid: '',
-    detailTypes: '',
     isDisplay: false,
     dialogMsg: 'error',
     dialogShow: false,

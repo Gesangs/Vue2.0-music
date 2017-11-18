@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     fanhui() {
-      this.$router.back();
+      this.$router.push('/find');
     },
     scroll(pos) {
       this.scrollY = pos.y;

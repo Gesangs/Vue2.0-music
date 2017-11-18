@@ -8,8 +8,8 @@
               <ul>
                   <li @click="insertNext(selectMusic)">下一首播放</li>
                   <li @click="love(selectMusic)">{{ islove ? '已添加至喜欢' : '添加至喜欢' }}</li>
-                  <li @click="searchSingerAndAlbum(selectMusic.singer.mid,'singer')"><span>歌手：</span><span v-html="selectMusic.singer.name"></span></li>
-                  <li @click="searchSingerAndAlbum(selectMusic.album.mid,'album')"><span>专辑：</span><span v-html="selectMusic.album.name"></span></li>
+                  <li @click="searchSinger(selectMusic.singer.mid)"><span>歌手：</span><span v-html="selectMusic.singer.name"></span></li>
+                  <li @click="searchAlbum(selectMusic.album.mid)"><span>专辑：</span><span v-html="selectMusic.album.name"></span></li>
                   <li @click="deletes(selectMusic)" v-show="isold || islove">删除</li>
               </ul>
         </div>
@@ -51,14 +51,19 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
           'Love',
           'insertNext'
           ]),
-        // 跳转详情页
-        searchSingerAndAlbum(id,type) {
-        this.setpopupShow(false);
-        this.setDetailTypes(type)
-        this.setDetailMid(id);
-        this.$router.push({
-              path:`/detail`
-            });
+    searchSinger(id) {
+      this.setDetailMid(id);
+      this.setpopupShow(false);
+      this.$router.push({
+            path:`/singerDetail`
+          });
+    },
+    searchAlbum(id) {
+      this.setpopupShow(false);
+      this.setDetailMid(id);
+      this.$router.push({
+            path:`/albumDetail`
+          });
     },
     downpopup() {
       this.setpopupShow(false);
