@@ -195,7 +195,7 @@
     border: none;
     height: 30px;
     background-color: #fff;
-    margin: 7px 30px 30px;
+    margin: 7px 30px 30px 30px;
     text-indent: 25px;
 }
 .search i {
@@ -218,6 +218,7 @@
   display: flex;
   flex-wrap: wrap;
   padding-left: 10px;
+  box-sizing: border-box;
 }
 .hotList > p {
   border-radius: 10px;
@@ -234,7 +235,8 @@
   overflow: hidden;
 }
 .historyList > ul > p {
-  padding: 10px 30px;
+  text-indent: 30px;
+  padding: 10px 0px;
   font-size: 14px;
 }
 .sResult {
@@ -245,8 +247,9 @@
   overflow: hidden;
 }
 .singer, .album {
+  text-indent: 20px;
   width: 100%;
-  padding: 10px 0 10px 20px;
+  padding: 10px 0;
   font-size: 11px;
   border-bottom: 1px solid rgba(1,186,144,0.8);
 }
