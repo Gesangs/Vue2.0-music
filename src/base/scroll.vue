@@ -66,7 +66,7 @@
 
         if (this.pullup) {
           this.scroll.on('scrollEnd', () => {
-            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            if (this.scroll.y <= (this.scroll.maxScrollY + 70)) {
               this.$emit('scrollToEnd')
             }
           })

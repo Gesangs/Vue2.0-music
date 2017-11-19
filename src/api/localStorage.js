@@ -3,7 +3,7 @@
 import storage from 'good-storage'
 
 const searchKey = '__search__'
-const searchLen = 15
+const searchLen = 7
 
 const playKey = '__play__'
 const playLen = 200

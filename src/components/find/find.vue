@@ -3,18 +3,18 @@
     <div class="find">
       <!-- 搜索框 -->
       <div class="search">
-        <input type="search" placeholder="歌曲、歌手、专辑" v-model="msg" @focus="Focus" @keyup.enter="search(msg)">
-        <i v-show="isShowkey" @click="Blur">取消</i>
+        <input type="search" placeholder="歌曲、歌手、专辑" v-model="msg" @keyup.enter="search(msg)">
+        <i v-show="msg" @click="Blur">取消</i>
       </div>
       <!-- 热门搜索 -->
-      <div class="hotSearch" v-show="!isShowkey">
+      <div class="hotSearch" v-show="!msg">
         <div class="hot">热门搜索</div>
         <div class="hotList">
           <p v-for="item in hotkey" @click="search(item.k)">{{ item.k }}</p>
         </div>
       </div>
       <!-- 搜索历史 -->
-      <div class="searchHistory" v-show="!isShowkey &&  searchHistory[0]">
+      <div class="searchHistory" v-show="!msg &&  searchHistory[0]">
         <div class="hot">搜索历史<span class="iconfont icon-del" @click="clearHistory"></span></div>
         <div class="historyList" ref="history">
           <ul>
@@ -26,13 +26,18 @@
         </div>
       </div>
       <!-- 搜索结果 -->
-        <div class="singer" @click="searchSinger(singer.mid)" v-show="isShowkey && singer.name">
+        <div class="singer" @click="searchSinger(singer.mid)" v-show="msg && singer.name">
           歌手：{{ singer.name }}
         </div>
-        <div class="album" @click="searchAlbum(album.mid)" v-show="isShowkey && album.name">
+        <div class="album" @click="searchAlbum(album.mid)" v-show="msg && album.name">
           专辑：{{ album.name }}
         </div>
-      <scroll :data="musics" @scroll="Bblur()" class="sResult" v-show="isShowkey">
+      <scroll :data="musics"
+              @scroll="Bblur()"
+              class="sResult"
+              v-show="msg"
+              :pullup="pullup"
+              @scrollToEnd="searchMore">
         <song-list :songs="musics"></song-list>
       </scroll>
       <router-view></router-view>
@@ -47,6 +52,9 @@
  import {getHotKey,search} from '../../api/search.js';
  import {handleSong} from '../../base/song.js';
  import {clearAll} from '../../api/localStorage.js';
+
+ const perpage = 10;
+
   export default {
     components: {
           SongList,
@@ -57,9 +65,11 @@
           msg: '',
           musics: [],
           hotkey:[],
-          isShowkey: false,
           singer: {},
-          album: {}
+          album: {},
+          pullup: true,
+          isMore: true,
+          page: 1,
         };
     },
     computed: {
@@ -86,23 +96,48 @@
       Bblur() {
         document.activeElement.blur();
       },
+      Blur() {
+        this.msg = '';
+      },
       // 搜索
       search(msg) {
-        msg = msg.trim();
+        this.isMore = true;
         this.msg = msg;
-            search(msg, 1, false, 15).then((res) => {
-              if(res.code === 0) {
-                this.musics = this.handleList(res.data.song.list);
-                this.isShowkey = true;
-                this.singer = res.data.song.list["0"].singer[0];
-                this.album = {
-                  mid: res.data.song.list["0"].albummid,
-                  name: res.data.song.list["0"].albumname };
-                this.addHistory(msg);
-              }
+          search(msg, this.page, false, perpage).then((res) => {
+            if(res.code === 0) {
+              const song = res.data.song;
+              this.musics = this.handleList(song.list);
+              this.singer = song.list["0"].singer[0];
+              this.album = {
+                mid: song.list["0"].albummid,
+                name: song.list["0"].albumname };
+              this.addHistory(msg);
+              this.checkMore(res.data);
+            }
+    })
+    },
+    // 上拉加载更多
+    searchMore() {
+      if(!this.isMore) {
+        return;
+      }
+      this.page++;
+      search(this.msg, this.page, false, perpage).then((res) => {
+        if(res.code === 0) {
+          const song = res.data.song;
+          this.musics = this.musics.concat(this.handleList(song.list));
+          this.checkMore(res.data);
+        }
       })
     },
-    // 详情跳转
+    // 检查还有没有更多
+    checkMore(data) {
+      const song = data.song;
+      if(!song.list.length || (song.curnum + song.curpage * perpage) > song.totalnum) {
+        this.isMore = false;
+      }
+    },
+    // 歌手专辑搜索
     searchSinger(id) {
       this.setDetailMid(id);
       this.$router.push({
@@ -124,16 +159,7 @@
         });
         return List;
       },
-      Focus() {
-        this.isShowkey = true;
-      },
-      Blur() {
-        this.isShowkey = false;
-        this.musics = [];
-        this.singer = {};
-        this.album = {};
-      },
-      // 获取热搜
+      // 获取热搜词
       _gethotKey() {
         getHotKey().then((res) => {
           if (res.code === 0) {
@@ -204,7 +230,7 @@
   margin-top: 30px;
 }
 .historyList {
-  height: 300px;
+  height: 230px;
   overflow: hidden;
 }
 .historyList > ul > p {
@@ -235,7 +261,7 @@
 }
 
 .find .icon-del {
-  margin-right: 25px;
+  margin-right: 30px;
 }
 
 </style>
