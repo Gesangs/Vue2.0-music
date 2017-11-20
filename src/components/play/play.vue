@@ -1,7 +1,8 @@
 <template>
   <div class="contorller"
        :style="{height:playHeight, backgroundColor:setColor, color:fontColor}"
-       @click="Display">
+       @click="Display"
+       ref="contor">
     <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
     <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan()"></div>
     <div class="img clearfix"
@@ -23,7 +24,7 @@
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
           <div v-if="currentLyric">
-            <p ref="lyricLine" v-for="(line,index) in currentLyric.lines" :class="{'current': currentLineNum === index}" >{{ line.txt }}</p>
+            <p ref="lyricLine" v-for="(line,index) in currentLyric.lines" :class="{'current': currentLineNum === index}" @click.stop="ToLyric(line.time)">{{ line.txt }}</p>
           </div>
         </div>
       </scroll>
@@ -57,6 +58,10 @@ import {getLyric,getColor} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
 import '../../base/rgbaster.min.js';
+
+const Width = window.innerWidth;
+const Height = window.innerHeight;
+
 export default {
   components: {
     Scroll,
@@ -64,13 +69,13 @@ export default {
   },
   data() {
     return {
+      playHeight: '59px',
+      isFullLyric: false,
       islove: false,
       setColorf: `rgba(196,176,152,0.8)`,
-      fontColor: '#000',
-      playHeight: '59px',
       setColor: 'rgb(196,176,152)',
       setColors: 'linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))',
-      isFullLyric: false,
+      fontColor: '#000',
       Mode: ['icon-loop','icon-randoms','icon-unloop'],
       modeIndex: 2,
       playClass: 'icon-play',
@@ -208,34 +213,34 @@ export default {
        })
       },
         // 收回
-        unDisplay() {
-          this.playHeight = '59px',
-          this.$store.commit('setDisplay', false);
-          this.setDisplay(false)
-        },
-        // 切换播放状态
-        ready() {
-          if(!this.Music.url) {
-          return;
-          }
-          if(! this.isPlaying) {
-            this.$refs.audio.play();
-            this.isplay(true)
-          } else {
-            this.$refs.audio.pause();
-            this.isplay(false)
-          }
-          if (this.currentLyric) {
-            this.currentLyric.togglePlay()
-          }
-        },
-        // 获取歌词
-        getLyric() {
-          this.getImageColor();
-          getLyric(this.Music.mid).then((res) => {
-           if(res.retcode === 0) {
-            return Base64.decode(res.lyric)
-          }
+      unDisplay() {
+        this.playHeight = '59px',
+        this.$store.commit('setDisplay', false);
+        this.setDisplay(false)
+      },
+      // 切换播放状态
+      ready() {
+        if(!this.Music.url) {
+        return;
+        }
+        if(! this.isPlaying) {
+          this.$refs.audio.play();
+          this.isplay(true)
+        } else {
+          this.$refs.audio.pause();
+          this.isplay(false)
+        }
+        if (this.currentLyric) {
+          this.currentLyric.togglePlay()
+        }
+      },
+      // 获取歌词
+      getLyric() {
+        this.getImageColor();
+        getLyric(this.Music.mid).then((res) => {
+         if(res.retcode === 0) {
+          return Base64.decode(res.lyric)
+        }
         }).then((lyric) => {
           if(this.currentLyric) {
             this.currentLyric.stop();
@@ -259,9 +264,14 @@ export default {
         }
         this.playingLyric = txt;
       },
+      // 点击歌词跳转到指定位置播放
+      ToLyric(time) {
+        this.$refs.audio.currentTime = (time / 1000);
+        this.currentLyric.seek(time);
+      },
       updateTime(e) {
        this.currentTime = e.target.currentTime;
-     },
+      },
       // 获取audio传入find组件实现点击播放，移动端不支持autoplay
       getAudio() {
         const au = this.$refs.audio;
@@ -361,6 +371,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 20;
+    /*启用GPU加速*/
     transform: translate3d(0,0,0);
     transition: all 0.4s cubic-bezier(.15,.65,.35,.97);
   }

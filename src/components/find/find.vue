@@ -33,11 +33,11 @@
           专辑：{{ album.name }}
         </div>
       <scroll :data="musics"
+              :pullup="pullup"
+              @scrollToEnd="searchMore"
               @scroll="Bblur()"
               class="sResult"
-              v-show="msg"
-              :pullup="pullup"
-              @scrollToEnd="searchMore">
+              v-show="msg">
         <song-list :songs="musics"></song-list>
       </scroll>
       <router-view></router-view>

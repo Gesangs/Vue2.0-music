@@ -6,10 +6,10 @@ const searchKey = '__search__'
 const searchLen = 7
 
 const playKey = '__play__'
-const playLen = 200
+const playLen = 100
 
 const loveKey = '__favorite__'
-const loveLen = 200
+const loveLen = 100
 
 function insertArray(arr, val, compare, maxLen) {
   // 判断元素是否存在，避免重复添加

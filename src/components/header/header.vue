@@ -44,12 +44,6 @@
     font-family: "微软雅黑";
     z-index: 19;
 }
-
-.shang {
-    /*display: flex;
-    flex-direction: row;*/
-}
-
 .shang span {
     display: block;
     font-size: 20px;
@@ -58,16 +52,12 @@
     padding: 5px;
     text-align: center;
 }
-
-
-
 .xia {
     padding: 5px 10px 3px 10px;
     display: flex;
     justify-content: center;
     box-shadow: 0 2px 4px 0 rgb(1,186,144);
 }
-
 .xia .item {
     flex: 1;
     display: block;
