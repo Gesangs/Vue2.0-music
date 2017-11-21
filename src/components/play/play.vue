@@ -219,7 +219,7 @@ export default {
          this.$refs.lyricList.refresh()
          if (this.currentLineNum > 5) {
            let lineEl = this.$refs.lyricLine[this.currentLineNum - 5]
-           this.$refs.lyricList.scrollToElement(lineEl, 50)
+           this.$refs.lyricList.scrollToElement(lineEl, 600)
          } else {
            this.$refs.lyricList.scrollTo(0, 0, 1000)
          }
