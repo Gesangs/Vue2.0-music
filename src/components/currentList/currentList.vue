@@ -7,7 +7,8 @@
             <ul>
               <li v-for="(item, index) in currentList"
                   @click="Splay({item:item,index:index})"
-                  :class="{liSelect: item.id === Music.id}">
+                  :class="{liSelect: item.id === Music.id}"
+                  ref="currentlist">
                 <p>{{ index+1 }} .  <span v-html="item.name"></span> - <span v-html="item.singer.name"></span></p>
               </li>
             </ul>
@@ -46,7 +47,16 @@ import Scroll from '../../base/scroll.vue';
               this.showFlag = true;
               setTimeout(() => {
                 this.$refs.currentList.refresh();
+              const index = this.Music.index;
+              if (index > 2) {
+                let lineEl = this.$refs.currentlist[index - 2]
+                this.$refs.currentList.scrollToElement(lineEl, 300)
+              } else {
+                this.$refs.currentList.scrollTo(0, 0, 1000)
+              }
               },100)
+            },
+            ToCurrentSong() {
             },
             hide() {
               this.showFlag = false;

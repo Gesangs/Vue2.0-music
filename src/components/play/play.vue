@@ -274,9 +274,9 @@ export default {
         this.currentLineNum = lineNum;
         if (this.currentLineNum > 6) {
           let lineEl = this.$refs.lyricLine[this.currentLineNum - 5]
-          this.$refs.lyricList.scrollToElement(lineEl, 50)
+          this.$refs.lyricList.scrollToElement(lineEl, 600)
         } else {
-          this.$refs.lyricList.scrollTo(0, 0, 100)
+          this.$refs.lyricList.scrollTo(0, 0, 1000)
         }
         this.playingLyric = txt;
       },
