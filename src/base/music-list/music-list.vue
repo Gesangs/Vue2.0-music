@@ -1,4 +1,5 @@
 <template>
+  <keep-alive>
   <transition name="slide">
     <div class="musicList">
       <div class="listTitle">
@@ -20,6 +21,7 @@
       </scroll>
     </div>
   </transition>
+</keep-alive>
 </template>
 <script>
 import SongList from '../song-list.vue';

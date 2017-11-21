@@ -62,15 +62,27 @@ const routes = [{
 },
 {
   path: '/albumDetail',
-  component: albumDetail
+  component: albumDetail,
+  meta: {
+      keepAlive: true,
+      isBack:false
+    }
 },
 {
   path: '/singerDetail',
-  component: singerDetail
+  component: singerDetail,
+  meta: {
+      keepAlive: true,
+      isBack:false
+    }
 },
 {
   path: '/rankDetail',
-  component: rankDetail
+  component: rankDetail,
+  meta: {
+      keepAlive: true,
+      isBack:false
+    }
 }
 ];
 

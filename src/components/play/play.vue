@@ -24,7 +24,7 @@
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
           <div v-if="currentLyric">
-            <p ref="lyricLine" v-for="(line,index) in currentLyric.lines" :class="{'current': currentLineNum === index}" @click.stop="ToLyric(line.time)">{{ line.txt }}</p>
+            <p ref="lyricLine" v-for="(line,index) in currentLyric.lines" :class="{[Current]: currentLineNum === index}" @click.stop="ToLyric(line.time, index)">{{ line.txt }}</p>
           </div>
         </div>
       </scroll>
@@ -44,7 +44,7 @@
         <span :class="[islove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
         <span class="iconfont icon-list"  @click.stop="showlist" v-show="!isDisplay"></span>
       </div>
-    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @canplay="getLyric" @ended="next" :loop="modeIndex === 0" @error="Error"></audio>
+    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @ended="next" :loop="modeIndex === 0" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
@@ -54,7 +54,7 @@
 import {mapGetters, mapMutations, mapActions} from 'vuex';
 import Scroll from '../../base/scroll.vue';
 import popup from '../popup/popup.vue';
-import {getLyric,getColor} from '../../api/song.js';
+import {getLyric} from '../../api/song.js';
 import {Base64} from 'js-base64';
 import Lyric from 'lyric-parser';
 import '../../base/rgbaster.min.js';
@@ -85,7 +85,8 @@ export default {
       currentTime: 0,
       currentLyric: null,
       currentLineNum:0,
-      playingLyric:''
+      playingLyric:'',
+      Current: 'currentw'
     };
   },
   mounted() {
@@ -119,6 +120,9 @@ export default {
         this.islove = false;
         this.isLove(this.Music.id).then((res) => {
           this.islove = res;
+        })
+        this.$nextTick(() => {
+          this.getLyric();
         })
         return this.Music.singer.name;
       }
@@ -172,8 +176,11 @@ export default {
               if (grayLevel >= 192) {
                 // 若为浅色，把文字设置为黑色
                 that.fontColor = '#000';
+                // 高亮为白色
+                that.Current = 'currentw';
               } else {
                 that.fontColor = '#fff';
+                that.Current = 'currentb';
               }
           }
         })
@@ -210,6 +217,12 @@ export default {
         this.isFullLyric = !(this.isFullLyric);
         this.$nextTick(() => {
          this.$refs.lyricList.refresh()
+         if (this.currentLineNum > 5) {
+           let lineEl = this.$refs.lyricLine[this.currentLineNum - 5]
+           this.$refs.lyricList.scrollToElement(lineEl, 50)
+         } else {
+           this.$refs.lyricList.scrollTo(0, 0, 1000)
+         }
        })
       },
         // 收回
@@ -236,6 +249,9 @@ export default {
       },
       // 获取歌词
       getLyric() {
+        if(!this.Music.mid) {
+          return
+        }
         this.getImageColor();
         getLyric(this.Music.mid).then((res) => {
          if(res.retcode === 0) {
@@ -256,16 +272,16 @@ export default {
       // 处理歌词
       handleLyric({lineNum, txt}) {
         this.currentLineNum = lineNum;
-        if (lineNum > 6) {
-          let lineEl = this.$refs.lyricLine[lineNum - 6]
-          this.$refs.lyricList.scrollToElement(lineEl, 500)
+        if (this.currentLineNum > 6) {
+          let lineEl = this.$refs.lyricLine[this.currentLineNum - 5]
+          this.$refs.lyricList.scrollToElement(lineEl, 50)
         } else {
-          this.$refs.lyricList.scrollTo(0, 0, 1000)
+          this.$refs.lyricList.scrollTo(0, 0, 100)
         }
         this.playingLyric = txt;
       },
       // 点击歌词跳转到指定位置播放
-      ToLyric(time) {
+      ToLyric(time, index) {
         this.$refs.audio.currentTime = (time / 1000);
         this.currentLyric.seek(time);
       },
@@ -464,8 +480,11 @@ export default {
   {
     clear:both;
   }
-  .current {
+  .currentw {
     color: #fff;
+  }
+  .currentb {
+    color: #000;
   }
   .progressBar {
     width: 100%;
@@ -511,10 +530,10 @@ export default {
     font-size: 13px;
   }
   .ly-wrapper {
-    margin: 95px 0 20px 0;
+    margin: 95px 10px 20px 10px;
     left: 0;
     right: 0;
-    height: 66%;
+    height: 56%;
     overflow: hidden;
   }
   </style>
