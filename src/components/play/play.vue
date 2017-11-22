@@ -20,7 +20,7 @@
     </div>
     <!-- 歌词区块 -->
     <transition name="fade">
-    <div class="fullGeci" :style="{backgroundColor: setColorf}" v-show="isFullLyric && isDisplay"  @click="togglefull">
+    <div class="fullGeci" :style="{backgroundColor: setColorf, color: setColorg}" v-show="isFullLyric && isDisplay"  @click="togglefull">
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
           <div v-if="currentLyric">
@@ -44,7 +44,7 @@
         <span :class="[islove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
         <span class="iconfont icon-list"  @click.stop="showlist" v-show="!isDisplay"></span>
       </div>
-    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @ended="next" :loop="modeIndex === 0" @error="Error"></audio>
+    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @ended="next" @loadedmetadata="getLyric" :loop="modeIndex === 0" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
@@ -76,6 +76,7 @@ export default {
       setColor: 'rgb(196,176,152)',
       setColors: 'linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))',
       fontColor: '#000',
+      setColorg: '#000',
       Mode: ['icon-loop','icon-randoms','icon-unloop'],
       modeIndex: 2,
       playClass: 'icon-play',
@@ -120,9 +121,6 @@ export default {
         this.islove = false;
         this.isLove(this.Music.id).then((res) => {
           this.islove = res;
-        })
-        this.$nextTick(() => {
-          this.getLyric();
         })
         return this.Music.singer.name;
       }
@@ -176,11 +174,14 @@ export default {
               if (grayLevel >= 192) {
                 // 若为浅色，把文字设置为黑色
                 that.fontColor = '#000';
-                // 高亮为白色
-                that.Current = 'currentw';
+                // 歌词颜色
+                that.setColorg = 'rgb(99,118,117)';
+                // 歌词高亮为白色
+                that.Current = 'currentb';
               } else {
                 that.fontColor = '#fff';
-                that.Current = 'currentb';
+                that.setColorg = 'rgb(221,221,221)';
+                that.Current = 'currentw';
               }
           }
         })
@@ -396,14 +397,14 @@ export default {
     top: 0;
     right: 0;
     margin: 15px;
-    z-index: 21;
+    z-index: 26;
   }
   .icon-down {
     position: absolute;
     top: 0;
     left: 0;
     margin: 15px;
-    z-index: 21;
+    z-index: 26;
   }
   .contorller .img{
     width: 54px;

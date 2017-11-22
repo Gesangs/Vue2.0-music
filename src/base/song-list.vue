@@ -7,7 +7,7 @@
                 <span v-html="item.name"></span>
                 <span v-html="item.singer.name"></span>
               </div>
-              <p class="icon-Menu" @click.stop="selectmusic(item)"></p>
+              <p class="icon-Menu" v-if="Show" @click.stop="selectmusic(item)"></p>
             </li><li></li>
         </ul>
     </div>
@@ -17,63 +17,45 @@
 import {mapMutations,mapGetters,mapActions} from 'vuex';
 import {savePlay} from '../api/localStorage.js';
 import popup from '../components/popup/popup.vue';
-
-    export default {
-      components: {
-        popup
-      },
-        props: {
-            songs: {
-                type: Array,
-                default: []
-            },
-            types: {
-              type: String,
-              default: 'normal'
-            }
+export default {
+  components: {
+    popup
+  },
+    props: {
+        songs: {
+            type: Array,
+            default: []
         },
-        data() {
-          return {
-            isShow: false,
-            delShow: false,
-            songList: this.songs,
-          }
-        },
-        created() {
-           this.delShow = false;
-          if(this.types == 'old' || this.types == 'love') {
-            this.delShow = true;
-          }
-        },
-        computed: {
-          ...mapGetters([
-            'loveMusic',
-            'audio',
-            'Music'
-            ])
-        },
-        methods: {
-          ...mapMutations([
-            'playMusic',
-            'isplay',
-            'addOld',
-            'selectmusic',
-            'pushList',
-          ]),
-          ...mapActions([
-            'Splay'
-            ])
-            // 点击播放
-            // Splay(item,index) {
-            //   const music = Object.assign({},item,{index:index});
-            //   this.playMusic(music);
-            //   this.pushList(this.songs);
-            //   this.isplay(true);
-            //   this.addOld(music);
-            //   this.audio.play();
-            // }
+        Show: {
+          type: Boolean,
+          default: true
         }
+    },
+    data() {
+      return {
+        songList: this.songs,
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'loveMusic',
+        'audio',
+        'Music'
+        ])
+    },
+    methods: {
+      ...mapMutations([
+        'playMusic',
+        'isplay',
+        'addOld',
+        'selectmusic',
+        'pushList',
+      ]),
+      ...mapActions([
+        'Splay'
+        ])
     }
+}
 </script>
 
 <style>

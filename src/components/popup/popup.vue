@@ -2,7 +2,6 @@
 <template>
   <transition name="fade">
     <div class="popup" @click.stop.prevent="downpopup">
-      <transition name="slideY">
         <div class="musicDetail" @click.stop="">
             <p><span>歌曲：</span><span v-html="selectMusic.name"></span></p>
               <ul>
@@ -13,85 +12,85 @@
                   <li @click="deletes(selectMusic)" v-show="isold || islove">删除</li>
               </ul>
         </div>
-      </transition>
+    <!-- <router-view></router-view> -->
     </div>
   </transition>
 </template>
 <script>
 import {mapGetters, mapMutations, mapActions} from 'vuex';
-    export default {
-      computed: {
-        ...mapGetters([
-          'selectMusic',
-          'oldMusic'
-          ])
-      },
-      data() {
-        return {
-          islove: false,
-          isold: false
-        }
-      },
-      created() {
-        this.isLove(this.selectMusic.id).then((res) => {
-          this.islove = res;
-        })
-        this.isOld(this.selectMusic.id)
-      },
-      methods: {
-        ...mapMutations([
-          'setDetailTypes',
-          'setDetailMid',
-          'setpopupShow',
-          'delOld',
-          'delLove'
-          ]),
-        ...mapActions([
-          'isLove',
-          'Love',
-          'insertNext'
-          ]),
-    searchSinger(id) {
-      this.setDetailMid(id);
+export default {
+  computed: {
+    ...mapGetters([
+      'selectMusic',
+      'oldMusic'
+      ])
+  },
+  data() {
+    return {
+      islove: false,
+      isold: false
+    }
+  },
+  created() {
+    this.isLove(this.selectMusic.id).then((res) => {
+      this.islove = res;
+    })
+    this.isOld(this.selectMusic.id)
+  },
+  methods: {
+    ...mapMutations([
+      'setDetailTypes',
+      'setDetailMid',
+      'setpopupShow',
+      'delOld',
+      'delLove'
+      ]),
+    ...mapActions([
+      'isLove',
+      'Love',
+      'insertNext'
+      ]),
+searchSinger(id) {
+  this.setDetailMid(id);
+  this.setpopupShow(false);
+  this.$router.push({
+        path:`/singerDetail`
+      });
+},
+searchAlbum(id) {
+  this.setpopupShow(false);
+  this.setDetailMid(id);
+  this.$router.push({
+        path:`/albumDetail`
+      });
+},
+downpopup() {
+  this.setpopupShow(false);
+  },
+  love(music) {
+    this.Love(music);
+    if(this.islove) {
+      this.islove = false;
       this.setpopupShow(false);
-      this.$router.push({
-            path:`/singerDetail`
-          });
-    },
-    searchAlbum(id) {
-      this.setpopupShow(false);
-      this.setDetailMid(id);
-      this.$router.push({
-            path:`/albumDetail`
-          });
-    },
-    downpopup() {
-      this.setpopupShow(false);
-      },
-      love(music) {
-        this.Love(music);
-        if(this.islove) {
-          this.islove = false;
-          this.setpopupShow(false);
-        } else {
-          this.islove = true;
-        }
-      },
-      isOld(musicId) {
-          let index = this.oldMusic.findIndex((item) => {
-            return item.id == musicId;
-          })
-          this.isold = (index > -1);
-      },
-      deletes(item) {
-         if(this.isold) {
-           this.delOld(item);
-         } else {
-           this.delLove(item);
-         }
-         this.setpopupShow(false)
-       }
-  }
+    } else {
+      this.islove = true;
+    }
+  },
+  isOld(musicId) {
+      let index = this.oldMusic.findIndex((item) => {
+        return item.id == musicId;
+      })
+      this.isold = (index > -1);
+  },
+  deletes(item) {
+     if(this.isold) {
+       this.delOld(item);
+     } else {
+       this.delLove(item);
+     }
+     this.setpopupShow(false)
+   }
+ }
 }
 </script>
 <style scopeId>

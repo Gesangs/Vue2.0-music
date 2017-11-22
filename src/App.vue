@@ -2,7 +2,9 @@
   <div>
     <v-header></v-header>
       <router-view></router-view>
+      <keep-alive>
     <v-play @showLists="showplaylist"></v-play>
+  </keep-alive>
     <transition name="fade">
       <div class="dialog" v-show="dialogShow">{{ this.dialogMsg }}</div>
     </transition>

@@ -16,7 +16,8 @@
         </div>
         <router-view></router-view>
     </scroll>
-</div></transition>
+    </div>
+</transition>
 </template>
 
 <script>

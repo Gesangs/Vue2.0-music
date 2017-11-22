@@ -14,7 +14,7 @@
               :listen-scroll="listenScroll"
               @scroll="scroll"
               ref="musiclist">
-        <song-list :songs="musicList"></song-list>
+        <song-list :songs="musicList" :Show="showPopup"></song-list>
         <div v-show="!musicList.length" class="loading-container">
           <loading></loading>
         </div>
@@ -88,6 +88,10 @@ export default {
     listTitle: {
       type: String,
       default: ''
+    },
+    showPopup: {
+      type: Boolean,
+      default:true
     }
   },
   methods: {
