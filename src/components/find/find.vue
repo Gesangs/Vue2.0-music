@@ -27,10 +27,10 @@
       </div>
       <!-- 搜索结果 -->
         <div class="singer" @click="searchSinger(singer.mid)" v-show="msg && singer.name">
-          歌手：{{ singer.name }}
+          歌手：<span v-html="singer.name"></span>
         </div>
         <div class="album" @click="searchAlbum(album.mid)" v-show="msg && album.name">
-          专辑：{{ album.name }}
+          专辑：<span v-html="album.name"></span>
         </div>
       <scroll :data="musics"
               :pullup="pullup"
