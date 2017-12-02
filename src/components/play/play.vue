@@ -72,7 +72,7 @@ export default {
       playHeight: '59px',
       isFullLyric: false,
       islove: false,
-      setColorf: `rgba(196,176,152,0.8)`,
+      setColorf: `rgba(196,176,152,0.9)`,
       setColor: 'rgb(196,176,152)',
       setColors: 'linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))',
       fontColor: '#000',
@@ -168,7 +168,7 @@ export default {
               that.setColors = `linear-gradient(${payload.dominant}, transparent, transparent,transparent,${payload.dominant})`;
             // 提取颜色R、G、B值
               let c = payload.dominant.match(/\d+/g);
-              that.setColorf = `rgba(${c[0]},${c[1]},${c[2]},0.8)`;
+              that.setColorf = `rgba(${c[0]},${c[1]},${c[2]},0.9)`;
             // 转换成灰度值判断颜色深浅
               let grayLevel = c[0] * 0.299 + c[1] * 0.587 + c[2] * 0.114;
               if (grayLevel >= 192) {

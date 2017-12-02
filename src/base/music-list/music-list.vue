@@ -14,7 +14,7 @@
               :listen-scroll="listenScroll"
               @scroll="scroll"
               ref="musiclist">
-        <song-list :songs="musicList" :Show="showPopup"></song-list>
+        <song-list :songs="musicList" :Show="showPopup" :types="types"></song-list>
         <div v-show="!musicList.length" class="loading-container">
           <loading></loading>
         </div>
@@ -85,7 +85,7 @@ export default {
       type: String,
       default: ''
     },
-    listTitle: {
+    types: {
       type: String,
       default: ''
     },

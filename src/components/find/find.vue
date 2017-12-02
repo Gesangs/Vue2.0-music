@@ -125,7 +125,8 @@
       search(this.msg, this.page, false, perpage).then((res) => {
         if(res.code === 0) {
           const song = res.data.song;
-          this.musics = this.musics.concat(this.handleList(song.list));
+          // this.musics = this.musics.concat(this.handleList(song.list));
+          this.musics = [...this.musics, ...this.handleList(song.list)];
           this.checkMore(res.data);
         }
       })
@@ -154,7 +155,7 @@
       handleList(list) {
         const List = [];
         list.forEach((item) => {
-          let music = handleSong(item)
+          const music = handleSong(item)
           List.push(music);
         });
         return List;
