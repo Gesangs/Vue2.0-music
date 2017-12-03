@@ -14,6 +14,8 @@ npm install
 npm run dev
 
 ```
+### 亮点
+提取歌曲封面的主题色应用到全局
 
 ## 插件
 
