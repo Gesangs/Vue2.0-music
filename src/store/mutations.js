@@ -10,7 +10,7 @@ import {
   deletePlay,
   loadPlay,
   clearAll
-} from '../api/localStorage.js'
+} from "../api/localStorage.js";
 
 const mutations = {
   setpopupShow(state, bool) {
@@ -34,7 +34,7 @@ const mutations = {
   playMusic(state, data) {
     state.Music = data;
   },
-  selectmusic(state,music) {
+  selectmusic(state, music) {
     state.selectMusic = music;
     state.popupShow = true;
   },
@@ -52,20 +52,20 @@ const mutations = {
         index: index
       });
       state.currentList.push(item);
-    })
+    });
   },
   insertCurrentList(state, music) {
     let list = state.currentList;
-    let index = list.findIndex((item) => {
-        return item.id === music.id;
-      })
-    if(index > -1) {
+    let index = list.findIndex(item => {
+      return item.id === music.id;
+    });
+    if (index > -1) {
       list.splice(index, 1);
     }
-    list.splice(state.Music.index + 1, 0, music)
+    list.splice(state.Music.index + 1, 0, music);
   },
   addHistory(state, key) {
-    saveSearch(key)
+    saveSearch(key);
     state.searchHistory = loadSearch();
   },
   delHistory(state, key) {
@@ -75,7 +75,7 @@ const mutations = {
   clearHistory(state) {
     clearSearch();
     state.searchHistory = loadSearch();
-    clearAll()
+    clearAll();
   },
   addLove(state, musics) {
     saveFavorite(musics);
@@ -86,13 +86,13 @@ const mutations = {
     state.loveMusic = loadFavorite();
   },
   addOld(state, music) {
-    savePlay(music)
+    savePlay(music);
     state.oldMusic = loadPlay();
   },
   delOld(state, music) {
-    deletePlay(music)
+    deletePlay(music);
     state.oldMusic = loadPlay();
   }
-}
+};
 
-export default mutations
+export default mutations;

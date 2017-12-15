@@ -18,64 +18,64 @@
 </template>
 
 <script>
-  export default {
-    data() {
-            return {
-                isClick:false
-            }
-        },
-    methods: {
-        mune() {
-            this.isClick = !this.isClick;
-        }
+export default {
+  data() {
+    return {
+      isClick: false
+    };
+  },
+  methods: {
+    mune() {
+      this.isClick = !this.isClick;
     }
-  };
+  }
+};
 </script>
 
 <style>
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 .header {
-    width: 100%;
-    background: rgb(1,186,144);
-    color: #fff;
-    font-family: "微软雅黑";
-    z-index: 19;
+  width: 100%;
+  background: rgb(1, 186, 144);
+  color: #fff;
+  font-family: "微软雅黑";
+  z-index: 19;
 }
 .shang span {
-    display: block;
-    font-size: 20px;
-    margin: 0 auto;
-    line-height: 20px;
-    padding: 5px;
-    text-align: center;
+  display: block;
+  font-size: 20px;
+  margin: 0 auto;
+  line-height: 20px;
+  padding: 5px;
+  text-align: center;
 }
 .xia {
-    padding: 5px 10px 3px 10px;
-    display: flex;
-    justify-content: center;
-    box-shadow: 0 2px 4px 0 rgb(1,186,144);
+  padding: 5px 10px 3px 10px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 2px 4px 0 rgb(1, 186, 144);
 }
 .xia .item {
-    flex: 1;
-    display: block;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    text-decoration: none;
-    color: #fff;
-    font-size: 15px;
+  flex: 1;
+  display: block;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 15px;
 }
 
 .xia .router-link-active {
-    border-bottom: 2px #fff solid;
+  border-bottom: 2px #fff solid;
 }
 
 .header .iconfont {
-    width: 15px;
-    height: 15px;
+  width: 15px;
+  height: 15px;
 }
 </style>
 

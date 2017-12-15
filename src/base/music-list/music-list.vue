@@ -24,10 +24,10 @@
 </keep-alive>
 </template>
 <script>
-import SongList from '../song-list.vue';
-import Scroll from '../scroll.vue';
-import Loading from '../loading.vue';
-import {handleSong} from '../song.js';
+import SongList from "../song-list.vue";
+import Scroll from "../scroll.vue";
+import Loading from "../loading.vue";
+import { handleSong } from "../song.js";
 export default {
   components: {
     SongList,
@@ -49,32 +49,34 @@ export default {
       let YY = Math.floor(Math.max(-217, newY));
       let zIndex = 0;
       let scale = 1;
-      this.$refs.bglayer.style['transform'] = `translate3D(0 ,${YY}px, 0)`;
-      this.$refs.bglayer.style['webkit-transform'] = `translate3D(0 ,${YY}px, 0)`;
+      this.$refs.bglayer.style["transform"] = `translate3D(0 ,${YY}px, 0)`;
+      this.$refs.bglayer.style[
+        "webkit-transform"
+      ] = `translate3D(0 ,${YY}px, 0)`;
       // 下拉列表图片跟随缩放，计算缩放比例
-      const precent = Math.abs((newY) / 260);
-      if(newY > 0) {
+      const precent = Math.abs(newY / 260);
+      if (newY > 0) {
         scale = 1 + precent;
         zIndex = 10;
       }
       // 上划列表遮住图片
-      if(newY < -217) {
+      if (newY < -217) {
         zIndex = 10;
-        this.$refs.bgImg.style['padding-top'] = 0;
-        this.$refs.bgImg.style['height'] = '45px';
+        this.$refs.bgImg.style["padding-top"] = 0;
+        this.$refs.bgImg.style["height"] = "45px";
       } else {
-        this.$refs.bgImg.style['padding-top'] = '260px';
-        this.$refs.bgImg.style['height'] = '0';
+        this.$refs.bgImg.style["padding-top"] = "260px";
+        this.$refs.bgImg.style["height"] = "0";
       }
-      this.$refs.bgImg.style['transform'] = `scale(${scale})`;
-      this.$refs.bgImg.style['webkit-transform'] = `scale(${scale})`;
-      this.$refs.bgImg.style['z-index'] = zIndex;
+      this.$refs.bgImg.style["transform"] = `scale(${scale})`;
+      this.$refs.bgImg.style["webkit-transform"] = `scale(${scale})`;
+      this.$refs.bgImg.style["z-index"] = zIndex;
     }
   },
   data() {
     return {
       scrollY: 0
-    }
+    };
   },
   props: {
     musicList: {
@@ -83,26 +85,26 @@ export default {
     },
     musicImg: {
       type: String,
-      default: ''
+      default: ""
     },
     types: {
       type: String,
-      default: ''
+      default: ""
     },
     showPopup: {
       type: Boolean,
-      default:true
+      default: true
     }
   },
   methods: {
     fanhui() {
-      this.$router.push('/find');
+      this.$router.push("/find");
     },
     scroll(pos) {
       this.scrollY = pos.y;
     }
   }
-}
+};
 </script>
 
 <style>
@@ -114,7 +116,7 @@ export default {
   left: 0;
   overflow: hidden;
   z-index: 32;
-  background: rgba(255,255,255,1);
+  background: rgba(255, 255, 255, 1);
 }
 
 .fanhui {
@@ -133,8 +135,8 @@ export default {
   width: 100%;
   height: 0px;
   padding-top: 260px;
-  background-size: cover!important;
-  background-position: center!important;
+  background-size: cover !important;
+  background-position: center !important;
 }
 .bglayer {
   width: 100%;
@@ -148,10 +150,12 @@ export default {
   bottom: 10px;
   background-color: #fff;
 }
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: all 0.3s;
 }
-.slide-enter, .slide-leave-to {
+.slide-enter,
+.slide-leave-to {
   transform: translate3d(100%, 0, 0);
 }
 .loading-container {

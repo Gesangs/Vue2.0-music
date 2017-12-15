@@ -5,24 +5,23 @@
   </div>
 </template>
 <script>
-  export default {
-    props: {
-      title: {
-        type: String,
-        default: '正在载入...'
-      }
+export default {
+  props: {
+    title: {
+      type: String,
+      default: "正在载入..."
     }
   }
+};
 </script>
 <style>
-
 .loading {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 .desc {
-    line-height: 20px;
-    font-size: 14px;
-    color: black;
+  line-height: 20px;
+  font-size: 14px;
+  color: black;
 }
 </style>

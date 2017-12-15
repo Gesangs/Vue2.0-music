@@ -17,102 +17,105 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
- import Scroll from '../../base/scroll.vue';
- import SongList from '../../base/song-list.vue';
- import {deleteFavorite,loadPlay,loadFavorite} from '../../api/localStorage.js'
+import { mapGetters } from "vuex";
+import Scroll from "../../base/scroll.vue";
+import SongList from "../../base/song-list.vue";
+import {
+  deleteFavorite,
+  loadPlay,
+  loadFavorite
+} from "../../api/localStorage.js";
 export default {
   components: {
-          Scroll,
-          SongList
-        },
-    data() {
-        return {
-            liindex:'',
-            isActive: true,
-        }
+    Scroll,
+    SongList
+  },
+  data() {
+    return {
+      liindex: "",
+      isActive: true
+    };
+  },
+  computed: {
+    ...mapGetters(["loveMusic", "oldMusic"])
+  },
+  methods: {
+    switchRecent() {
+      this.isActive = true;
+      this.$nextTick(() => {
+        this.$refs.oldlist.refresh();
+      });
     },
-    computed: {
-        ...mapGetters([
-            'loveMusic',
-            'oldMusic'
-        ])
-    },
-    methods:{
-        switchRecent() {
-            this.isActive = true;
-            this.$nextTick(() => {
-                this.$refs.oldlist.refresh()
-            })
-        },
-        switchLove() {
-            this.isActive = false;
-            this.$nextTick(() => {
-                this.$refs.lovelist.refresh()
-            })
-        }
+    switchLove() {
+      this.isActive = false;
+      this.$nextTick(() => {
+        this.$refs.lovelist.refresh();
+      });
     }
+  }
 };
 </script>
 
 <style>
 .music {
-    position: absolute;
-    width: 100%;
-    top: 72px;
-    bottom: 4em;
-    overflow: hidden;
-    background-color: #fff;
+  position: absolute;
+  width: 100%;
+  top: 72px;
+  bottom: 4em;
+  overflow: hidden;
+  background-color: #fff;
 }
 .Tab {
-    width: 100%;
-    display: flex;
-    margin: 10px 0;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  margin: 10px 0;
+  justify-content: center;
 }
-.myLove, .recent {
-    width: 40%;
-    text-align: center;
-    font-size: 14px;
-    padding: 5px 0;
-    border-radius: 5px 0px 0px 5px;
-    border: 1px solid rgb(1, 186, 144);
+.myLove,
+.recent {
+  width: 40%;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 0;
+  border-radius: 5px 0px 0px 5px;
+  border: 1px solid rgb(1, 186, 144);
 }
 .recent {
-    border-radius: 0px 5px 5px 0px;
-    border-left: none;
+  border-radius: 0px 5px 5px 0px;
+  border-left: none;
 }
 .myLove {
-    border-right: none;
+  border-right: none;
 }
 .active {
-    background-color: rgb(1, 186, 144);
-    color: #fff;
+  background-color: rgb(1, 186, 144);
+  color: #fff;
 }
 .music .icon {
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-.oldList, .loveList {
-    width: 100%;
-    position: absolute;
-    height: 100%;
-    overflow: hidden;
+.oldList,
+.loveList {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
 }
 .delll {
-    position: relative;
+  position: relative;
 }
 .dell {
-    width: 20px;
-    height: 20px;
-    background: url(del.svg);
-    background-size: cover;
-    position: absolute;
-    margin: 19px 19px 0 0;
-    top: 1px;
-    right: 1px;
+  width: 20px;
+  height: 20px;
+  background: url(del.svg);
+  background-size: cover;
+  position: absolute;
+  margin: 19px 19px 0 0;
+  top: 1px;
+  right: 1px;
 }
 </style>
