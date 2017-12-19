@@ -4,7 +4,7 @@
        @click="Display"
        ref="contor">
     <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
-    <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan()"></div>
+    <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan"></div>
     <div class="img clearfix"
          :class="{imgPlay: isDisplay}"
          :style="{background: Image}">
@@ -49,6 +49,7 @@
         <span class="iconfont icon-list"  @click.stop="showlist" v-show="!isDisplay"></span>
       </div>
     <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @ended="next" @loadedmetadata="getLyric" :loop="modeIndex === 0" @error="Error"></audio>
+    <!--  -->
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
@@ -393,7 +394,7 @@ export default {
   left: 0;
   z-index: 20;
   /*启用GPU加速*/
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 1px);
   transition: all 0.4s cubic-bezier(0.15, 0.65, 0.35, 0.97);
 }
 .icon-menu {

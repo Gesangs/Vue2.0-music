@@ -2,9 +2,7 @@
   <div>
     <v-header></v-header>
       <router-view></router-view>
-      <keep-alive>
     <v-play @showLists="showplaylist"></v-play>
-  </keep-alive>
     <transition name="fade">
       <div class="dialog" v-show="dialogShow">{{ this.dialogMsg }}</div>
     </transition>
@@ -14,18 +12,18 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
-import header from "./components/header/header.vue";
-import play from "./components/play/play.vue";
-import popup from "./components/popup/popup.vue";
-import currentList from "./components/currentList/currentList.vue";
+import { mapGetters } from "vuex";
+import Header from "./components/header/header.vue";
+import Play from "./components/play/play.vue";
+import Popup from "./components/popup/popup.vue";
+import CurrentList from "./components/currentList/currentList.vue";
 
 export default {
   components: {
-    "v-header": header,
-    "v-play": play,
-    "v-popup": popup,
-    "v-list": currentList
+    "v-header": Header,
+    "v-play": Play,
+    "v-popup": Popup,
+    "v-list": CurrentList
   },
   computed: {
     ...mapGetters(["dialogMsg", "dialogShow", "popupShow", "isShowList"])

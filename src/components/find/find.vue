@@ -242,7 +242,7 @@ export default {
 .sResult {
   position: absolute;
   width: 100%;
-  top: 198px;
+  top: 200px;
   bottom: 1px;
   overflow: hidden;
 }
@@ -250,7 +250,8 @@ export default {
 .album {
   text-indent: 20px;
   width: 100%;
-  padding: 10px 0;
+  height: 35px;
+  line-height: 35px;
   font-size: 11px;
   border-bottom: 1px solid rgba(1, 186, 144, 0.8);
 }

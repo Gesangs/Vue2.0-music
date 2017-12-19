@@ -74,7 +74,6 @@ li {
 .song-list li > div {
   flex: 1;
   height: 60px;
-  border-bottom: 1px solid rgba(1, 186, 144, 0.3);
 }
 .song-list li > div > span:nth-child(1) {
   display: block;
