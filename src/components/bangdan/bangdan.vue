@@ -3,7 +3,7 @@
     <div class="rank">
         <scroll :data="topList" class="rankscorll" ref="ranklist">
             <div>
-            <div v-for="item in topList" :key='index'>
+            <div v-for="(item, index) in topList" :key='index'>
                 <div @click="selectItem(item.id)" class="rankList" >
                 <img :src="item.picUrl" alt="">
                 <div class="rankRight">
