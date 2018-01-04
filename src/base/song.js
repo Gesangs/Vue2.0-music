@@ -40,9 +40,6 @@ export function handleSong(music) {
       name: music.albumname
     },
     duration: music.interval,
-    image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${
-      music.albummid
-    }.jpg?max_age=2592000`,
-    url: `http://ws.stream.qqmusic.qq.com/${music.songid}.m4a?fromtag=46`
+    image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${music.albummid}.jpg?max_age=2592000`
   });
 }
