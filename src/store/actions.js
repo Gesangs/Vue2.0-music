@@ -37,12 +37,9 @@ export const insertNext = function({ commit, state }, music) {
 };
 
 export const Splay = function({ commit, state }, obj) {
-  let url;
   getMusicVkey(obj.item.mid).then(res => {
     const vkey = res.data.items["0"].vkey;
-    console.log(vkey)
-    url = `http://dl.stream.qqmusic.qq.com/C400${obj.item.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
-
+    const url = `http://dl.stream.qqmusic.qq.com/C400${obj.item.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
     const music = Object.assign({}, obj.item, { index: obj.index, url });
     commit("playMusic", music);
     if (obj.songlist) {

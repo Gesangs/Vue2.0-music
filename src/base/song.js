@@ -1,5 +1,5 @@
 export default class Song {
-  constructor({ id, mid, singer, name, album, duration, image, url }) {
+  constructor({ id, mid, singer, name, album, duration, image }) {
     this.id = id;
     this.mid = mid;
     this.singer = singer;
@@ -7,7 +7,6 @@ export default class Song {
     this.album = album;
     this.duration = duration;
     this.image = image;
-    this.url = url;
   }
 }
 // 可能会有多名歌手

@@ -60,6 +60,7 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 import Scroll from "../../base/scroll.vue";
 import popup from "../popup/popup.vue";
 import { getLyric } from "../../api/song.js";
+import { getMusicVkey } from "../../api/search"
 import { Base64 } from "js-base64";
 import Lyric from "lyric-parser";
 import "../../base/rgbaster.min.js";
@@ -330,13 +331,20 @@ export default {
       this.touch.initiated = false;
     },
     switchMusic(index) {
-      this.playMusic(this.currentList[index]);
-      this.isplay(true);
-      this.$refs.audio.play();
-      this.addOld(this.currentList[index]);
+      const currentMusic = this.currentList[index];
+      getMusicVkey(currentMusic.mid).then((res) => {
+        const vkey = res.data.items["0"].vkey;
+        const url = `http://dl.stream.qqmusic.qq.com/C400${currentMusic.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
+        const music = Object.assign({}, currentMusic, { url });
+        this.playMusic(music);
+        this.isplay(true);
+        this.$refs.audio.play();
+        this.addOld(music);
+      })
     },
     // 下一首
     next() {
+      
       if (!this.Music.url) {
         return;
       }

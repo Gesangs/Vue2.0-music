@@ -19,7 +19,6 @@ const state = {
     },
     duration: "",
     image: "../../static/defa.jpg",
-    url: ""
   },
   selectMusic: {},
   audio: {},
