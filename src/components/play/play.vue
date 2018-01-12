@@ -9,7 +9,7 @@
          :class="{imgPlay: isDisplay}"
          :style="{background: Image}">
       <div class="img-back"
-           :style="{background:setColors}"
+           :style="{background:`linear-gradient(${isDisplay ? setColor : 'to right'} ,transparent ,${setColor})`}"
            @touchstart.prevent="touchStart"
            @touchmove.prevent="touchMove"
            @touchend.prevent="touchEnd"></div>
@@ -60,7 +60,7 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 import Scroll from "../../base/scroll.vue";
 import popup from "../popup/popup.vue";
 import { getLyric } from "../../api/song.js";
-import { getMusicVkey } from "../../api/search"
+import { getMusicVkey } from "../../api/search";
 import { Base64 } from "js-base64";
 import Lyric from "lyric-parser";
 import "../../base/rgbaster.min.js";
@@ -80,8 +80,6 @@ export default {
       islove: false,
       setColorf: `rgba(196,176,152,0.9)`,
       setColor: "rgb(196,176,152)",
-      setColors:
-        "linear-gradient(rgb(196,176,152), transparent, transparent,transparent,rgb(196,176,152))",
       fontColor: "#000",
       setColorg: "#000",
       Mode: ["icon-loop", "icon-randoms", "icon-unloop"],
@@ -168,7 +166,6 @@ export default {
         success: function(payload) {
           // 设置背景色
           that.setColor = payload.dominant;
-          that.setColors = `linear-gradient(${payload.dominant}, transparent, transparent,transparent,${payload.dominant})`;
           // 提取颜色R、G、B值
           let c = payload.dominant.match(/\d+/g);
           that.setColorf = `rgba(${c[0]},${c[1]},${c[2]},0.9)`;
@@ -183,7 +180,7 @@ export default {
             that.Current = "currentb";
           } else {
             that.fontColor = "#fff";
-            that.setColorg = "rgb(221,221,221)";
+            that.setColorg = "rgb(219, 182, 182)";
             that.Current = "currentw";
           }
         }
@@ -332,7 +329,7 @@ export default {
     },
     switchMusic(index) {
       const currentMusic = this.currentList[index];
-      getMusicVkey(currentMusic.mid).then((res) => {
+      getMusicVkey(currentMusic.mid).then(res => {
         const vkey = res.data.items["0"].vkey;
         const url = `http://dl.stream.qqmusic.qq.com/C400${currentMusic.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
         const music = Object.assign({}, currentMusic, { url });
@@ -340,11 +337,10 @@ export default {
         this.isplay(true);
         this.$refs.audio.play();
         this.addOld(music);
-      })
+      });
     },
     // 下一首
     next() {
-      
       if (!this.Music.url) {
         return;
       }
@@ -401,6 +397,7 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 20;
+  box-shadow: 3px 0px 4px 0 rgba(167, 135, 135, 0.7);
   /*启用GPU加速*/
   transform: translate3d(0, 0, 1px);
   transition: all 0.4s cubic-bezier(0.15, 0.65, 0.35, 0.97);
@@ -429,7 +426,7 @@ export default {
   transition: all 0.4s cubic-bezier(0.15, 0.65, 0.35, 0.97);
 }
 .img .img-back {
-  width: 100%;
+  width: 101%;
   height: 101%;
 }
 .imgPlay {
