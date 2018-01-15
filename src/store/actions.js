@@ -56,9 +56,11 @@ export const clickPlay = function({ commit, state }, obj) {
       const vkey = res.data.items["0"].vkey;
       const url = `http://dl.stream.qqmusic.qq.com/C400${obj.item.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
       const music = Object.assign({}, obj.item, { index: obj.index, url });
-      Splay({ commit, state }, {...obj, item: music});
+      Splay({ commit, state }, {songlist: obj.songlist, item: music});
+      console.log('不存在')
     })
   } else {
-      Splay({ commit, state }, {...obj, item: oldMusic});
+      Splay({ commit, state }, {songlist: obj.songlist, item: oldMusic});
+      // console.log('存在')
   }
 }

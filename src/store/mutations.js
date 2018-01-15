@@ -48,9 +48,7 @@ const mutations = {
   pushList(state, list) {
     state.currentList.length = 0;
     list.forEach((item, index) => {
-      item = Object.assign({}, item, {
-        index: index
-      });
+      item.index = index;
       state.currentList.push(item);
     });
   },

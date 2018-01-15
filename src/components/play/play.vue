@@ -340,7 +340,7 @@ export default {
       if (this.modeIndex === 1) {
         index = Math.floor(Math.random() * len);
       }
-      this.clickPlay({item: this.currentList[index], index});
+      this.clickPlay({item: this.currentList[index]});
     },
     // 上一首
     pre() {
@@ -354,7 +354,7 @@ export default {
       } else {
         index = this.Music.index - 1;
       }
-      this.clickPlay({item: this.currentList[index], index});
+      this.clickPlay({item: this.currentList[index]});
     },
     // 循环
     setLoop() {
