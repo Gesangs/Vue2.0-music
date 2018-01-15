@@ -60,8 +60,7 @@ const mutations = {
     if (index > -1) {
       list.splice(index, 1);
     }
-    const musics = Object.assign({}, music, {index: state.Music.index + 1})
-    list.splice(state.Music.index + 1, 0, musics);
+    list.splice(state.Music.index + 1, 0, music);
   },
   addHistory(state, key) {
     saveSearch(key);

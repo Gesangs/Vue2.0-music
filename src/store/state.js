@@ -6,7 +6,6 @@ const state = {
   Music: {
     id: "",
     mid: "",
-    index: '',
     singer: {
       name: "",
       id: "",

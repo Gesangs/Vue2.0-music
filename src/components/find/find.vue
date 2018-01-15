@@ -258,7 +258,7 @@ export default {
 
 .find .icon-del,
 .find .icon-del_1 {
-  /* display: inline-block; */
+  display: inline-block;
   width: 18px;
   height: 18px;
   font-size: 18px !important;

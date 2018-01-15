@@ -1,7 +1,7 @@
 <template>
     <div class="song-list">
         <ul>
-            <li v-for="(item, index) in songs" :key='index' @click="clickPlay({songlist: songs,item,index})" :class="{imgSelect: item.id === Music.id}">
+            <li v-for="(item, index) in songs" :key='index' @click="Splay({songlist: songs,item:item,index:index})" :class="{imgSelect: item.id === Music.id}">
               <img v-lazy="item.image" alt="" >
               <div>
                 <span v-html="item.name"></span>
@@ -16,7 +16,6 @@
 <script>
 import { mapMutations, mapGetters, mapActions } from "vuex";
 import { savePlay } from "../api/localStorage.js";
-import { getMusicVkey } from "../api/search";
 import popup from "../components/popup/popup.vue";
 export default {
   components: {
@@ -48,7 +47,7 @@ export default {
       "selectmusic",
       "pushList"
     ]),
-    ...mapActions(["clickPlay"]),
+    ...mapActions(["Splay"])
   }
 };
 </script>

@@ -20,6 +20,11 @@
 import { mapGetters } from "vuex";
 import Scroll from "../../base/scroll.vue";
 import SongList from "../../base/song-list.vue";
+import {
+  deleteFavorite,
+  loadPlay,
+  loadFavorite
+} from "../../api/localStorage.js";
 export default {
   components: {
     Scroll,
