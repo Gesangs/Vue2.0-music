@@ -7,7 +7,7 @@
             <ul>
               <li v-for="(item, index) in currentList"
                   :key='index'
-                  @click="Splay({item:item,index:index})"
+                  @click="clickPlay({item, index})"
                   :class="{liSelect: item.id === Music.id}"
                   ref="currentlist">
                 <p>{{ index+1 }} .  <span v-html="item.name"></span> - <span v-html="item.singer.name"></span></p>
@@ -22,6 +22,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from "vuex";
+import { getMusicVkey } from "../../api/search";
 import SongList from "../../base/song-list.vue";
 import Scroll from "../../base/scroll.vue";
 export default {
@@ -38,7 +39,7 @@ export default {
     ...mapGetters(["currentList", "Music"])
   },
   methods: {
-    ...mapActions(["Splay"]),
+    ...mapActions(["clickPlay"]),
     show() {
       this.showFlag = true;
       setTimeout(() => {

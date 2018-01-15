@@ -76,10 +76,11 @@ export default {
       this.isold = index > -1;
     },
     deletes(item) {
-      if (this.isold) {
+      if (this.islove) {
         this.delOld(item);
-      } else {
         this.delLove(item);
+      } else {
+        this.delOld(item);
       }
       this.setpopupShow(false);
     }
