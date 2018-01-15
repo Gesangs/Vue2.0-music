@@ -1,7 +1,7 @@
 <template>
     <div class="song-list">
         <ul>
-            <li v-for="(item, index) in songs" :key='index' @click="Splay({songlist: songs,item:item,index:index})" :class="{imgSelect: item.id === Music.id}">
+            <li v-for="(item, index) in songs" :key='index' @click="clickPlay({songlist: songs,item:item,index:index})" :class="{imgSelect: item.id === Music.id}">
               <img v-lazy="item.image" alt="" >
               <div>
                 <span v-html="item.name"></span>
@@ -47,7 +47,7 @@ export default {
       "selectmusic",
       "pushList"
     ]),
-    ...mapActions(["Splay"])
+    ...mapActions(["clickPlay"])
   }
 };
 </script>

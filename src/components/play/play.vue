@@ -144,7 +144,7 @@ export default {
       "addOld",
       "selectmusic"
     ]),
-    ...mapActions(["Love", "isLove", "diaShow"]),
+    ...mapActions(["Love", "isLove", "diaShow", "clickPlay"]),
     showlist() {
       if (!this.Music.url) {
         return;
@@ -327,18 +327,6 @@ export default {
       }
       this.touch.initiated = false;
     },
-    switchMusic(index) {
-      const currentMusic = this.currentList[index];
-      getMusicVkey(currentMusic.mid).then(res => {
-        const vkey = res.data.items["0"].vkey;
-        const url = `http://dl.stream.qqmusic.qq.com/C400${currentMusic.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
-        const music = Object.assign({}, currentMusic, { url });
-        this.playMusic(music);
-        this.isplay(true);
-        this.$refs.audio.play();
-        this.addOld(music);
-      });
-    },
     // 下一首
     next() {
       if (!this.Music.url) {
@@ -352,11 +340,7 @@ export default {
       if (this.modeIndex === 1) {
         index = Math.floor(Math.random() * len);
       }
-<<<<<<< HEAD
-      this.clickPlay({item: this.currentList[index]});
-=======
-      this.switchMusic(index);
->>>>>>> parent of e05db3d... fix bug
+      this.clickPlay({ item: this.currentList[index], index});
     },
     // 上一首
     pre() {
@@ -370,11 +354,7 @@ export default {
       } else {
         index = this.Music.index - 1;
       }
-<<<<<<< HEAD
-      this.clickPlay({item: this.currentList[index]});
-=======
-      this.switchMusic(index);
->>>>>>> parent of e05db3d... fix bug
+      this.clickPlay({ item: this.currentList[index], index});
     },
     // 循环
     setLoop() {

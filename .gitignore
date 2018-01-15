@@ -16,3 +16,4 @@ selenium-debug.log
 *.sln
 .vscode/tasks.json
 .vscode/launch.json
+*.zip
