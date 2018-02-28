@@ -47,19 +47,10 @@ const Splay = function({ commit, state }, obj) {
 };
 
 export const clickPlay = function({ commit, state }, obj) {
-// 查找本地是否存在
-const oldMusic = loadPlay().find((item) => {
-  return item.id === obj.item.id;
-})
-if(!oldMusic){
-  getMusicVkey(obj.item.mid).then(res => {
-    const vkey = res.data.items["0"].vkey;
-    const url = `http://dl.stream.qqmusic.qq.com/C400${obj.item.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
-    const music = Object.assign({}, obj.item, { index: obj.index, url });
-    Splay({ commit, state }, {...obj, item: music});
-  })
-} else {
-    oldMusic.index = obj.index;
-    Splay({ commit, state }, {...obj, item: oldMusic});
-}
+    getMusicVkey(obj.item.mid).then(res => {
+      const vkey = res.data.items["0"].vkey;
+      const url = `http://dl.stream.qqmusic.qq.com/C400${obj.item.mid}.m4a?vkey=${vkey}&guid=3655047200&fromtag=66`;
+      const music = { ...obj.item, index: obj.index, url };
+      Splay({ commit, state }, {...obj, item: music});
+    })
 }

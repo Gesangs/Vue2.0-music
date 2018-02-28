@@ -52,7 +52,6 @@ export default {
         }
       }, 100);
     },
-    ToCurrentSong() {},
     hide() {
       this.showFlag = false;
     }
