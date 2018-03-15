@@ -17,3 +17,12 @@ selenium-debug.log
 .vscode/tasks.json
 .vscode/launch.json
 *.zip
+
+.eslintconfig
+.eslintignore
+.eslintrc.js
+.postcssrc.js
+.editorconfig
+.babelrc
+Vuemusic.js
+package-lock.json
