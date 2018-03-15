@@ -41,9 +41,6 @@ const mutations = {
   isplay(state, flag) {
     state.isPlaying = flag;
   },
-  audioDom(state, dom) {
-    state.audio = dom;
-  },
   // 添加到播放列表
   pushList(state, list) {
     state.currentList.length = 0;

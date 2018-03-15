@@ -24,9 +24,10 @@ export const Love = function({ commit, state }, item) {
 };
 
 export const diaShow = function({ commit }) {
+  let times;
   clearTimeout(times);
   commit("setdialogShow", true);
-  var times = setTimeout(function() {
+  times = setTimeout(function() {
     commit("setdialogShow", false);
   }, 1600);
 };
@@ -36,14 +37,15 @@ export const insertNext = function({ commit, state }, music) {
   commit("setpopupShow", false);
 };
 
+
 const Splay = function({ commit, state }, obj) {
   commit("playMusic", obj.item);
   if (obj.songlist) {
     commit("pushList", obj.songlist);
   }
+  commit("addOld", obj.item); 
+  if(!state.isPlaying)
   commit("isplay", true);
-  commit("addOld", obj.item);
-  state.audio.play();
 };
 
 export const clickPlay = function({ commit, state }, obj) {

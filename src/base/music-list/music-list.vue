@@ -118,7 +118,13 @@ export default {
   z-index: 32;
   background: rgba(255, 255, 255, 1);
 }
-
+@media screen and (min-width: 769px) {
+   .musicList {
+        width: 560px;
+        left: 50%;
+        transform: translate3d(-50%, 0, 0)
+    }
+}
 .fanhui {
   position: absolute;
   top: 0;

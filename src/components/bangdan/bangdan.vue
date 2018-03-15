@@ -64,7 +64,12 @@ export default {
   overflow: hidden;
   background-color: #fff;
 }
-
+@media screen and (min-width: 769px) {
+   .rank {
+        width: 560px;
+        margin: 0 auto;
+    }
+}
 .rankList {
   display: flex;
   margin: 30px;

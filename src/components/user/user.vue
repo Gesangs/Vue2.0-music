@@ -12,7 +12,6 @@
           <song-list :songs="loveMusic" :types="'love'"></song-list>
         </scroll>
     </div>
-    </div>
 </transition>
 </template>
 

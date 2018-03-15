@@ -173,7 +173,8 @@ export default {
 </script>
 
 <style scopeId>
-@import "./font_find/iconfont.css" .find {
+@import "./font_find/iconfont.css"; 
+.find {
   position: absolute;
   width: 100%;
   top: 72px;
@@ -242,7 +243,7 @@ export default {
 .sResult {
   position: absolute;
   width: 100%;
-  top: 200px;
+  top: 130px;
   bottom: 1px;
   overflow: hidden;
 }
@@ -258,7 +259,6 @@ export default {
 
 .find .icon-del,
 .find .icon-del_1 {
-  display: inline-block;
   width: 18px;
   height: 18px;
   font-size: 18px !important;

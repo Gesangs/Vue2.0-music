@@ -1,9 +1,8 @@
 <template>
   <div class="contorller"
-       :style="{height:playHeight, backgroundColor:setColor, color:fontColor}"
-       @click="Display"
-       ref="contor">
-    <div class="iconfont icon-down" v-show="isDisplay" @click.stop="unDisplay"></div>
+       :style="{height:playHeight, backgroundColor:setColor, color:iconColor, willChange: Transform}"
+       @click="() => {if(!isDisplay) Display()}">
+    <div class="iconfont icon-down" v-show="isDisplay" @click.stop="Display"></div>
     <div class="iconfont icon-menu" v-show="isDisplay" @click.stop="caidan"></div>
     <div class="img clearfix"
          :class="{imgPlay: isDisplay}"
@@ -20,7 +19,7 @@
     </div>
     <!-- 歌词区块 -->
     <transition name="fade">
-    <div class="fullGeci" :style="{backgroundColor: setColorf, color: setColorg}" v-show="isFullLyric && isDisplay"  @click="togglefull">
+    <div class="fullGeci" :style="{backgroundColor: gecibackColor, color: geciColor}" v-show="isFullLyric && isDisplay"  @click="togglefull">
       <scroll class="ly-wrapper" ref="lyricList" :data="currentLyric && currentLyric.lines">
         <div style="width: 80%;margin: 0 auto;overflow: hidden;">
           <div v-if="currentLyric">
@@ -48,8 +47,14 @@
         <span :class="[islove ? loveClass : unloveClass]" class="iconfont" @click="Love(Music)" v-show="isDisplay"></span>
         <span class="iconfont icon-list"  @click.stop="showlist" v-show="!isDisplay"></span>
       </div>
-    <audio :src="Music.url" ref="audio" :autoplay="isPlaying" @timeupdate="updateTime" @ended="next" @loadedmetadata="getLyric" :loop="modeIndex === 0" @error="Error"></audio>
-    <!--  -->
+    <audio id="media" 
+           :src="Music.url" 
+           ref="audio" 
+           @loadstart="playMusic" 
+           @timeupdate="updateTime" 
+           @ended="next" 
+           @loadedmetadata="getLyric" 
+           :loop="modeIndex === 0" @error="Error"></audio>
     <div class="progressBar" ref="progressBar">
       <div class="progress" ref="progress"></div>
     </div>
@@ -63,7 +68,7 @@ import { getLyric } from "../../api/song.js";
 import { getMusicVkey } from "../../api/search";
 import { Base64 } from "js-base64";
 import Lyric from "lyric-parser";
-import "../../base/rgbaster.min.js";
+import "../../base/rgbaster.js";
 
 export default {
   components: {
@@ -72,13 +77,14 @@ export default {
   },
   data() {
     return {
+      Transform: "auto",
       playHeight: "59px",
       isFullLyric: false,
       islove: false,
-      setColorf: `rgba(196,176,152,0.9)`,
+      gecibackColor: `rgba(196,176,152,0.9)`,
       setColor: "rgb(196,176,152)",
-      fontColor: "#000",
-      setColorg: "#000",
+      iconColor: "#000",
+      geciColor: "#000",
       Mode: ["icon-loop", "icon-randoms", "icon-unloop"],
       modeIndex: 2,
       playClass: "icon-play",
@@ -91,12 +97,6 @@ export default {
       playingLyric: "",
       Current: "currentw"
     };
-  },
-  mounted() {
-    // 获取Audio之前要 '钩' 一下
-    this.$nextTick(() => {
-      this.getAudio();
-    });
   },
   watch: {
     // 进度条
@@ -148,38 +148,43 @@ export default {
       }
       this.$emit("showLists");
     },
+    playMusic(){
+      this.$refs.audio.play();
+    },
     // 获取图片主题色
     getImageColor() {
       const that = this;
       const host = location.host;
-      // canvas不允许跨域资源调用方法，利用后台转发的方法，解决跨域问题。
+      // canvas不允许获取跨域资源的数据，利用服务器代理的方法，解决跨域问题。
       const URl = `http://${host}/api/img?0=${this.Music.image}`;
       // 把图片绘入canvas利用getImageData获取主题色
+      this.Transform = "transform";
       RGBaster.colors(URl, {
         // 调色板大小
-        paletteSize: 30,
+        paletteSize: 50,
         // 颜色排除
         exclude: ["rgb(255,255,255)", "rgb(0,0,0)"],
         success: function(payload) {
           // 设置背景色
           that.setColor = payload.dominant;
-          // 提取颜色R、G、B值
+          // 提取颜色R、G、B值，设置歌词背景颜色
           let c = payload.dominant.match(/\d+/g);
-          that.setColorf = `rgba(${c[0]},${c[1]},${c[2]},0.9)`;
+          that.gecibackColor = `rgba(${c[0]},${c[1]},${c[2]},0.8)`;
           // 转换成灰度值判断颜色深浅
           let grayLevel = c[0] * 0.299 + c[1] * 0.587 + c[2] * 0.114;
           if (grayLevel >= 192) {
-            // 若为浅色，把文字设置为黑色
-            that.fontColor = "#000";
+            // 若为主题色为浅色，把图标颜色设置为黑色
+            that.iconColor = "#000";
             // 歌词颜色
-            that.setColorg = "rgb(99,118,117)";
+            that.geciColor = "rgb(99,118,117)";
             // 歌词高亮为白色
             that.Current = "currentb";
           } else {
-            that.fontColor = "#fff";
-            that.setColorg = "rgb(219, 182, 182)";
+            that.iconColor = "#fff";
+            that.geciColor = "rgb(219, 182, 182)";
             that.Current = "currentw";
           }
+          that.Transform = "auto";
         }
       });
     },
@@ -204,8 +209,17 @@ export default {
     },
     // 展开
     Display() {
-      this.setDisplay(true);
-      this.playHeight = "100%";
+      this.Transform = "transform"
+      setTimeout(() => {
+        this.Transform = "auto";
+      }, 500);
+      if(this.isDisplay) {
+        this.playHeight = "59px"; 
+        this.setDisplay(false);
+      } else {
+        this.playHeight = "100%";
+        this.setDisplay(true);
+      }
     },
     // 歌词页面大小切换
     togglefull() {
@@ -222,11 +236,6 @@ export default {
           this.$refs.lyricList.scrollTo(0, 0, 1000);
         }
       });
-    },
-    // 收回
-    unDisplay() {
-      (this.playHeight = "59px"), this.$store.commit("setDisplay", false);
-      this.setDisplay(false);
     },
     // 切换播放状态
     ready() {
@@ -266,6 +275,7 @@ export default {
               this.currentLyric.play();
             }
           });
+          // this.$refs.audio.play();
         });
     },
     // 处理歌词
@@ -283,6 +293,7 @@ export default {
     ToLyric(time, index) {
       this.$refs.audio.currentTime = time / 1000;
       this.currentLyric.seek(time);
+      if(!this.isPlaying) this.ready();
     },
     updateTime(e) {
       this.currentTime = e.target.currentTime;
@@ -318,7 +329,7 @@ export default {
       }
       if (this.touch.deltaY > 0 && Math.abs(this.touch.deltaY) > 70) {
         this.touch.deltaY = 0;
-        this.unDisplay();
+        this.Display();
       } else {
         return;
       }
@@ -383,10 +394,9 @@ export default {
   left: 0;
   z-index: 20;
   box-shadow: 3px 0px 4px 0 rgba(167, 135, 135, 0.7);
-  /*启用GPU加速*/
-  transform: translate3d(0, 0, 1px);
   transition: all 0.4s cubic-bezier(0.15, 0.65, 0.35, 0.97);
 }
+
 .icon-menu {
   position: absolute;
   top: 0;
@@ -407,7 +417,6 @@ export default {
   background-size: cover !important;
   background-position: center center;
   position: relative;
-  transform: translate3d(0, 1px, 0);
   transition: all 0.4s cubic-bezier(0.15, 0.65, 0.35, 0.97);
 }
 .img .img-back {
@@ -424,7 +433,6 @@ export default {
   top: 0px;
   left: 7em;
   transition: left 0.4s ease;
-  transform: translate3d(0, 0, 0);
   z-index: 26;
   font-size: 62.5%;
 }
@@ -444,7 +452,6 @@ export default {
   bottom: 10px;
   right: 20px;
   transition: all 0.4s;
-  transform: translate3d(0, 0, 0);
   vertical-align: middle;
   /* 中线对齐 */
   align-items: center;
@@ -456,7 +463,7 @@ export default {
 .title-play {
   top: 62%;
   left: 50%;
-  transform: translate(-50%);
+  transform: translate3d(-50%, -50%, 0);
 }
 .control-play {
   width: 100%;

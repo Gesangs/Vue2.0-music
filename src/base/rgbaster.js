@@ -1,16 +1,16 @@
-;(function(global, undefined){
+;(function(window, undefined){
 
   "use strict";
 
   // Helper functions.
-  var getContext = function(){
+  const getContext = function(){
     return document.createElement("canvas").getContext('2d');
   };
 
-  var getImageData = function(img, loaded){
+  const getImageData = function(img, loaded){
 
-    var imgObj = new Image();
-    var imgSrc = img.src || img;
+    const imgObj = new Image();
+    const imgSrc = img.src || img;
 
     // Can't set cross origin to be anonymous for data url's
     // https://github.com/mrdoob/three.js/issues/1305
@@ -18,10 +18,10 @@
       imgObj.crossOrigin = "Anonymous";
 
     imgObj.onload = function(){
-      var context = getContext('2d');
+      const context = getContext('2d');
       context.drawImage(imgObj, 0, 0);
 
-      var imageData = context.getImageData(0, 0, imgObj.width, imgObj.height);
+      const imageData = context.getImageData(0, 0, imgObj.width, imgObj.height);
       loaded && loaded(imageData.data);
     };
 
@@ -29,88 +29,40 @@
 
   };
 
-  var makeRGB = function(name){
+  const makeRGB = function(name){
     return ['rgb(', name, ')'].join('');
   };
 
-  var mapPalette = function(palette){
-    return palette.map(function(c){ return makeRGB(c.name); });
-  };
+  const PALETTESIZE = 10;
 
-
-  // RGBaster Object
-  // ---------------
-  //
-  var BLOCKSIZE = 5;
-  var PALETTESIZE = 10;
-
-  var RGBaster = {};
+  const RGBaster = {};
 
   RGBaster.colors = function(img, opts){
 
     opts = opts || {};
-    var exclude = opts.exclude || [ ], // for example, to exlude white and black:  [ '0,0,0', '255,255,255' ]
+    const exclude = opts.exclude || [ ], 
         paletteSize = opts.paletteSize || PALETTESIZE;
 
-    getImageData(img, function(data){
+    getImageData(img, function(imgdata){
+      const data = {
+        imgdata,
+        exclude,
+        paletteSize
+      }
+      const worker = new Worker('../../static/imgData.js');
+      worker.postMessage(data);
 
-              var length        = ( img.width * img.height ) || data.length,
-                  colorCounts   = {},
-                  rgbString     = '',
-                  rgb           = [],
-                  colors        = {
-                    dominant: { name: '', count: 0 },
-                    palette:  Array.apply(null, new Array(paletteSize)).map(Boolean).map(function(a){ return { name: '0,0,0', count: 0 }; })
-                  };
-
-              // Loop over all pixels, in BLOCKSIZE iterations.
-              var i = 0;
-              while ( i < length ) {
-                rgb[0] = data[i];
-                rgb[1] = data[i+1];
-                rgb[2] = data[i+2];
-                rgbString = rgb.join(",");
-
-                // Keep track of counts.
-                if ( rgbString in colorCounts ) {
-                  colorCounts[rgbString] = colorCounts[rgbString] + 1;
-                }
-                else{
-                  colorCounts[rgbString] = 1;
-                }
-
-                // Find dominant and palette, ignoring those colors in the exclude list.
-                if ( exclude.indexOf( makeRGB(rgbString) ) === -1 ) {
-                  var colorCount = colorCounts[rgbString];
-                  if ( colorCount > colors.dominant.count ){
-                    colors.dominant.name = rgbString;
-                    colors.dominant.count = colorCount;
-                  } else {
-                    colors.palette.some(function(c){
-                      if ( colorCount > c.count ) {
-                        c.name = rgbString;
-                        c.count = colorCount;
-                        return true;
-                      }
-                    });
-                  }
-                }
-
-                // Increment!
-                i += BLOCKSIZE * 4;
-              }
-
-              if ( opts.success ) {
-                var palette = mapPalette(colors.palette);
-                opts.success({
-                  dominant: makeRGB(colors.dominant.name),
-                  secondary: palette[0],
-                  palette:  palette
-                });
-              }
+      worker.onmessage = function(event){
+        const colors = event.data;
+        if ( opts.success ) {
+          opts.success({
+            dominant: makeRGB(colors.dominant.name)
+          });
+        }
+    }
     });
   };
 
-  global.RGBaster = global.RGBaster || RGBaster;
+  window.RGBaster = window.RGBaster || RGBaster;
 
-})(global);
+})(window);

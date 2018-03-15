@@ -6,8 +6,6 @@ export const Image = state => `url(${state.Music.image})`;
 
 export const selectMusic = state => state.selectMusic;
 
-export const audio = state => state.audio;
-
 export const oldMusic = state => state.oldMusic;
 
 export const loveMusic = state => state.loveMusic;

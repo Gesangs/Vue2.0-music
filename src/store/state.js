@@ -21,7 +21,6 @@ const state = {
     image: "../../static/defa.jpg",
   },
   selectMusic: {},
-  audio: {},
   oldMusic: loadPlay(),
   loveMusic: loadFavorite(),
   searchHistory: loadSearch(),
