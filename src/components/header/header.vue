@@ -1,19 +1,14 @@
 <template>
   <div class="header">
-    <div class="shang">
-        <span>轻&nbsp;&nbsp;听</span>
-    </div>
-    <div class="xia">
-        <router-link to="/user" class="item">
-          我的
-        </router-link>
-        <router-link to="/find" class="item">
-          发现
-        </router-link>
-        <router-link to="/bangdan" class="item">
-          榜单
-        </router-link>
-    </div>
+    <router-link to="/user" class="item">
+      我的
+    </router-link>
+    <router-link to="/find" class="item">
+      发现
+    </router-link>
+    <router-link to="/bangdan" class="item">
+      榜单
+    </router-link>
   </div>
 </template>
 
@@ -43,33 +38,23 @@ export default {
   color: #fff;
   font-family: "微软雅黑";
   z-index: 19;
-}
-.shang span {
-  display: block;
-  font-size: 20px;
-  margin: 0 auto;
-  line-height: 20px;
-  padding: 5px;
-  text-align: center;
-}
-.xia {
   padding: 5px 10px 3px 10px;
   display: flex;
   justify-content: center;
-  box-shadow: 0 2px 4px 0 rgb(1, 186, 144);
 }
-.xia .item {
+
+.header .item {
   flex: 1;
   display: block;
-  height: 30px;
+  height: 40px;
   text-align: center;
-  line-height: 30px;
+  line-height: 40px;
   text-decoration: none;
   color: #fff;
   font-size: 15px;
 }
 
-.xia .router-link-active {
+.header .router-link-active {
   border-bottom: 2px #fff solid;
 }
 

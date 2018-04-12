@@ -177,7 +177,7 @@ export default {
 .find {
   position: absolute;
   width: 100%;
-  top: 72px;
+  top: 40px;
   bottom: 3.8em;
   overflow: hidden;
   background-color: #fff;

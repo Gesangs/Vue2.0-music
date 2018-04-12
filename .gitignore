@@ -23,6 +23,5 @@ selenium-debug.log
 .eslintrc.js
 .postcssrc.js
 .editorconfig
-.babelrc
 Vuemusic.js
 package-lock.json

@@ -59,7 +59,7 @@ export default {
 .rank {
   position: absolute;
   width: 100%;
-  top: 78px;
+  top: 40px;
   bottom: 3.6em;
   overflow: hidden;
   background-color: #fff;

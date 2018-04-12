@@ -11,14 +11,15 @@ Vue.use(VueLazyload, {
   loading: require("./components/default.png")
 });
 
+Vue.use(Router);
 // 页面懒加载，只有点击的时候才会加载
-const user = resolve => {
-  import("./components/user/user.vue").then(module => {
+const bangdan = (resolve) => {
+  import("./components/bangdan/bangdan.vue").then((module) => {
     resolve(module);
   });
 };
-const bangdan = resolve => {
-  import("./components/bangdan/bangdan.vue").then(module => {
+const user = resolve => {
+  import("./components/user/user.vue").then(module => {
     resolve(module);
   });
 };
@@ -40,7 +41,6 @@ const singerDetail = resolve => {
 
 Vue.config.productionTip = false;
 
-Vue.use(Router);
 Vue.prototype.$ajax = Axios;
 /* eslint-disable no-new */
 

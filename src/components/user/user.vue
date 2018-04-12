@@ -59,7 +59,7 @@ export default {
 .music {
   position: absolute;
   width: 100%;
-  top: 72px;
+  top: 40px;
   bottom: 4em;
   overflow: hidden;
   background-color: #fff;
